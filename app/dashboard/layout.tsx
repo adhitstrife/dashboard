@@ -1,7 +1,7 @@
 'use client'
 import { AppShell, AppShellMain, Burger, Container, Drawer, Flex, Group, Image, NavLink, ScrollArea, Skeleton, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconCalendarCheck, IconCar, IconHome, IconHome2, IconMessage, IconUsersGroup } from "@tabler/icons-react";
+import { IconCalendarCheck, IconCar, IconHome, IconHome2, IconMessage, IconUserDollar, IconUserStar, IconUsersGroup } from "@tabler/icons-react";
 import React from "react";
 
 export default function DashboardLayout({ children }: { children?: React.ReactNode }) {
@@ -20,11 +20,11 @@ export default function DashboardLayout({ children }: { children?: React.ReactNo
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar p="md">
-                <NavLink href="#" label={"Dashboard"} leftSection={<IconHome2 size={20} stroke={1.5} />} color="primary-red" active variant="filled" />
-                <NavLink href="#" label={"User"} leftSection={<IconUsersGroup size={20} stroke={1.5} />} />
+                <NavLink href="/dashboard" label={"Dashboard"} leftSection={<IconHome2 size={20} stroke={1.5} />} color="primary-red" active variant="filled" />
                 <NavLink href="#" label={"Visit"} leftSection={<IconCar size={20} stroke={1.5} />} />
                 <NavLink href="#" label={"Leave"} leftSection={<IconCalendarCheck size={20} stroke={1.5} />} />
-                <NavLink href="#" label={"Message"} leftSection={<IconMessage size={20} stroke={1.5} />} />
+                <NavLink href="/dashboard/sales" label={"Sales"} leftSection={<IconUserStar size={20} stroke={1.5} />} />
+                <NavLink href="#" label={"Customers"} leftSection={<IconUserDollar size={20} stroke={1.5} />} />
             </AppShell.Navbar>
             {children}
         </AppShell>

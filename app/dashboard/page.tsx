@@ -3,7 +3,7 @@ import React from 'react';
 import DashboardLayout from './layout';
 import { ActionIcon, AppShell, AppShellMain, Avatar, Badge, Box, Card, Flex, Grid, Group, ScrollArea, Select, Stack, Table, Text, TextInput, Title, useMantineTheme } from '@mantine/core';
 import { BarChart, DonutChart } from '@mantine/charts';
-import { IconChartColumn, IconChevronRight, IconSearch } from '@tabler/icons-react';
+import { IconCalendarClock, IconChartColumn, IconChevronRight, IconSearch } from '@tabler/icons-react';
 
 export default function Dashboard() {
   const theme = useMantineTheme();
@@ -81,13 +81,48 @@ export default function Dashboard() {
               <Text size='sm' mt={10} style={{ color: theme.colors['secondary-gray'][9] }}>You have 2 leave request pending</Text>
             </Box>
             <Box>
-              <Text ta={'right'} size='sm' mt={10} style={{ color: theme.colors['secondary-gray'][9] }}>Current time</Text>
+              <Text ta={'right'} size='sm' mt={10} >Current time</Text>
               <Title order={2}>12:10 PM</Title>
             </Box>
           </Flex>
         </div>
         <Box mt={20} className="content">
           <Grid>
+            <Grid.Col span={{ base: 12, lg: 4 }}>
+              <Card>
+                <Group justify='space-between'>
+                  <Text size='sm' c='primary-red' fw={900}>Today Visits</Text>
+                  <IconCalendarClock size={20} stroke={1.5} />
+                </Group>
+                <Box>
+                  <Title>30</Title>
+                </Box>
+              </Card>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, lg: 4 }}>
+              <Card>
+                <Group justify='space-between'>
+                  <Text size='sm' c='primary-red' fw={900}>This Week Visits</Text>
+                  <IconCalendarClock size={20} stroke={1.5} />
+                </Group>
+                <Box>
+                  <Title>30</Title>
+                </Box>
+              </Card>
+            </Grid.Col>
+            <Grid.Col span={{ base: 12, lg: 4 }}>
+              <Card>
+                <Group justify='space-between'>
+                  <Text size='sm' c='primary-red' fw={900}>This Month Visits</Text>
+                  <IconCalendarClock size={20} stroke={1.5} />
+                </Group>
+                <Box>
+                  <Title>30</Title>
+                </Box>
+              </Card>
+            </Grid.Col>
+          </Grid>
+          {/* <Grid>
             <Grid.Col span={{ base: 12, lg: 6 }}>
               <Card withBorder radius={"md"} px={20} py={30}>
                 <Group justify='space-between'>
@@ -142,9 +177,9 @@ export default function Dashboard() {
                 </Group>
               </Card>
             </Grid.Col>
-          </Grid>
-          <Grid>
-            <Grid.Col span={{ base: 12, lg: 8 }}>
+          </Grid> */}
+          <Grid mt={20}>
+            <Grid.Col span={{ base: 12, lg: 12 }}>
               <Card withBorder radius={"md"} px={20} py={30} h={400}>
                 <Group justify='space-between'>
                   <Box>
@@ -177,20 +212,20 @@ export default function Dashboard() {
                 </Table.ScrollContainer>
               </Card>
             </Grid.Col>
-            <Grid.Col span={{ base: 12, lg: 4 }}>
+            {/* <Grid.Col span={{ base: 12, lg: 4 }}>
               <Card withBorder radius={"md"} px={20} py={30} h={400}>
                 <Group justify='space-between'>
                   <Box>
                     <Title order={3}>Book 1 on 1</Title>
                   </Box>
                   <Box>
-                    <IconChartColumn size={20} stroke={1.5} color={"#D15346"}/>
+                    <IconChartColumn size={20} stroke={1.5} color={"#D15346"} />
                   </Box>
                 </Group>
                 <TextInput label="Collegues" placeholder='Find People' mt={20} leftSection={<IconSearch stroke={1.5} size={20} />} />
                 <ScrollArea>
                   <Stack gap={10} py={10}>
-                    {elements.map((person,index) => (
+                    {elements.map((person, index) => (
                       <Group justify='space-between' key={index}>
                         <Group>
                           <Avatar name={person.name} color='initials' />
@@ -207,7 +242,7 @@ export default function Dashboard() {
                   </Stack>
                 </ScrollArea>
               </Card>
-            </Grid.Col>
+            </Grid.Col> */}
           </Grid>
         </Box>
       </AppShell.Main>
