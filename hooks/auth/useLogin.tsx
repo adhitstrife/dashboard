@@ -30,7 +30,7 @@ const useLogin = () => {
             return router.push("/dashboard")
         } catch (error) {
             setIsLoading(false);
-            if (axios.isAxiosError(error) && error.response?.status === 401) {
+            if (axios.isAxiosError(error) && error.response?.status === 400) {
                 notifications.show({
                     title: 'Login Failed',
                     message: 'Authentication Failed',
