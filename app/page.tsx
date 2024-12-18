@@ -47,7 +47,7 @@ export default function HomePage() {
       </div>
       <Center mt={30} className="input">
         <form onSubmit={handleSubmit}>
-          <Flex direction={'column'} w={{ base: 500, sm: 355 }}>
+          <Flex direction={'column'} w={{ base: 300, sm: 355 }}>
             <TextInput size='md' placeholder='Username' name='username' onChange={(e) => handleChange(e)} />
             <PasswordInput mt={20} size='md' name='password' onChange={(e) => handleChange(e)} placeholder='Password' />
             <Text href={"/dashboard"} component={Link} ta={"right"} mt={12} c={"blue"} size='sm'>Forgot Password</Text>

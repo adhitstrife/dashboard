@@ -1,9 +1,10 @@
 "use client"
-import React from 'react';
+import React, { useEffect } from 'react';
 import DashboardLayout from './layout';
-import { ActionIcon, AppShell, AppShellMain, Avatar, Badge, Box, Card, Flex, Grid, Group, ScrollArea, Select, Stack, Table, Text, TextInput, Title, useMantineTheme } from '@mantine/core';
+import { ActionIcon, AppShell, AppShellMain, Avatar, Badge, Box, Card, Flex, Grid, Group, ScrollArea, Select, Skeleton, Stack, Table, Text, TextInput, Title, useMantineTheme } from '@mantine/core';
 import { BarChart, DonutChart } from '@mantine/charts';
 import { IconCalendarClock, IconChartColumn, IconChevronRight, IconSearch } from '@tabler/icons-react';
+import useUserProfile from '@/hooks/auth/useUserProfile';
 
 export default function Dashboard() {
   const theme = useMantineTheme();
@@ -14,6 +15,12 @@ export default function Dashboard() {
     { name: 'Work From Home', value: 100, color: 'teal.6' },
     { name: 'On Leave', value: 200, color: 'gray.6' },
   ];
+  const { getUserProfile, userProfile, isLoading } = useUserProfile()
+
+  useEffect(() => {
+    getUserProfile()
+    console.log("foo")
+  },[])
 
   const teamData = [
     {
@@ -75,13 +82,17 @@ export default function Dashboard() {
     <DashboardLayout>
       <AppShell.Main bg={'#F6F6F6'}>
         <div className="header-page">
-          <Flex justify={'space-between'}>
-            <Box>
-              <Title order={2}>Good Afternoon, User!</Title>
+          <Flex direction={{ base: 'column-reverse', md: 'row' }} justify={{ base: 'flex-start', md: 'space-between'}}>
+            <Box mt={{ base: 20, md: 0 }}>
+              { userProfile ? (
+                <Title order={2}>Good Afternoon, {userProfile.username}!</Title>
+              ) : (
+                <Skeleton height={8} radius="xl" />
+              )}
               <Text size='sm' mt={10} style={{ color: theme.colors['secondary-gray'][9] }}>You have 2 leave request pending</Text>
             </Box>
             <Box>
-              <Text ta={'right'} size='sm' mt={10} >Current time</Text>
+              <Text ta={{ base: 'left', md: 'right'}} size='sm' mt={10} >Current time</Text>
               <Title order={2}>12:10 PM</Title>
             </Box>
           </Flex>

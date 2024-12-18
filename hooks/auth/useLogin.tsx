@@ -40,8 +40,6 @@ const useLogin = () => {
                 })
             }
             return error;
-
-            return error;
         }
     }
 
