@@ -6,6 +6,14 @@ const withBundleAnalyzer = bundleAnalyzer({
 
 export default withBundleAnalyzer({
   reactStrictMode: false,
+  rewrites: () => {
+    return [
+      {
+        source: '/backend/:path*',
+        destination: 'https://marfandy.pythonanywhere.com/:path*'
+      }
+    ]
+  },
   eslint: {
     ignoreDuringBuilds: true,
   },
