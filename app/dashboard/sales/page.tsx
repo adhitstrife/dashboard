@@ -20,8 +20,8 @@ export default function user() {
     const { isLoadingEditSales, updateDataSales } = useEditSales();
     const { isLoadingGetListSales, getListSales, salesData } = useGetListSales();
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
-    const [ page, setPage ] = useState(10);
-    const [ pageSize, setPageSize ] = useState(1);
+    const [ page, setPage ] = useState(1);
+    const [ pageSize, setPageSize ] = useState(10);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [opened, { toggle, close }] = useDisclosure(false);
