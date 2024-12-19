@@ -1,8 +1,8 @@
 "use client"
-import { ActionIcon, AppShell, Box, Button, Card, Dialog, Flex, Group, Loader, Modal, NumberInput, PasswordInput, Select, Table, Text, TextInput, Title, useMantineTheme } from "@mantine/core";
+import { ActionIcon, AppShell, Box, Button, Card, Dialog, Flex, Group, Loader, Modal, NumberInput, Pagination, PasswordInput, Select, Table, Text, TextInput, Title, useMantineTheme } from "@mantine/core";
 import DashboardLayout from "../layout";
 import { IconEye, IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
 import { DateInput } from "@mantine/dates";
 import useGetCities from "@/hooks/region/useGetCities";
@@ -20,6 +20,8 @@ export default function user() {
     const { isLoadingEditSales, updateDataSales } = useEditSales();
     const { isLoadingGetListSales, getListSales, salesData } = useGetListSales();
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
+    const [ page, setPage ] = useState(10);
+    const [ pageSize, setPageSize ] = useState(1);
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [opened, { toggle, close }] = useDisclosure(false);
@@ -48,7 +50,7 @@ export default function user() {
 
     useEffect(() => {
         getCountryList()
-        getListSales()
+        getListSales(page, pageSize)
     }, [])
 
     useEffect(() => {
@@ -181,7 +183,6 @@ export default function user() {
         }
     }
 
-
     const openEditSalesModal = async (id: number) => {
         try {
             await getDetailSales(id);
@@ -191,6 +192,16 @@ export default function user() {
         } finally {
             setShowEditModal(true)
         }
+    }
+
+    const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        await getListSales(page, pageSize, value);
+    }
+
+    const handleChangePage = async (e: any) => {
+        await getListSales(e, pageSize);
+        setPage(e);
     }
 
     return (
@@ -211,7 +222,7 @@ export default function user() {
                 <Card withBorder radius={"md"} px={20} py={30} mah={'screen'} mt={20}>
                     <Group justify='space-between'>
                         <Group>
-                            <TextInput placeholder="Search Sales" />
+                            <TextInput placeholder="Search Sales" onChange={(e) => handleSearch(e)} />
                         </Group>
                         <Button color="primary-red" variant="filled" onClick={() => setShowAddModal(true)}>
                             <IconPlus size={20} stroke={1.5} />
@@ -262,6 +273,9 @@ export default function user() {
                                 )}
                             </Table.Tbody>
                         </Table>
+                        {salesData && (
+                            <Pagination mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(salesData.count / pageSize)} />
+                        )}
                     </Table.ScrollContainer>
                 </Card>
                 <Modal opened={showAddModal} onClose={() => setShowAddModal(false)} title="Add new sales">
