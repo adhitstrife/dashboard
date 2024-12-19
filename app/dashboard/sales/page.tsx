@@ -50,7 +50,7 @@ export default function user() {
 
     useEffect(() => {
         getCountryList()
-        getListSales(page, pageSize)
+        getListSales()
     }, [])
 
     useEffect(() => {
