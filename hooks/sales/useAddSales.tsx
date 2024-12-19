@@ -1,7 +1,7 @@
 import selectData from "@/app/interface/component/selectData";
 import salesPayload from "@/app/interface/payload/salesPayload";
 import countryResponse from "@/app/interface/response/country";
-import salesResponse from "@/app/interface/response/salesResponse";
+import salesResponse from "@/app/interface/response/sales/salesListResponse";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import axios from "axios";

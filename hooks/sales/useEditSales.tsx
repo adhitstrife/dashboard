@@ -8,36 +8,45 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useState } from "react"
 
-const useGetListSales = () => {
-    const [isLoadingGetListSales, setIsLoadingGetListSales] = useState(false);
-    const [salesData, setSalesData] = useState<salesResponse>();
+const useEditSales = () => {
+    const [isLoadingEditSales, setIsLoadingEditSales] = useState(false);
+    const [salesData, setSalesDate] = useState<salesResponse>();
     
-    const getListSales = async () => {
+    const updateDataSales = async (id: number, payload: salesPayload) => {
         try {
-            setIsLoadingGetListSales(true);
-            const url = '/backend/api/sales';
-            const response = await axios.get(url, {
+            setIsLoadingEditSales(true);
+            const url = `/backend/api/sales/${id}`;
+            const response = await axios.put(url, payload, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`
                 }
             }
             );
             const json: salesResponse = response.data
-            setSalesData(json)
+            setSalesDate(json)
+
+            notifications.show({
+                title: 'Saving Complete',
+                message: `Success update sales data`,
+                color: 'green',
+                icon: <IconCheck size={20} stroke={1.5} />,
+                position: 'top-right'
+            })
+
         } catch (error) {
             notifications.show({
-                title: 'Fetch Failed',
-                message: `Error when get sales list ${error}`,
+                title: 'Saving Failed',
+                message: `Error when update sales data ${error}`,
                 color: 'red',
                 icon: <IconX size={20} stroke={1.5} />,
                 position: 'top-right'
             })
             return error;
         } finally {
-            setIsLoadingGetListSales(false)
+            setIsLoadingEditSales(false)
         }
     }
 
-    return { getListSales, salesData, isLoadingGetListSales }
+    return { updateDataSales, salesData, isLoadingEditSales }
 }
-export default useGetListSales;
+export default useEditSales;

@@ -14,10 +14,10 @@ interface salesPayload {
     nip: string;
     employee_status: string;
     job_level: string;
-    joining_date: Date | null;
+    joining_date: string;
     bank_name: string;
     account_name: string;
-    acoount_number: string;
+    account_number: string;
     city_id: number;
 }
 
