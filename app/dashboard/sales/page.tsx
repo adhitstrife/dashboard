@@ -11,6 +11,7 @@ import useAddSales from "@/hooks/sales/useAddSales";
 import useGetListSales from "@/hooks/sales/useGetListSales";
 import useGetSalesDetail from "@/hooks/sales/useGetSalesDetail";
 import useEditSales from "@/hooks/sales/useEditSales";
+import useDeleteSales from "@/hooks/sales/useDeleteSales";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -20,12 +21,14 @@ export default function user() {
     const { isLoadingEditSales, updateDataSales } = useEditSales();
     const { isLoadingGetListSales, getListSales, salesData } = useGetListSales();
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
+    const { deleteSales, isLoadingDeleteSales } = useDeleteSales()
     const [ page, setPage ] = useState(1);
     const [ pageSize, setPageSize ] = useState(10);
+    const [ deletedSales, setDeletedSales ] = useState(0);
     const [ searchedSales, setSearchedSales ] = useState("");
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
-    const [opened, { toggle, close }] = useDisclosure(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [salesPayload, setSalesPayload] = useState<salesPayload>({
         username: '',
         name: '',
@@ -158,6 +161,15 @@ export default function user() {
         })
     }
 
+    const handleCloseModal = () => {
+        setDeletedSales(0)
+        clearPayload()
+        setSalesDetail(null)
+        setShowAddModal(false)
+        setShowEditModal(false)
+        setShowDeleteModal(false)
+    }
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
@@ -166,7 +178,7 @@ export default function user() {
             console.log(error)
         } finally {
             setShowAddModal(false);
-            getListSales()
+            getListSales(page, pageSize, searchedSales)
             clearPayload();
         }
     }
@@ -179,8 +191,20 @@ export default function user() {
             console.log(error)
         } finally {
             setShowEditModal(false);
-            getListSales()
+            getListSales(page, pageSize, searchedSales)
             clearPayload();
+        }
+    }
+
+    const handleDelete = async () => {
+        try {
+            await deleteSales(deletedSales);
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setShowDeleteModal(false)
+            getListSales(page, pageSize, searchedSales)
+            setDeletedSales(0)
         }
     }
 
@@ -204,6 +228,11 @@ export default function user() {
     const handleChangePage = async (e: any) => {
         await getListSales(e, pageSize, searchedSales);
         setPage(e);
+    }
+
+    const handleModalDelete = (id: number) => {
+        setShowDeleteModal(true)
+        setDeletedSales(id)
     }
 
     return (
@@ -259,7 +288,7 @@ export default function user() {
                                                     <ActionIcon variant="transparent" onClick={() => openEditSalesModal(sales.id)}>
                                                         <IconPencil size={20} stroke={1.5} />
                                                     </ActionIcon>
-                                                    <ActionIcon variant="transparent" onClick={toggle}>
+                                                    <ActionIcon variant="transparent" onClick={() => handleModalDelete(sales.id)}>
                                                         <IconTrash color="red" size={20} stroke={1.5} />
                                                     </ActionIcon>
                                                 </Group>
@@ -280,7 +309,7 @@ export default function user() {
                         )}
                     </Table.ScrollContainer>
                 </Card>
-                <Modal opened={showAddModal} onClose={() => setShowAddModal(false)} title="Add new sales">
+                <Modal opened={showAddModal} onClose={handleCloseModal} title="Add new sales">
                     <form onSubmit={handleSubmit}>
                         <TextInput
                             label="Username"
@@ -352,7 +381,6 @@ export default function user() {
                             label="Phonenumber"
                             placeholder="Input Phone Number"
                             hideControls
-                            leftSection={<Text>+62</Text>}
                             name="phone"
                             withAsterisk
                             required
@@ -448,7 +476,7 @@ export default function user() {
                         </Button>
                     </form>
                 </Modal>
-                <Modal opened={showEditModal} onClose={() => setShowEditModal(false)} title="Edit sales data">
+                <Modal opened={showEditModal} onClose={handleCloseModal} title="Edit sales data">
                     {salesDetail && (
                         <form onSubmit={(e) => handleUpdate(salesDetail.results.id, e)}>
                             <TextInput
@@ -630,9 +658,9 @@ export default function user() {
 
                     )}
                 </Modal>
-                <Modal opened={opened} withCloseButton onClose={close} size="lg" title="Are you sure want to delete this item">
+                <Modal opened={showDeleteModal} withCloseButton onClose={handleCloseModal} size="lg" title="Are you sure want to delete this item">
 
-                    <Button variant="filled" color="primary-red" mt={20} fullWidth>
+                    <Button variant="filled" color="primary-red" mt={20} onClick={handleDelete} fullWidth>
                         Delete
                     </Button>
                 </Modal>
