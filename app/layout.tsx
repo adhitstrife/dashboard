@@ -6,6 +6,8 @@ import { theme } from '../theme';
 import '@mantine/charts/styles.css';
 import '@mantine/notifications/styles.css';
 import { Notifications } from '@mantine/notifications';
+import '@mantine/dates/styles.css';
+
 
 export const metadata = {
   title: 'Mantine Next.js template',

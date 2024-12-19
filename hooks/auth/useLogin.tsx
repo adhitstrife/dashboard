@@ -4,7 +4,7 @@ import axios from "axios";
 import Cookies from 'js-cookie';
 import loginResponse from "../../app/interface/response/login";
 import { notifications } from "@mantine/notifications";
-import { IconCheck } from "@tabler/icons-react";
+import { IconCheck, IconX } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
 
@@ -35,7 +35,7 @@ const useLogin = () => {
                     title: 'Login Failed',
                     message: 'Authentication Failed',
                     color: 'red',
-                    icon: <IconCheck size={20} stroke={1.5} />,
+                    icon: <IconX size={20} stroke={1.5} />,
                     position: 'top-right'
                 })
             }
