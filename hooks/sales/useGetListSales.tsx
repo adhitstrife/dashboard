@@ -15,7 +15,7 @@ const useGetListSales = () => {
     const getListSales = async (page: number = 1, page_size: number = 10, name?: string, ) => {
         try {
             setIsLoadingGetListSales(true);
-            const url = `/backend/api/sales?page=${page}&page_size=${page_size}&name=${name ? name : ''}`;
+            const url = `/backend/api/sales?page=${page}&page_size=${page_size}&keyword=${name ? name : ''}`;
             const response = await axios.get(url, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`

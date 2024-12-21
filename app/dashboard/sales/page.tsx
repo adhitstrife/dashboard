@@ -12,6 +12,7 @@ import useGetListSales from "@/hooks/sales/useGetListSales";
 import useGetSalesDetail from "@/hooks/sales/useGetSalesDetail";
 import useEditSales from "@/hooks/sales/useEditSales";
 import useDeleteSales from "@/hooks/sales/useDeleteSales";
+import Link from "next/link";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -282,7 +283,7 @@ export default function user() {
                                             <Table.Td>{sales.nip}</Table.Td>
                                             <Table.Td>
                                                 <Group>
-                                                    <ActionIcon variant="transparent" onClick={() => openEditSalesModal(sales.id)}>
+                                                    <ActionIcon variant="transparent" component={Link} href={`/dashboard/sales/${sales.id}`} >
                                                         <IconEye size={20} stroke={1.5} />
                                                     </ActionIcon>
                                                     <ActionIcon variant="transparent" onClick={() => openEditSalesModal(sales.id)}>

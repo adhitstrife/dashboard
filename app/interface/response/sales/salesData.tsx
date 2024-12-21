@@ -1,8 +1,11 @@
+import target from "./target";
+
 interface salesCity {
     id: number;
     name: string;
     province_id: number
 }
+
 interface salesData {
     id:number;
     username: string;
@@ -25,6 +28,7 @@ interface salesData {
     account_name: string;
     account_number: string;
     city: salesCity;
+    target: target | null;
 }
 
 export default salesData
