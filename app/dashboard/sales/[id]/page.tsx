@@ -10,6 +10,8 @@ import { YearPickerInput } from "@mantine/dates";
 import targetAddPayload from "@/app/interface/payload/targetAddPayload";
 import useAddTarget from "@/hooks/target/useAddTarget";
 import useUpdateTarget from "@/hooks/target/useUpdateTarget";
+import { CustomerTable } from "./customerTable";
+import useGetListCustomer from "@/hooks/customer/useGetListCustomer";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
@@ -20,10 +22,13 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     const theme = useMantineTheme();
     const { getUserProfile, userProfile, isLoading } = useUserProfile()
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
+    const { isLoadingGetListCustomer,  customerData , getListCustomer } = useGetListCustomer();
     const { isLoadingAddTarget, postNewTarget } = useAddTarget()
     const { isLoadingUpdateTarget, updateTarget } = useUpdateTarget()
     const [showEditTargetModal, setShowEditTargetModal] = useState(false);
     const [showAddTargetModal, setShowAddTargetModal] = useState(false);
+    const [ pageCustomer, setPageCustomer ] = useState(1);
+    const [ pageSizeCustomer, setPageSizeCustomer ] = useState(10);
     const [addPayload, setAddPayload] = useState<targetAddPayload>({
         sales_id: null,
         period: null,
@@ -49,6 +54,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
             }
             return payload
         })
+        getListCustomer(1,10,undefined,undefined,id);
     }, [id])
 
     useEffect(() => {
@@ -60,7 +66,6 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                 current_progress: salesDetail.results.target.current_progress
             })
         }
-        console.log("foo")
     }, [salesDetail])
 
     const formatNumber = (number: number) => {
@@ -268,8 +273,10 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                         </Grid>
                                     </Tabs.Panel>
 
-                                    <Tabs.Panel value="messages">
-                                        Messages tab content
+                                    <Tabs.Panel value="customers">
+                                        {customerData && (
+                                            <CustomerTable customerList={customerData} />
+                                        )}
                                     </Tabs.Panel>
 
                                     <Tabs.Panel value="settings">
