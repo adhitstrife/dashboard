@@ -2,7 +2,7 @@
 import { ActionIcon, AppShell, Box, Button, Card, Center, Flex, Grid, Group, Image, Modal, NumberInput, Progress, Tabs, Text, Title, useMantineTheme } from "@mantine/core";
 import DashboardLayout from "../../layout";
 import useUserProfile from "@/hooks/auth/useUserProfile";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import useGetSalesDetail from "@/hooks/sales/useGetSalesDetail";
 import { IconCalendarCheck, IconEdit, IconFileDollar, IconUser, IconUserDollar } from "@tabler/icons-react";
 import { SalesDataLabel } from "./salesDataLabel";
@@ -11,7 +11,12 @@ import targetAddPayload from "@/app/interface/payload/targetAddPayload";
 import useAddTarget from "@/hooks/target/useAddTarget";
 import useUpdateTarget from "@/hooks/target/useUpdateTarget";
 
-export default function salesDetail({ params }: { params: { id: number } }) {
+interface SalesDetailProps {
+    params: { id: string }; // id is usually passed as a string in params
+}
+
+export default function salesDetail({ params }: { params: Promise<{ id: number }>}) {
+    const { id } = use(params);
     const theme = useMantineTheme();
     const { getUserProfile, userProfile, isLoading } = useUserProfile()
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
@@ -36,15 +41,15 @@ export default function salesDetail({ params }: { params: { id: number } }) {
 
     useEffect(() => {
         getUserProfile()
-        getDetailSales(params.id)
+        getDetailSales(id)
         setAddPayload((prevPayload) => {
             const payload = {
                 ...prevPayload,
-                sales_id: params.id
+                sales_id: id
             }
             return payload
         })
-    }, [params])
+    }, [id])
 
     useEffect(() => {
         if (salesDetail && salesDetail.results.target) {
@@ -130,15 +135,15 @@ export default function salesDetail({ params }: { params: { id: number } }) {
         } finally {
             setShowAddTargetModal(false);
             setShowEditTargetModal(false);
-            getDetailSales(params.id)
+            getDetailSales(id)
             setAddPayload({
-                sales_id: params.id,
+                sales_id: id,
                 period: null,
                 target_amount: null,
                 current_progress: null
             })
             setEditPayload({
-                sales_id: params.id,
+                sales_id: id,
                 period: null,
                 target_amount: null,
                 current_progress: null
