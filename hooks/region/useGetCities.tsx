@@ -14,7 +14,7 @@ const useGetCities = () => {
         try {
             setIsLoadingGetCities(true);
             const url = '/backend/api/cities';
-            const response = await axios.get(`${url}?name=${name ? name : ''}`, {
+            const response = await axios.get(`${url}?keyword=${name ? name : ''}`, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`
                 }
