@@ -10,25 +10,28 @@ import { YearPickerInput } from "@mantine/dates";
 import targetAddPayload from "@/app/interface/payload/targetAddPayload";
 import useAddTarget from "@/hooks/target/useAddTarget";
 import useUpdateTarget from "@/hooks/target/useUpdateTarget";
-import { CustomerTable } from "./customerTable";
+import { CustomerTable } from "../../../../components/customerTable";
 import useGetListCustomer from "@/hooks/customer/useGetListCustomer";
+import useGetListVisit from "@/hooks/visit/useGetListVisit";
+import { VisitTable } from "@/components/visitTable";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
 }
 
-export default function salesDetail({ params }: { params: Promise<{ id: number }>}) {
+export default function salesDetail({ params }: { params: Promise<{ id: number }> }) {
     const { id } = use(params);
     const theme = useMantineTheme();
     const { getUserProfile, userProfile, isLoading } = useUserProfile()
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
-    const { isLoadingGetListCustomer,  customerData , getListCustomer } = useGetListCustomer();
+    const { isLoadingGetListCustomer, customerData, getListCustomer } = useGetListCustomer();
+    const { isLoadingGetListVisit, getListVisit, visitData } = useGetListVisit();
     const { isLoadingAddTarget, postNewTarget } = useAddTarget()
     const { isLoadingUpdateTarget, updateTarget } = useUpdateTarget()
     const [showEditTargetModal, setShowEditTargetModal] = useState(false);
     const [showAddTargetModal, setShowAddTargetModal] = useState(false);
-    const [ pageCustomer, setPageCustomer ] = useState(1);
-    const [ pageSizeCustomer, setPageSizeCustomer ] = useState(10);
+    const [pageCustomer, setPageCustomer] = useState(1);
+    const [pageSizeCustomer, setPageSizeCustomer] = useState(10);
     const [addPayload, setAddPayload] = useState<targetAddPayload>({
         sales_id: null,
         period: null,
@@ -54,7 +57,8 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
             }
             return payload
         })
-        getListCustomer(1,10,undefined,undefined,id);
+        getListCustomer(1, 10, undefined, undefined, id);
+        getListVisit(1, 10, undefined, undefined, id);
     }, [id])
 
     useEffect(() => {
@@ -126,7 +130,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
         return setShowEditTargetModal(false)
     }
 
-    
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
@@ -278,9 +282,10 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                             <CustomerTable customerList={customerData} />
                                         )}
                                     </Tabs.Panel>
-
-                                    <Tabs.Panel value="settings">
-                                        Settings tab content
+                                    <Tabs.Panel value="visit">
+                                        {visitData && (
+                                            <VisitTable visitList={visitData} />
+                                        )}
                                     </Tabs.Panel>
                                 </Tabs>
                             </Box>
