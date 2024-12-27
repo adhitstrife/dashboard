@@ -1,30 +1,31 @@
 import selectData from "@/app/interface/component/selectData";
 import countryResponse from "@/app/interface/response/country";
+import provincesResponse from "@/app/interface/response/province";
 import { notifications } from "@mantine/notifications";
 import { IconX } from "@tabler/icons-react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useState } from "react"
 
-const useGetCities = () => {
-    const [isLoadingGetCities, setIsLoadingGetCities] = useState(false);
-    const [cities, setCities] = useState<selectData[]>([]);
+const useGetProvinces = () => {
+    const [isLoadingGetProvinces, setIsLoadingGetProvinces] = useState(false);
+    const [provinces, setProvinces] = useState<selectData[]>([]);
 
-    const getCountryList = async (name?: string | null, province_id?: number | null) => {
+    const getProvinceList = async (name?: string | null) => {
         try {
-            setIsLoadingGetCities(true);
-            const url = '/backend/api/cities';
-            const response = await axios.get(`${url}?province_id=${province_id ? province_id : ''}&keyword=${name ? name : ''}`, {
+            setIsLoadingGetProvinces(true);
+            const url = '/backend/api/provinces';
+            const response = await axios.get(`${url}?keyword=${name ? name : ''}`, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`
                 }
             }
             );
-            const json: countryResponse = response.data
+            const json: provincesResponse = response.data
             toString
-            setCities(json.results.map((country) => ({
-                value: country.id.toString(),
-                label: country.name
+            setProvinces(json.results.map((province) => ({
+                value: province.id.toString(),
+                label: province.name
             })))
 
         } catch (error) {
@@ -39,6 +40,6 @@ const useGetCities = () => {
         }
     }
 
-    return { getCountryList, cities, isLoadingGetCities }
+    return { getProvinceList, provinces, isLoadingGetProvinces }
 }
-export default useGetCities;
+export default useGetProvinces;

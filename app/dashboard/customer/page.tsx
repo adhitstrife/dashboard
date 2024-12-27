@@ -1,46 +1,177 @@
 "use client"
-import { ActionIcon, AppShell, Box, Button, Card, Dialog, Flex, Group, Image, Modal, NumberInput, Table, Text, TextInput, Title, useMantineTheme } from "@mantine/core";
+import { ActionIcon, AppShell, Box, Button, Card, Dialog, Flex, Group, Image, Loader, Modal, NumberInput, Select, Table, Text, TextInput, Title, useMantineTheme } from "@mantine/core";
 import DashboardLayout from "../layout";
 import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { useDisclosure, useViewportSize } from "@mantine/hooks";
+import useGetCities from "@/hooks/region/useGetCities";
+import useGetProvinces from "@/hooks/region/useGetProvince";
+import customerPayload from "@/app/interface/payload/customerPayload";
+import useGetDistrict from "@/hooks/region/useGetDistrict";
+import useGetSubDistrict from "@/hooks/region/useGetSubDistrict";
+import useGetSubDistricts from "@/hooks/region/useGetSubDistrict";
+import useAddCustomer from "@/hooks/customer/useAddCustomer";
+import useGetListCustomer from "@/hooks/customer/useGetListCustomer";
+import { CustomerTable } from "@/components/customerTable";
+import useGetListSales from "@/hooks/sales/useGetListSales";
+import useAssignSalesToCustomer from "@/hooks/customer/useAssignSalesToCustomer";
 
 export default function user() {
     const theme = useMantineTheme();
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [opened, { toggle, close }] = useDisclosure(false);
+    const [customerPayload, setCustomerPayload] = useState<customerPayload>({
+        address: '',
+        city_id: null,
+        contact_person: '',
+        district_id: null,
+        permission_letter: '',
+        province_id: null,
+        sub_district_id: null,
+        name: '',
+        npwp: '',
+        phone: ''
+    })
+    const [showAssignSalesModal, setShowAssignSaleModal] = useState(false);
+    const [ page, setPage ] = useState(1);
+    const [ pageSize, setPageSize ] = useState(10)
+    const [ searchedCustomer, setSearchedCustomer ] = useState("");
+    const [assignSalesPayload, setAssignSalesPayload] = useState<assignSales>({
+        customer_id: null,
+        sales_id: null
+    })
     const { height, width } = useViewportSize();
+    const { getCountryList, cities, isLoadingGetCities } = useGetCities()
+    const { getProvinceList, isLoadingGetProvinces, provinces } = useGetProvinces()
+    const { districts, getDistrictList, isLoadingGetDistrict} = useGetDistrict();
+    const { getSubDistrictList, isLoadingGetSubDistrict, subDistricts} = useGetSubDistricts();
+    const { isLoadingAddCustomer, postNewCustomer } = useAddCustomer();
+    const { isLoadingGetListCustomer, customerData, getListCustomer } = useGetListCustomer();
+    const { isLoadingGetListSales, getListSales, salesData, listForSelesSelect } = useGetListSales();
+    const { assignSalesToCustomer, isLoadingAssignSales } = useAssignSalesToCustomer();
+
+    const searchProvince = (e: string) => {
+        getProvinceList(e)
+    }
+    const searchCity = (e: string) => {
+        getCountryList(e, customerPayload.province_id)
+    }
+
+    const searchDistrict = (e: string) => {
+        getDistrictList(e, customerPayload.city_id)
+    }
+
+    const searchSales = (e: string) => {
+        getListSales(1,10,e)
+    }
+
+    const searchSubDistrict = (e: string) => {
+        getSubDistrictList(e, customerPayload.district_id)
+    }
+
+    const selectSalesToAssign = (e: string | null) => {
+        if (e) {
+            setAssignSalesPayload({
+                ...assignSalesPayload,
+                sales_id: parseInt(e)
+            })
+        }
+    }
+
+    const handleSelectChange = (name: string, e: string | null) => {
+        if (e) {
+            const value = parseInt(e)
+            setCustomerPayload({
+                ...customerPayload,
+                [name]: value
+            })
+        }
+    }
+
+    const handleNumberInput = (name: string, value: string | null | number) => {
+        setCustomerPayload({
+            ...customerPayload,
+            [name]: value
+        })
+    }
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+
+        setCustomerPayload({
+            ...customerPayload,
+            [name]: value
+        });
+    }
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault()
+        try {
+            await postNewCustomer(customerPayload);
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setShowAddModal(false);
+            getListCustomer(page, pageSize, searchedCustomer)
+            clearPayload();
+        }
+    }
+
+    const processAssignSales = async (e: React.FormEvent) => {
+        e.preventDefault
+        try {
+            await assignSalesToCustomer(assignSalesPayload)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setShowAssignSaleModal(false)
+            setAssignSalesPayload({
+                customer_id: null,
+                sales_id: null
+            })
+        }
+    }
+
+    const clearPayload = () => {
+        setCustomerPayload({
+            address: '',
+            city_id: null,
+            contact_person: '',
+            district_id: null,
+            name: '',
+            npwp: '',
+            permission_letter: '',
+            phone: '',
+            province_id: null,
+            sub_district_id: null
+        })
+    }
 
     const elements = [
         {
             username: 'JohnDoe', firstName: 'John', lastName: 'Doe', email: 'john.mckinley@examplepetstore.com', phone: '+6287712345678', address: 'jl. kaki'
         },
     ]
-    const rows = elements.map((element) => (
-        <Table.Tr key={element.username}>
-            <Table.Td>{element.username}</Table.Td>
-            <Table.Td>{element.email}</Table.Td>
-            <Table.Td>{element.phone}</Table.Td>
-            <Table.Td>
-                <Button variant="filled" color="primary-red" size="xs">Assign</Button>
-            </Table.Td>
-            <Table.Td>
-                <Button variant="transparent" color="primary-red" size="xs">Show Letter</Button>
-            </Table.Td>
-            <Table.Td>{element.address}</Table.Td>
-            <Table.Td>
-                <Group>
-                    <ActionIcon variant="transparent" onClick={() => setShowEditModal(true)}>
-                        <IconPencil size={20} stroke={1.5} />
-                    </ActionIcon>
-                    <ActionIcon variant="transparent" onClick={toggle}>
-                        <IconTrash color="red" size={20} stroke={1.5} />
-                    </ActionIcon>
-                </Group>
-            </Table.Td>
-        </Table.Tr>
-    ));
+
+    const handleAssignSales = (customerId: number) => {
+        console.log('Assign Sales clicked for customer ID:', customerId);
+        setAssignSalesPayload({
+            ...assignSalesPayload,
+            customer_id: customerId
+        })
+        setShowAssignSaleModal(true)
+    };
+
+    useEffect(() => {
+        getListCustomer(page, 10, searchedCustomer)
+        getProvinceList()
+    }, [])
+
+    const handleChangePage = async (e: any) => {
+        await getListSales(e, 10, searchedCustomer);
+        setPage(e);
+    }
 
     return (
         <DashboardLayout>
@@ -66,52 +197,119 @@ export default function user() {
                             <IconPlus size={20} stroke={1.5} />
                         </Button>
                     </Group>
-                    <Table.ScrollContainer minWidth={200} mt={20}>
-                        <Table>
-                            <Table.Thead>
-                                <Table.Tr>
-                                    <Table.Th>Username</Table.Th>
-                                    <Table.Th>Contact Person</Table.Th>
-                                    <Table.Th>Phone</Table.Th>
-                                    <Table.Th>Sales</Table.Th>
-                                    <Table.Th>Permission Letter</Table.Th>
-                                    <Table.Th>Address</Table.Th>
-                                    <Table.Th>Actions</Table.Th>
-                                </Table.Tr>
-                            </Table.Thead>
-                            <Table.Tbody>{rows}</Table.Tbody>
-                        </Table>
-                    </Table.ScrollContainer>
+                    {customerData ? (
+                        <CustomerTable page={page} handleChangePage={handleChangePage} customerList={customerData}  onAssignSales={handleAssignSales} />
+                    ): (
+                        <Loader color='white' size={'lg'} />
+                    )}
                 </Card>
                 <Modal opened={showAddModal} onClose={() => setShowAddModal(false)} title="Add new sales">
-                    <form>
+                    <form onSubmit={handleSubmit}>
                         <TextInput
-                            label="Username"
-                            placeholder="Input Username"
+                            label="Name"
+                            placeholder="Input customer name"
+                            name="name"
                             mt={10}
+                            onChange={handleChange}
+                            withAsterisk
+                            required
                         />
                         <TextInput
-                            label="Firstname"
-                            placeholder="Input Firstname"
+                            label="Contact Person"
+                            placeholder="Input who can be contacted"
+                            name="contact_person"
                             mt={10}
-                        />
-                        <TextInput
-                            label="Lastname"
-                            placeholder="Input Lastname"
-                            mt={10}
+                            onChange={handleChange}
+                            withAsterisk
+                            required
                         />
                         <NumberInput
-                            label="Phonenumber"
-                            placeholder="Input Phone Number"
+                            label="Phone"
+                            placeholder="Input customer phone number"
                             mt={10}
                             hideControls
+                            onChange={(e) => handleNumberInput('phone', e)}
+                            withAsterisk
+                            required
+                        />
+                        <TextInput
+                            label="Permission letter number"
+                            placeholder="Input customer permission letter number"
+                            name="permission_letter"
+                            mt={10}
+                            onChange={handleChange}
+                            withAsterisk
+                            required
+                        />
+                        <NumberInput
+                            label="NPWP"
+                            placeholder="Input customer NPWP"
+                            mt={10}
+                            hideControls
+                            onChange={(e) => handleNumberInput('npwp', e)}
+                            withAsterisk
+                            required
+                        />
+                        <Select
+                            label="Province"
+                            placeholder="Pick customer province"
+                            mt={10}
+                            data={provinces}
+                            name="province_id"
+                            searchable
+                            onSearchChange={(e) => searchProvince(e)}
+                            onChange={(e) => handleSelectChange('province_id', e)}
+                            withAsterisk
+                        />
+                        <Select
+                            label="City"
+                            placeholder="Pick customer city"
+                            mt={10}
+                            data={cities}
+                            name="city_id"
+                            searchable
+                            onSearchChange={(e) => searchCity(e)}
+                            onChange={(e) => handleSelectChange('city_id', e)}
+                            disabled={!customerPayload.province_id}
+                            onFocus={(e) => searchCity(e.target.value)}
+                            withAsterisk
+                        />
+                        <Select
+                            label="District"
+                            placeholder="Pick customer district"
+                            mt={10}
+                            data={districts}
+                            name="district_id"
+                            searchable
+                            onSearchChange={(e) => searchDistrict(e)}
+                            onChange={(e) => handleSelectChange('district_id', e)}
+                            disabled={!customerPayload.city_id}
+                            onFocus={(e) => searchDistrict(e.target.value)}
+                            withAsterisk
+                        />
+                        <Select
+                            label="Sub District"
+                            placeholder="Pick customer sub district"
+                            mt={10}
+                            data={subDistricts}
+                            name="sub_district_id"
+                            searchable
+                            onSearchChange={(e) => searchSubDistrict(e)}
+                            onChange={(e) => handleSelectChange('sub_district_id', e)}
+                            disabled={!customerPayload.district_id}
+                            onFocus={(e) => searchSubDistrict(e.target.value)}
+                            withAsterisk
                         />
                         <TextInput
                             label="Address"
                             placeholder="Input Address"
                             mt={10}
+                            onChange={handleChange}
+                            name="address"
+                            withAsterisk
+                            required
                         />
-                        <Button variant="filled" color="primary-red" mt={20} fullWidth>
+                        <Button type="submit" variant="filled" color="primary-red" mt={20} fullWidth>
                             Save
                         </Button>
                     </form>
@@ -150,10 +348,28 @@ export default function user() {
                     </form>
                 </Modal>
                 <Modal opened={opened} withCloseButton onClose={close} size="lg" title="Are you sure want to delete this item">
-                    
+
                     <Button variant="filled" color="primary-red" mt={20} fullWidth>
                         Delete
                     </Button>
+                </Modal>
+                <Modal opened={showAssignSalesModal} onClose={() => setShowAssignSaleModal(false)} title="Pick sales to assign to this customer">
+                    <form onSubmit={processAssignSales}>
+                        <Select
+                            label="Sales"
+                            placeholder="Search sales name"
+                            mt={10}
+                            data={listForSelesSelect}
+                            name="sales_id"
+                            searchable
+                            onSearchChange={(e) => searchSales(e)}
+                            onChange={(e) => selectSalesToAssign(e)}
+                            withAsterisk
+                        />
+                        <Button type="submit" variant="filled" color="primary-red" mt={20} fullWidth>
+                            Save
+                        </Button>
+                    </form>
                 </Modal>
             </AppShell.Main>
         </DashboardLayout>

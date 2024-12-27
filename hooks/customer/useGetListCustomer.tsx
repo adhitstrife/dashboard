@@ -13,7 +13,8 @@ const useGetListCustomer = () => {
     const getListCustomer = async (page: number = 1, page_size: number = 10, name?: string, status?: string, sales_id?: number ) => {
         try {
             setIsLoadingGetListCustomer(true);
-            const url = `/backend/api/customer?sales_id=${sales_id ? sales_id : ''}&status=${status ? status : ''}page=${page}&page_size=${page_size}&keyword=${name ? name : ''}`;
+            const withStatus = status ? `&status=${status ? status : ''}` : null;
+            const url = `/backend/api/customer?sales_id=${sales_id ? sales_id : ''}&status=${status ? status : ''}&page=${page}&page_size=${page_size}&keyword=${name ? name : ''}`;
             const response = await axios.get(url, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`

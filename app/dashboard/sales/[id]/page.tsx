@@ -4,7 +4,7 @@ import DashboardLayout from "../../layout";
 import useUserProfile from "@/hooks/auth/useUserProfile";
 import { use, useEffect, useState } from "react";
 import useGetSalesDetail from "@/hooks/sales/useGetSalesDetail";
-import { IconCalendarCheck, IconEdit, IconFileDollar, IconUser, IconUserDollar } from "@tabler/icons-react";
+import { IconCalendarCheck, IconClockCheck, IconEdit, IconFileDollar, IconUser, IconUserDollar } from "@tabler/icons-react";
 import { SalesDataLabel } from "./salesDataLabel";
 import { YearPickerInput } from "@mantine/dates";
 import targetAddPayload from "@/app/interface/payload/targetAddPayload";
@@ -14,6 +14,11 @@ import { CustomerTable } from "../../../../components/customerTable";
 import useGetListCustomer from "@/hooks/customer/useGetListCustomer";
 import useGetListVisit from "@/hooks/visit/useGetListVisit";
 import { VisitTable } from "@/components/visitTable";
+import useGetListLeave from "@/hooks/leave/useGetListLeave";
+import { LeaveTable } from "@/components/leaveTable";
+import { AttendanceTable } from "@/components/attendanceTable";
+import useGetListAttendance from "@/hooks/attendance/useGetListAttendance";
+import useGetListSales from "@/hooks/sales/useGetListSales";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
@@ -25,13 +30,14 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     const { getUserProfile, userProfile, isLoading } = useUserProfile()
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
     const { isLoadingGetListCustomer, customerData, getListCustomer } = useGetListCustomer();
+    const { getListLeave, isLoadingGetListLeave, leaveData} = useGetListLeave();
     const { isLoadingGetListVisit, getListVisit, visitData } = useGetListVisit();
+    const { attendanceData, getListAttendance, isLoadingGetListAttendance } = useGetListAttendance();
     const { isLoadingAddTarget, postNewTarget } = useAddTarget()
     const { isLoadingUpdateTarget, updateTarget } = useUpdateTarget()
     const [showEditTargetModal, setShowEditTargetModal] = useState(false);
     const [showAddTargetModal, setShowAddTargetModal] = useState(false);
     const [pageCustomer, setPageCustomer] = useState(1);
-    const [pageSizeCustomer, setPageSizeCustomer] = useState(10);
     const [addPayload, setAddPayload] = useState<targetAddPayload>({
         sales_id: null,
         period: null,
@@ -44,6 +50,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
         target_amount: null,
         current_progress: null
     })
+    const [ searchedCustomer, setSearchedCustomer ] = useState("");
     const currentYear = new Date().getFullYear();
     const maxYearDate = new Date(currentYear + 1, 11, 31);
 
@@ -59,6 +66,8 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
         })
         getListCustomer(1, 10, undefined, undefined, id);
         getListVisit(1, 10, undefined, undefined, id);
+        getListLeave(1, 10, undefined,  id)
+        getListAttendance(1, 10, true, id)
     }, [id])
 
     useEffect(() => {
@@ -160,6 +169,11 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
         }
     }
 
+    const handleChangePageCustomer = async (e: any) => {
+        await getListCustomer(e, 10, searchedCustomer);
+        setPageCustomer(e);
+    }
+
     return (
         <DashboardLayout>
             <AppShell.Main bg={'#F6F6F6'}>
@@ -212,6 +226,9 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                     <Tabs.List>
                                         <Tabs.Tab value="detail" leftSection={<IconUser size={20} stroke={1.5} />}>
                                             Detail
+                                        </Tabs.Tab>
+                                        <Tabs.Tab value="attendance" leftSection={<IconClockCheck size={20} stroke={1.5} />}>
+                                            Attendance
                                         </Tabs.Tab>
                                         <Tabs.Tab value="customers" leftSection={<IconUserDollar size={20} stroke={1.5} />}>
                                             Customers
@@ -276,15 +293,24 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                             </Grid.Col>
                                         </Grid>
                                     </Tabs.Panel>
-
+                                    <Tabs.Panel value="attendance">
+                                        {attendanceData && (
+                                            <AttendanceTable attendanceList={attendanceData} />
+                                        )}
+                                    </Tabs.Panel>
                                     <Tabs.Panel value="customers">
                                         {customerData && (
-                                            <CustomerTable customerList={customerData} />
+                                            <CustomerTable page={pageCustomer} handleChangePage={handleChangePageCustomer} customerList={customerData} />
                                         )}
                                     </Tabs.Panel>
                                     <Tabs.Panel value="visit">
                                         {visitData && (
                                             <VisitTable visitList={visitData} />
+                                        )}
+                                    </Tabs.Panel>
+                                    <Tabs.Panel value="leave">
+                                        {leaveData && (
+                                            <LeaveTable leaveList={leaveData} />
                                         )}
                                     </Tabs.Panel>
                                 </Tabs>

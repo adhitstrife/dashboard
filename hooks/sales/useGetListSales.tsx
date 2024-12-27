@@ -11,6 +11,7 @@ import { useState } from "react"
 const useGetListSales = () => {
     const [isLoadingGetListSales, setIsLoadingGetListSales] = useState(false);
     const [salesData, setSalesData] = useState<salesResponse>();
+    const [listForSelesSelect, setListForSelesSelect] = useState<selectData[]>([]);
     
     const getListSales = async (page: number = 1, page_size: number = 10, name?: string, ) => {
         try {
@@ -24,6 +25,10 @@ const useGetListSales = () => {
             );
             const json: salesResponse = response.data
             setSalesData(json)
+            setListForSelesSelect(json.results.map((sales) => ({
+                value: sales.id.toString(),
+                label: sales.name
+            })))
         } catch (error) {
             notifications.show({
                 title: 'Fetch Failed',
@@ -38,6 +43,6 @@ const useGetListSales = () => {
         }
     }
 
-    return { getListSales, salesData, isLoadingGetListSales }
+    return { getListSales, salesData, listForSelesSelect, isLoadingGetListSales }
 }
 export default useGetListSales;
