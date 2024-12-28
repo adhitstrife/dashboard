@@ -5,20 +5,22 @@ import useUserProfile from "@/hooks/auth/useUserProfile";
 import { use, useEffect, useState } from "react";
 import useGetSalesDetail from "@/hooks/sales/useGetSalesDetail";
 import { IconCalendarCheck, IconClockCheck, IconEdit, IconFileDollar, IconUser, IconUserDollar } from "@tabler/icons-react";
-import { SalesDataLabel } from "./salesDataLabel";
+import { DataLabel } from "../../../../components/label/dataLabel";
 import { YearPickerInput } from "@mantine/dates";
 import targetAddPayload from "@/app/interface/payload/targetAddPayload";
 import useAddTarget from "@/hooks/target/useAddTarget";
 import useUpdateTarget from "@/hooks/target/useUpdateTarget";
-import { CustomerTable } from "../../../../components/customerTable";
+import { CustomerTable } from "../../../../components/table/customerTable";
 import useGetListCustomer from "@/hooks/customer/useGetListCustomer";
 import useGetListVisit from "@/hooks/visit/useGetListVisit";
-import { VisitTable } from "@/components/visitTable";
+import { VisitTable } from "@/components/table/visitTable";
 import useGetListLeave from "@/hooks/leave/useGetListLeave";
-import { LeaveTable } from "@/components/leaveTable";
-import { AttendanceTable } from "@/components/attendanceTable";
+import { LeaveTable } from "@/components/table/leaveTable";
+import { AttendanceTable } from "@/components/table/attendanceTable";
 import useGetListAttendance from "@/hooks/attendance/useGetListAttendance";
 import useGetListSales from "@/hooks/sales/useGetListSales";
+import { useAtomValue } from "jotai";
+import { customerListAtom } from "@/state/data/customerListAtom";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
@@ -29,7 +31,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     const theme = useMantineTheme();
     const { getUserProfile, userProfile, isLoading } = useUserProfile()
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
-    const { isLoadingGetListCustomer, customerData, getListCustomer } = useGetListCustomer();
+    const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
     const { getListLeave, isLoadingGetListLeave, leaveData} = useGetListLeave();
     const { isLoadingGetListVisit, getListVisit, visitData } = useGetListVisit();
     const { attendanceData, getListAttendance, isLoadingGetListAttendance } = useGetListAttendance();
@@ -53,6 +55,8 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     const [ searchedCustomer, setSearchedCustomer ] = useState("");
     const currentYear = new Date().getFullYear();
     const maxYearDate = new Date(currentYear + 1, 11, 31);
+
+    const customerList = useAtomValue(customerListAtom)
 
     useEffect(() => {
         getUserProfile()
@@ -244,52 +248,52 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                     <Tabs.Panel value="detail">
                                         <Grid mt={40}>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Username" value={salesDetail.results.username} />
+                                                <DataLabel label="Username" value={salesDetail.results.username} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Fullname" value={salesDetail.results.name} />
+                                                <DataLabel label="Fullname" value={salesDetail.results.name} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="NIP" value={salesDetail.results.nip} />
+                                                <DataLabel label="NIP" value={salesDetail.results.nip} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Status Pekerja" value={salesDetail.results.employee_status} />
+                                                <DataLabel label="Status Pekerja" value={salesDetail.results.employee_status} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Level" value={salesDetail.results.job_level} />
+                                                <DataLabel label="Level" value={salesDetail.results.job_level} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Joining Date" value={salesDetail.results.joining_date} />
+                                                <DataLabel label="Joining Date" value={salesDetail.results.joining_date} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Birthplace" value={salesDetail.results.birth_place.name} />
+                                                <DataLabel label="Birthplace" value={salesDetail.results.birth_place.name} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Gender" value={salesDetail.results.gender} />
+                                                <DataLabel label="Gender" value={salesDetail.results.gender} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Religion" value={salesDetail.results.religion} />
+                                                <DataLabel label="Religion" value={salesDetail.results.religion} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Blood Type" value={salesDetail.results.blood_type} />
+                                                <DataLabel label="Blood Type" value={salesDetail.results.blood_type} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Email" value={salesDetail.results.email} />
+                                                <DataLabel label="Email" value={salesDetail.results.email} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Phone Number" value={salesDetail.results.phone} />
+                                                <DataLabel label="Phone Number" value={salesDetail.results.phone} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Address" value={salesDetail.results.address} />
+                                                <DataLabel label="Address" value={salesDetail.results.address} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Bank Name" value={salesDetail.results.bank_name} />
+                                                <DataLabel label="Bank Name" value={salesDetail.results.bank_name} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Account Name" value={salesDetail.results.account_name} />
+                                                <DataLabel label="Account Name" value={salesDetail.results.account_name} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <SalesDataLabel label="Account Number" value={salesDetail.results.account_number} />
+                                                <DataLabel label="Account Number" value={salesDetail.results.account_number} />
                                             </Grid.Col>
                                         </Grid>
                                     </Tabs.Panel>
@@ -299,8 +303,8 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                         )}
                                     </Tabs.Panel>
                                     <Tabs.Panel value="customers">
-                                        {customerData && (
-                                            <CustomerTable page={pageCustomer} handleChangePage={handleChangePageCustomer} customerList={customerData} />
+                                        {customerList && (
+                                            <CustomerTable page={pageCustomer} handleChangePage={handleChangePageCustomer} />
                                         )}
                                     </Tabs.Panel>
                                     <Tabs.Panel value="visit">

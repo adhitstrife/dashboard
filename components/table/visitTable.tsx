@@ -27,7 +27,7 @@ export const VisitTable: FC<visitTable> = ({ visitList }) => {
                 <Table.Tbody>
                     {visitList.results.length <= 0 && (
                         <Table.Tr>
-                            <Table.Td colSpan={6} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                            <Table.Td colSpan={12} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
                                 <Text>No visit yet </Text>
                             </Table.Td>
                         </Table.Tr>

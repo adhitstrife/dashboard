@@ -12,9 +12,15 @@ import useGetSubDistrict from "@/hooks/region/useGetSubDistrict";
 import useGetSubDistricts from "@/hooks/region/useGetSubDistrict";
 import useAddCustomer from "@/hooks/customer/useAddCustomer";
 import useGetListCustomer from "@/hooks/customer/useGetListCustomer";
-import { CustomerTable } from "@/components/customerTable";
+import { CustomerTable } from "@/components/table/customerTable";
 import useGetListSales from "@/hooks/sales/useGetListSales";
 import useAssignSalesToCustomer from "@/hooks/customer/useAssignSalesToCustomer";
+import { useAtomValue, useSetAtom } from "jotai";
+import { customerDetailAtom } from "@/state/data/customerDetailAtom";
+import customerData from "@/app/interface/response/customer/customerData";
+import { CustomerDetailModal } from "@/components/modal/customer/customerDetailModal";
+import { CustomerEditModal } from "@/components/modal/customer/customerEditModal";
+import { customerListAtom } from "@/state/data/customerListAtom";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -33,7 +39,8 @@ export default function user() {
         npwp: '',
         phone: ''
     })
-    const [showAssignSalesModal, setShowAssignSaleModal] = useState(false);
+    const [showAssignSalesModal, setShowAssignSalesModal] = useState(false);
+    const [showDetailCustomerModal, setShowDetailCustomerModal] = useState(false);
     const [ page, setPage ] = useState(1);
     const [ pageSize, setPageSize ] = useState(10)
     const [ searchedCustomer, setSearchedCustomer ] = useState("");
@@ -41,15 +48,19 @@ export default function user() {
         customer_id: null,
         sales_id: null
     })
+
+    const customerList = useAtomValue(customerListAtom)
+
     const { height, width } = useViewportSize();
     const { getCountryList, cities, isLoadingGetCities } = useGetCities()
     const { getProvinceList, isLoadingGetProvinces, provinces } = useGetProvinces()
     const { districts, getDistrictList, isLoadingGetDistrict} = useGetDistrict();
     const { getSubDistrictList, isLoadingGetSubDistrict, subDistricts} = useGetSubDistricts();
     const { isLoadingAddCustomer, postNewCustomer } = useAddCustomer();
-    const { isLoadingGetListCustomer, customerData, getListCustomer } = useGetListCustomer();
+    const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
     const { isLoadingGetListSales, getListSales, salesData, listForSelesSelect } = useGetListSales();
     const { assignSalesToCustomer, isLoadingAssignSales } = useAssignSalesToCustomer();
+
 
     const searchProvince = (e: string) => {
         getProvinceList(e)
@@ -125,7 +136,7 @@ export default function user() {
         } catch (error) {
             console.log(error)
         } finally {
-            setShowAssignSaleModal(false)
+            setShowAssignSalesModal(false)
             setAssignSalesPayload({
                 customer_id: null,
                 sales_id: null
@@ -160,7 +171,7 @@ export default function user() {
             ...assignSalesPayload,
             customer_id: customerId
         })
-        setShowAssignSaleModal(true)
+        setShowAssignSalesModal(true)
     };
 
     useEffect(() => {
@@ -197,12 +208,14 @@ export default function user() {
                             <IconPlus size={20} stroke={1.5} />
                         </Button>
                     </Group>
-                    {customerData ? (
-                        <CustomerTable page={page} handleChangePage={handleChangePage} customerList={customerData}  onAssignSales={handleAssignSales} />
+                    {customerList ? (
+                        <CustomerTable  page={page} handleChangePage={handleChangePage}  onAssignSales={handleAssignSales} />
                     ): (
                         <Loader color='white' size={'lg'} />
                     )}
                 </Card>
+                <CustomerDetailModal  />
+                <CustomerEditModal />
                 <Modal opened={showAddModal} onClose={() => setShowAddModal(false)} title="Add new sales">
                     <form onSubmit={handleSubmit}>
                         <TextInput
@@ -314,46 +327,14 @@ export default function user() {
                         </Button>
                     </form>
                 </Modal>
-                <Modal opened={showEditModal} onClose={() => setShowEditModal(false)} title="Edit sales data">
-                    <form>
-                        <TextInput
-                            label="Username"
-                            placeholder="Input Username"
-                            mt={10}
-                        />
-                        <TextInput
-                            label="Firstname"
-                            placeholder="Input Firstname"
-                            mt={10}
-                        />
-                        <TextInput
-                            label="Lastname"
-                            placeholder="Input Lastname"
-                            mt={10}
-                        />
-                        <NumberInput
-                            label="Phonenumber"
-                            placeholder="Input Phone Number"
-                            mt={10}
-                            hideControls
-                        />
-                        <TextInput
-                            label="Address"
-                            placeholder="Input Address"
-                            mt={10}
-                        />
-                        <Button variant="filled" color="primary-red" mt={20} fullWidth>
-                            Save
-                        </Button>
-                    </form>
-                </Modal>
+                
                 <Modal opened={opened} withCloseButton onClose={close} size="lg" title="Are you sure want to delete this item">
 
                     <Button variant="filled" color="primary-red" mt={20} fullWidth>
                         Delete
                     </Button>
                 </Modal>
-                <Modal opened={showAssignSalesModal} onClose={() => setShowAssignSaleModal(false)} title="Pick sales to assign to this customer">
+                <Modal opened={showAssignSalesModal} onClose={() => setShowAssignSalesModal(false)} title="Pick sales to assign to this customer">
                     <form onSubmit={processAssignSales}>
                         <Select
                             label="Sales"

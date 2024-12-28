@@ -10,15 +10,15 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useState } from "react"
 
-const useAddCustomer = () => {
-    const [isLoadingAddCustomer, setIsLoadingAddCustomer] = useState(false);
+const useEditCustomer = () => {
+    const [isLoadingEditCustomer, setIsLoadingEditCustomer] = useState(false);
     const [customerData, setCustomerData] = useState<customerDetailResponse>();
     
-    const postNewCustomer = async (payload: customerPayload) => {
+    const updateNewCustomer = async (id: number, payload: customerPayload) => {
         try {
-            setIsLoadingAddCustomer(true);
-            const url = '/backend/api/customer';
-            const response = await axios.post(url, payload, {
+            setIsLoadingEditCustomer(true);
+            const url = `/backend/api/customers/${id}`;
+            const response = await axios.put(url, payload, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`
                 }
@@ -29,7 +29,7 @@ const useAddCustomer = () => {
 
             notifications.show({
                 title: 'Saving Complete',
-                message: `Success adding new customer`,
+                message: `Success Editing new sales`,
                 color: 'green',
                 icon: <IconCheck size={20} stroke={1.5} />,
                 position: 'top-right'
@@ -38,17 +38,17 @@ const useAddCustomer = () => {
         } catch (error) {
             notifications.show({
                 title: 'Saving Failed',
-                message: `Error when store new customer data ${error}`,
+                message: `Error when store new sales data ${error}`,
                 color: 'red',
                 icon: <IconX size={20} stroke={1.5} />,
                 position: 'top-right'
             })
             return error;
         } finally {
-            setIsLoadingAddCustomer(false)
+            setIsLoadingEditCustomer(false)
         }
     }
 
-    return { postNewCustomer, customerData, isLoadingAddCustomer }
+    return { updateNewCustomer, customerData, isLoadingEditCustomer }
 }
-export default useAddCustomer;
+export default useEditCustomer;

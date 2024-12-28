@@ -1,14 +1,16 @@
 import customerListResponse from "@/app/interface/response/customer/customerListResponse";
 import salesResponse from "@/app/interface/response/sales/salesListResponse";
+import { customerListAtom } from "@/state/data/customerListAtom";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import axios from "axios";
+import { useSetAtom } from "jotai";
 import Cookies from "js-cookie";
 import { useState } from "react"
 
 const useGetListCustomer = () => {
     const [isLoadingGetListCustomer, setIsLoadingGetListCustomer] = useState(false);
-    const [customerData, setcustomerData] = useState<customerListResponse>();
+    const setListCustomer = useSetAtom(customerListAtom);
     
     const getListCustomer = async (page: number = 1, page_size: number = 10, name?: string, status?: string, sales_id?: number ) => {
         try {
@@ -22,7 +24,7 @@ const useGetListCustomer = () => {
             }
             );
             const json: customerListResponse = response.data
-            setcustomerData(json)
+            setListCustomer(json)
         } catch (error) {
             notifications.show({
                 title: 'Fetch Failed',
@@ -37,6 +39,6 @@ const useGetListCustomer = () => {
         }
     }
 
-    return { getListCustomer, customerData, isLoadingGetListCustomer }
+    return { getListCustomer, isLoadingGetListCustomer }
 }
 export default useGetListCustomer;
