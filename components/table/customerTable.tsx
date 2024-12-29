@@ -1,5 +1,7 @@
 import customerData from "@/app/interface/response/customer/customerData"
 import customerListResponse from "@/app/interface/response/customer/customerListResponse"
+import { customerApproveModalAtom } from "@/state/component_state/modal/customerApproveModalAtom"
+import { customerDeleteModalAtom } from "@/state/component_state/modal/customerDeleteModalAtom"
 import { customerDetailModalAtom } from "@/state/component_state/modal/customerDetailModalAtom"
 import { customerEditModalAtom } from "@/state/component_state/modal/customerEditModalAtom"
 import { customerDetailAtom } from "@/state/data/customerDetailAtom"
@@ -15,11 +17,13 @@ interface customerTable {
     handleChangePage: (page: number) => void;
     onAssignSales?: (customerId: number) => void;
 }
-export const CustomerTable: FC<customerTable> = ({ page,handleChangePage, onAssignSales }) => {
+export const CustomerTable: FC<customerTable> = ({ page, handleChangePage, onAssignSales }) => {
     const setDetailCustomer = useSetAtom(customerDetailAtom);
     const setIsModalOpen = useSetAtom(customerDetailModalAtom);
+    const setIsModalEditOpen = useSetAtom(customerEditModalAtom);
+    const setIsModalDeleteOpen = useSetAtom(customerDeleteModalAtom);
+    const setIsModalApproveOpen = useSetAtom(customerApproveModalAtom);
     const customerList = useAtomValue(customerListAtom)
-    const [isModalEditOpen, setIsModalEditOpen] = useAtom(customerEditModalAtom);
 
     const handleOpenDetailModal = (customer: customerData) => {
         setDetailCustomer(customer);
@@ -29,7 +33,17 @@ export const CustomerTable: FC<customerTable> = ({ page,handleChangePage, onAssi
     const handleOpenEditModal = (customer: customerData) => {
         setDetailCustomer(customer);
         setIsModalEditOpen(true);
-        console.log(isModalEditOpen)
+    }
+
+    const handleOpenApproveModal = (customer: customerData) => {
+        console.log("foo")
+        setDetailCustomer(customer);
+        setIsModalApproveOpen(true);
+    }
+
+    const handleOpenDeleteModal = (customer: customerData) => {
+        setDetailCustomer(customer);
+        setIsModalDeleteOpen(true);
     }
 
     return (
@@ -76,13 +90,19 @@ export const CustomerTable: FC<customerTable> = ({ page,handleChangePage, onAssi
                                             </Table.Td>
                                             {onAssignSales && (
                                                 <Table.Td>
-                                                    {customer.sales ? customer.sales.name : (<Button onClick={() => onAssignSales(customer.id)} color="primary-red" size="xs">Assign Sales</Button>)}
+                                                    {!customer.sales && customer.status !== "In Review" ? (
+                                                        <Button onClick={() => onAssignSales(customer.id)} color="primary-red" size="xs">
+                                                            Assign Sales
+                                                        </Button>
+                                                    ) : (
+                                                        customer.sales?.name
+                                                    )}
                                                 </Table.Td>
                                             )}
                                             <Table.Td>
                                                 <Group>
                                                     {customer.status == "In Review" && (
-                                                        <ActionIcon variant="transparent">
+                                                        <ActionIcon onClick={() => handleOpenApproveModal(customer)} variant="transparent">
                                                             <IconCheck color="green" size={20} stroke={1.5} />
                                                         </ActionIcon>
                                                     )}
@@ -92,7 +112,7 @@ export const CustomerTable: FC<customerTable> = ({ page,handleChangePage, onAssi
                                                     <ActionIcon onClick={() => handleOpenEditModal(customer)} variant="transparent">
                                                         <IconPencil size={20} stroke={1.5} />
                                                     </ActionIcon>
-                                                    <ActionIcon variant="transparent">
+                                                    <ActionIcon onClick={() => handleOpenDeleteModal(customer)} variant="transparent">
                                                         <IconTrash color="red" size={20} stroke={1.5} />
                                                     </ActionIcon>
                                                 </Group>

@@ -21,6 +21,8 @@ import customerData from "@/app/interface/response/customer/customerData";
 import { CustomerDetailModal } from "@/components/modal/customer/customerDetailModal";
 import { CustomerEditModal } from "@/components/modal/customer/customerEditModal";
 import { customerListAtom } from "@/state/data/customerListAtom";
+import { CustomerDeleteModal } from "@/components/modal/customer/customerDeleteModal";
+import { CustomerApproveModal } from "@/components/modal/customer/customerApproveModal";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -216,6 +218,8 @@ export default function user() {
                 </Card>
                 <CustomerDetailModal  />
                 <CustomerEditModal />
+                <CustomerDeleteModal />
+                <CustomerApproveModal />
                 <Modal opened={showAddModal} onClose={() => setShowAddModal(false)} title="Add new sales">
                     <form onSubmit={handleSubmit}>
                         <TextInput
@@ -326,13 +330,6 @@ export default function user() {
                             Save
                         </Button>
                     </form>
-                </Modal>
-                
-                <Modal opened={opened} withCloseButton onClose={close} size="lg" title="Are you sure want to delete this item">
-
-                    <Button variant="filled" color="primary-red" mt={20} fullWidth>
-                        Delete
-                    </Button>
                 </Modal>
                 <Modal opened={showAssignSalesModal} onClose={() => setShowAssignSalesModal(false)} title="Pick sales to assign to this customer">
                     <form onSubmit={processAssignSales}>

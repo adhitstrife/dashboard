@@ -102,6 +102,7 @@ export const CustomerEditModal = () => {
             clearPayload();
             getListCustomer(1, 10)
             setIsModalOpen(false)
+            setDetailCustomer(null)
         }
     }
 
