@@ -1,15 +1,21 @@
 import customerListResponse from "@/app/interface/response/customer/customerListResponse"
+import leaveData from "@/app/interface/response/leave/leaveData"
 import leaveListResponse from "@/app/interface/response/leave/leaveListResponse"
 import visitListResponse from "@/app/interface/response/visit/visitListResponse"
+import { leaveApproveModalAtom } from "@/state/component_state/modal/leave/leaveApproveModalAtom"
 import { leaveListAtom } from "@/state/data/leave/leaveListAtom"
 import { ActionIcon, Box, Group, Table, Text } from "@mantine/core"
 import { IconCheck, IconX } from "@tabler/icons-react"
-import { useAtomValue } from "jotai"
+import { useAtomValue, useSetAtom } from "jotai"
 import { FC } from "react"
 
 export const LeaveTable = () => {
     const leaveList = useAtomValue(leaveListAtom)
+    const setIsModalOpen = useSetAtom(leaveApproveModalAtom);
 
+    const handleOpenApproveModal = (leave: leaveData) => {
+        setIsModalOpen(true);
+    }
     const isDatePassed = (leaveDate: string) => {
         const givenDate = new Date(leaveDate);
         const todayDate = new Date();
@@ -69,7 +75,7 @@ export const LeaveTable = () => {
                                                 <Box>
                                                     {leave.status == 'Submitted' ? (
                                                         <Group>
-                                                            <ActionIcon variant="transparent">
+                                                            <ActionIcon onClick={() => handleOpenApproveModal(leave)} variant="transparent">
                                                                 <IconCheck color="green" size={20} stroke={1.5} />
                                                             </ActionIcon>
                                                             <ActionIcon variant="transparent">

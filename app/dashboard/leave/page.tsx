@@ -26,6 +26,7 @@ import { CustomerApproveModal } from "@/components/modal/customer/customerApprov
 import useGetListLeave from "@/hooks/leave/useGetListLeave";
 import { leaveListAtom } from "@/state/data/leave/leaveListAtom";
 import { LeaveTable } from "@/components/table/leaveTable";
+import { LeaveApproveModal } from "@/components/modal/leave/leaveApproveModal";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -65,7 +66,7 @@ export default function user() {
     const { getSubDistrictList, isLoadingGetSubDistrict, subDistricts } = useGetSubDistricts();
     const { isLoadingAddCustomer, postNewCustomer } = useAddCustomer();
     const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
-    const { getListLeave, isLoadingGetListLeave, leaveData } = useGetListLeave();
+    const { getListLeave, isLoadingGetListLeave } = useGetListLeave();
     const { assignSalesToCustomer, isLoadingAssignSales } = useAssignSalesToCustomer();
 
 
@@ -246,15 +247,13 @@ export default function user() {
                         </Group>
                     </Group>
                     {leaveList ? (
-                        <LeaveTable page={page} handleChangePage={handleChangePage} />
+                        <LeaveTable />
                     ) : (
                         <Loader color='white' size={'lg'} />
                     )}
                 </Card>
-                <CustomerDetailModal />
-                <CustomerEditModal />
-                <CustomerDeleteModal />
-                <CustomerApproveModal />
+                
+                <LeaveApproveModal />
                 <Modal opened={showAddModal} onClose={() => setShowAddModal(false)} title="Add new sales">
                     <form onSubmit={handleSubmit}>
                         <TextInput
