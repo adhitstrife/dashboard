@@ -42,6 +42,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     const [showEditTargetModal, setShowEditTargetModal] = useState(false);
     const [showAddTargetModal, setShowAddTargetModal] = useState(false);
     const [pageCustomer, setPageCustomer] = useState(1);
+    const [pageLeave, setPageLeave] = useState(1);
     const [addPayload, setAddPayload] = useState<targetAddPayload>({
         sales_id: null,
         period: null,
@@ -176,7 +177,12 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     }
 
     const handleChangePageCustomer = async (e: any) => {
-        await getListCustomer(e, 10, searchedCustomer);
+        await getListCustomer(e, 10, searchedCustomer, undefined, id);
+        setPageCustomer(e);
+    }
+
+    const handleChangePageLeave = async (e: any) => {
+        await getListLeave(e, 10, undefined, id);
         setPageCustomer(e);
     }
 
@@ -316,7 +322,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                     </Tabs.Panel>
                                     <Tabs.Panel value="leave">
                                         {leaveData && (
-                                            <LeaveTable />
+                                            <LeaveTable page={pageLeave} handleChangePage={handleChangePageLeave} />
                                         )}
                                     </Tabs.Panel>
                                 </Tabs>
