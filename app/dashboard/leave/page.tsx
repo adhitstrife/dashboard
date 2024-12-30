@@ -49,7 +49,7 @@ export default function user() {
     const [showDetailCustomerModal, setShowDetailCustomerModal] = useState(false);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10)
-    const [searchedCustomer, setSearchedCustomer] = useState("");
+    const [searchedLeave, setSearchedLeave] = useState("");
     const [selectedStatus, setSelectedStatus] = useState("");
     const [filterBySales, setFilterBySales] = useState("");
     const [assignSalesPayload, setAssignSalesPayload] = useState<assignSales>({
@@ -68,33 +68,15 @@ export default function user() {
     const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
     const { getListLeave, isLoadingGetListLeave } = useGetListLeave();
     const { assignSalesToCustomer, isLoadingAssignSales } = useAssignSalesToCustomer();
+    const { isLoadingGetListSales, getListSales, salesData, listForSelesSelect } = useGetListSales();
 
-
-    const searchProvince = (e: string) => {
-        getProvinceList(e)
-    }
-    const searchCity = (e: string) => {
-        getCountryList(e, customerPayload.province_id)
-    }
-
-    const searchDistrict = (e: string) => {
-        getDistrictList(e, customerPayload.city_id)
-    }
 
     const searchSales = (e: string) => {
+        getListSales(1, 10, e)
     }
 
     const searchSubDistrict = (e: string) => {
         getSubDistrictList(e, customerPayload.district_id)
-    }
-
-    const selectSalesToAssign = (e: string | null) => {
-        if (e) {
-            setAssignSalesPayload({
-                ...assignSalesPayload,
-                sales_id: parseInt(e)
-            })
-        }
     }
 
     const handleSelectChange = (name: string, e: string | null) => {
@@ -107,114 +89,29 @@ export default function user() {
         }
     }
 
-    const handleNumberInput = (name: string, value: string | null | number) => {
-        setCustomerPayload({
-            ...customerPayload,
-            [name]: value
-        })
-    }
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-
-        setCustomerPayload({
-            ...customerPayload,
-            [name]: value
-        });
-    }
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        try {
-            await postNewCustomer(customerPayload);
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setShowAddModal(false);
-            getListCustomer(page, pageSize, searchedCustomer)
-            clearPayload();
-        }
-    }
-
-    const processAssignSales = async (e: React.FormEvent) => {
-        e.preventDefault
-        try {
-            await assignSalesToCustomer(assignSalesPayload)
-        } catch (error) {
-            console.log(error)
-        } finally {
-            setShowAssignSalesModal(false)
-            setAssignSalesPayload({
-                customer_id: null,
-                sales_id: null
-            })
-        }
-    }
-
-    const clearPayload = () => {
-        setCustomerPayload({
-            address: '',
-            city_id: null,
-            contact_person: '',
-            district_id: null,
-            name: '',
-            npwp: '',
-            permission_letter: '',
-            phone: '',
-            province_id: null,
-            sub_district_id: null
-        })
-    }
-
-    const elements = [
-        {
-            username: 'JohnDoe', firstName: 'John', lastName: 'Doe', email: 'john.mckinley@examplepetstore.com', phone: '+6287712345678', address: 'jl. kaki'
-        },
-    ]
-
-    const handleAssignSales = (customerId: number) => {
-        console.log('Assign Sales clicked for customer ID:', customerId);
-        setAssignSalesPayload({
-            ...assignSalesPayload,
-            customer_id: customerId
-        })
-        setShowAssignSalesModal(true)
-    };
-
     useEffect(() => {
-        getListLeave(page, 10, searchedCustomer)
+        getListLeave(page, 10, searchedLeave)
         getProvinceList()
     }, [])
 
     const handleChangePage = async (e: any) => {
-        await getListCustomer(e, 10, searchedCustomer);
+        await getListCustomer(e, 10, searchedLeave);
         setPage(e);
-    }
-
-    const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        await await getListCustomer(1, 10, value, selectedStatus !== "" ? selectedStatus : undefined, filterBySales !== "" ? parseInt(filterBySales) : undefined);
-        setSearchedCustomer(value);
     }
 
     const handleSelectedStatus = async (e: string | null) => {
         if (e) {
             const status = e == "All" ? "" : e
-            await await getListCustomer(1, 10, searchedCustomer, selectedStatus !== "" ? selectedStatus : undefined, filterBySales !== "" ? parseInt(filterBySales) : undefined);
+            await await getListLeave(1, 10, status, parseInt(searchedLeave));
             setSelectedStatus(e);
         }
     }
 
     const handleFilterBySales = async (e: string | null) => {
         if (e) {
-            console.log(e)
             const value = parseInt(e)
-            await await getListCustomer(1, 10, searchedCustomer, selectedStatus !== "" ? selectedStatus : undefined, value);
-            setFilterBySales(e);
-        } else {
-            console.log("foo")
-            await await getListCustomer(1, 10, searchedCustomer, selectedStatus !== "" ? selectedStatus : undefined, undefined);
-            setFilterBySales("");
+            await await getListLeave(page, 10, selectedStatus, value);
+            setSearchedLeave(e);
         }
     }
 
@@ -236,10 +133,18 @@ export default function user() {
                 <Card withBorder radius={"md"} px={20} py={30} mah={'screen'} mt={20}>
                     <Group justify='space-between'>
                         <Group align="center">
-                            <TextInput onChange={(e) => handleSearch(e)} placeholder="Search sales leave application" />
+                            <Select
+                                placeholder="Search sales name"
+                                data={listForSelesSelect}
+                                name="sales_id"
+                                searchable
+                                onSearchChange={(e) => searchSales(e)}
+                                onChange={(e) => handleFilterBySales(e)}
+                                withAsterisk
+                            />
                             <Select
                                 placeholder="Filter Leave By Status"
-                                data={['All', 'Assigned', 'In Review', 'Unassigned']}
+                                data={['All','Submitted', 'Approved', 'Rejected', 'Cancelled']}
                                 name="religion"
                                 onChange={(e) => handleSelectedStatus(e)}
                                 defaultValue={"All"}
@@ -252,119 +157,8 @@ export default function user() {
                         <Loader color='white' size={'lg'} />
                     )}
                 </Card>
-                
+
                 <LeaveApproveModal />
-                <Modal opened={showAddModal} onClose={() => setShowAddModal(false)} title="Add new sales">
-                    <form onSubmit={handleSubmit}>
-                        <TextInput
-                            label="Name"
-                            placeholder="Input customer name"
-                            name="name"
-                            mt={10}
-                            onChange={handleChange}
-                            withAsterisk
-                            required
-                        />
-                        <TextInput
-                            label="Contact Person"
-                            placeholder="Input who can be contacted"
-                            name="contact_person"
-                            mt={10}
-                            onChange={handleChange}
-                            withAsterisk
-                            required
-                        />
-                        <NumberInput
-                            label="Phone"
-                            placeholder="Input customer phone number"
-                            mt={10}
-                            hideControls
-                            onChange={(e) => handleNumberInput('phone', e)}
-                            withAsterisk
-                            required
-                        />
-                        <TextInput
-                            label="Permission letter number"
-                            placeholder="Input customer permission letter number"
-                            name="permission_letter"
-                            mt={10}
-                            onChange={handleChange}
-                            withAsterisk
-                            required
-                        />
-                        <NumberInput
-                            label="NPWP"
-                            placeholder="Input customer NPWP"
-                            mt={10}
-                            hideControls
-                            onChange={(e) => handleNumberInput('npwp', e)}
-                            withAsterisk
-                            required
-                        />
-                        <Select
-                            label="Province"
-                            placeholder="Pick customer province"
-                            mt={10}
-                            data={provinces}
-                            name="province_id"
-                            searchable
-                            onSearchChange={(e) => searchProvince(e)}
-                            onChange={(e) => handleSelectChange('province_id', e)}
-                            withAsterisk
-                        />
-                        <Select
-                            label="City"
-                            placeholder="Pick customer city"
-                            mt={10}
-                            data={cities}
-                            name="city_id"
-                            searchable
-                            onSearchChange={(e) => searchCity(e)}
-                            onChange={(e) => handleSelectChange('city_id', e)}
-                            disabled={!customerPayload.province_id}
-                            onFocus={(e) => searchCity(e.target.value)}
-                            withAsterisk
-                        />
-                        <Select
-                            label="District"
-                            placeholder="Pick customer district"
-                            mt={10}
-                            data={districts}
-                            name="district_id"
-                            searchable
-                            onSearchChange={(e) => searchDistrict(e)}
-                            onChange={(e) => handleSelectChange('district_id', e)}
-                            disabled={!customerPayload.city_id}
-                            onFocus={(e) => searchDistrict(e.target.value)}
-                            withAsterisk
-                        />
-                        <Select
-                            label="Sub District"
-                            placeholder="Pick customer sub district"
-                            mt={10}
-                            data={subDistricts}
-                            name="sub_district_id"
-                            searchable
-                            onSearchChange={(e) => searchSubDistrict(e)}
-                            onChange={(e) => handleSelectChange('sub_district_id', e)}
-                            disabled={!customerPayload.district_id}
-                            onFocus={(e) => searchSubDistrict(e.target.value)}
-                            withAsterisk
-                        />
-                        <TextInput
-                            label="Address"
-                            placeholder="Input Address"
-                            mt={10}
-                            onChange={handleChange}
-                            name="address"
-                            withAsterisk
-                            required
-                        />
-                        <Button type="submit" variant="filled" color="primary-red" mt={20} fullWidth>
-                            Save
-                        </Button>
-                    </form>
-                </Modal>
             </AppShell.Main>
         </DashboardLayout>
     )
