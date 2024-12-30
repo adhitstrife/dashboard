@@ -22,7 +22,7 @@ export const CustomerApproveModal = () => {
         setIsModalOpen(false)
     }
 
-    const handleDelete = async () => {
+    const handleApprove = async () => {
         if (detailCustomer) {
             try {
                 await approveCustomer(detailCustomer.id)
@@ -38,7 +38,7 @@ export const CustomerApproveModal = () => {
 
     return (
         <Modal opened={isModalOpen} withCloseButton onClose={onCloseModal} size="lg" title={`Arpprove ${detailCustomer?.name} as customer`}>
-            <Button onClick={handleDelete} type="submit" variant="filled" color="primary-red" mt={20} fullWidth>
+            <Button onClick={handleApprove} type="submit" variant="filled" color="primary-red" mt={20} fullWidth>
                 {isLoadingApproveCustomer ? <Loader color='white' size={'sm'} /> : 'Approve'}
             </Button>
         </Modal>

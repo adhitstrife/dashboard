@@ -3,8 +3,10 @@ import leaveData from "@/app/interface/response/leave/leaveData"
 import leaveListResponse from "@/app/interface/response/leave/leaveListResponse"
 import visitListResponse from "@/app/interface/response/visit/visitListResponse"
 import { leaveApproveModalAtom } from "@/state/component_state/modal/leave/leaveApproveModalAtom"
+import { leaveDetailAtom } from "@/state/data/leave/leaveDetailAtom"
 import { leaveListAtom } from "@/state/data/leave/leaveListAtom"
-import { ActionIcon, Box, Group, Table, Text } from "@mantine/core"
+import { leaveStatusAtom } from "@/state/data/leave/leaveStatusAtom"
+import { ActionIcon, Badge, Box, Group, Table, Text } from "@mantine/core"
 import { IconCheck, IconX } from "@tabler/icons-react"
 import { useAtomValue, useSetAtom } from "jotai"
 import { FC } from "react"
@@ -12,10 +14,27 @@ import { FC } from "react"
 export const LeaveTable = () => {
     const leaveList = useAtomValue(leaveListAtom)
     const setIsModalOpen = useSetAtom(leaveApproveModalAtom);
+    const setDetailLeave = useSetAtom(leaveDetailAtom);
+    const setStatusLeave = useSetAtom(leaveStatusAtom);
 
     const handleOpenApproveModal = (leave: leaveData) => {
         setIsModalOpen(true);
+        setDetailLeave(leave);
+        setStatusLeave("Approved")
     }
+
+    const handleOpenRejectModal = (leave: leaveData) => {
+        setIsModalOpen(true);
+        setDetailLeave(leave);
+        setStatusLeave("Rejected")
+    }
+
+    const handleOpenCancelModal = (leave: leaveData) => {
+        setIsModalOpen(true);
+        setDetailLeave(leave);
+        setStatusLeave("Cancelled")
+    }
+
     const isDatePassed = (leaveDate: string) => {
         const givenDate = new Date(leaveDate);
         const todayDate = new Date();
@@ -70,7 +89,7 @@ export const LeaveTable = () => {
                                         </Table.Td>
                                         <Table.Td>
                                             {isDatePassed(leave.start_date) ? (
-                                                <Text></Text>
+                                                <Badge color="secondary-gray">Expired</Badge>
                                             ) : (
                                                 <Box>
                                                     {leave.status == 'Submitted' ? (
@@ -78,17 +97,19 @@ export const LeaveTable = () => {
                                                             <ActionIcon onClick={() => handleOpenApproveModal(leave)} variant="transparent">
                                                                 <IconCheck color="green" size={20} stroke={1.5} />
                                                             </ActionIcon>
-                                                            <ActionIcon variant="transparent">
+                                                            <ActionIcon onClick={() => handleOpenRejectModal(leave)} variant="transparent">
+                                                                <IconX color="red" size={20} stroke={1.5} />
+                                                            </ActionIcon>
+                                                        </Group>
+                                                    ) : leave.status == 'Approved' ? (
+                                                        <Group>
+                                                            <ActionIcon onClick={() => handleOpenCancelModal(leave)}  variant="transparent">
                                                                 <IconX color="red" size={20} stroke={1.5} />
                                                             </ActionIcon>
                                                         </Group>
                                                     ) : (
-                                                        <Group>
-                                                            <ActionIcon variant="transparent">
-                                                                <IconX color="red" size={20} stroke={1.5} />
-                                                            </ActionIcon>
-                                                        </Group>
-                                                    ) }
+                                                        <Badge color="secondary-gray">Canceled</Badge>
+                                                    )}
                                                 </Box>
                                             )}
                                         </Table.Td>
