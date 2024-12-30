@@ -23,7 +23,7 @@ export default function DashboardLayout({ children }: { children?: React.ReactNo
             <AppShell.Navbar p="md">
                 <NavLink href="/dashboard" label={"Dashboard"} leftSection={<IconHome2 size={20} stroke={1.5} />} color="primary-red" active variant="filled" />
                 <NavLink href="#" label={"Visit"} leftSection={<IconCar size={20} stroke={1.5} />} />
-                <NavLink href="#" label={"Leave"} leftSection={<IconCalendarCheck size={20} stroke={1.5} />} />
+                <NavLink href="/dashboard/leave" label={"Leave"} leftSection={<IconCalendarCheck size={20} stroke={1.5} />} />
                 <NavLink href="/dashboard/sales" label={"Sales"} leftSection={<IconUserStar size={20} stroke={1.5} />} />
                 <NavLink href="/dashboard/customer" label={"Customers"} leftSection={<IconUserDollar size={20} stroke={1.5} />} />
             </AppShell.Navbar>

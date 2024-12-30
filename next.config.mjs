@@ -10,7 +10,7 @@ export default withBundleAnalyzer({
     return [
       {
         source: '/backend/:path*',
-        destination: 'https://marfandy.pythonanywhere.com/:path*'
+        destination: 'https://api.alprido.co.id/:path*'
       }
     ]
   },

@@ -20,7 +20,7 @@ import { AttendanceTable } from "@/components/table/attendanceTable";
 import useGetListAttendance from "@/hooks/attendance/useGetListAttendance";
 import useGetListSales from "@/hooks/sales/useGetListSales";
 import { useAtomValue } from "jotai";
-import { customerListAtom } from "@/state/data/customerListAtom";
+import { customerListAtom } from "@/state/data/customer/customerListAtom";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params

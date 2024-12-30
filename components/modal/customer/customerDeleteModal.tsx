@@ -1,7 +1,7 @@
 import useDeleteCustomer from "@/hooks/customer/useDeleteCustomer";
 import useGetListCustomer from "@/hooks/customer/useGetListCustomer";
 import { customerDeleteModalAtom } from "@/state/component_state/modal/customerDeleteModalAtom";
-import { customerDetailAtom } from "@/state/data/customerDetailAtom";
+import { customerDetailAtom } from "@/state/data/customer/customerDetailAtom";
 import { Button, Loader, Modal } from "@mantine/core"
 import { useAtom } from "jotai";
 

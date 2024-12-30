@@ -1,6 +1,6 @@
 import customerData from "@/app/interface/response/customer/customerData";
 import { customerDetailModalAtom } from "@/state/component_state/modal/customerDetailModalAtom";
-import { customerDetailAtom } from "@/state/data/customerDetailAtom";
+import { customerDetailAtom } from "@/state/data/customer/customerDetailAtom";
 import { Box, Center, Grid, Modal } from "@mantine/core"
 import { useAtom } from "jotai";
 import { FC, useEffect } from "react";

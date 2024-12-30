@@ -1,17 +1,15 @@
-interface customerCity {
-    id: number;
-    name: string;
-    province_id: number
-}
+import salesData from "../sales/salesData";
+
 
 interface leaveData {
     id:number;
-    user_id: number;
+    user: salesData;
     leave_reason: string;
     category: string;
     start_date: string;
     end_date: string;
     notes: string;
+    status: string;
 }
 
 export default leaveData

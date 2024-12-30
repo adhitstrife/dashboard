@@ -1,6 +1,6 @@
 import customerListResponse from "@/app/interface/response/customer/customerListResponse";
 import salesResponse from "@/app/interface/response/sales/salesListResponse";
-import { customerListAtom } from "@/state/data/customerListAtom";
+import { customerListAtom } from "@/state/data/customer/customerListAtom";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import axios from "axios";

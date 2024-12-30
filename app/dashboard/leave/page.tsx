@@ -23,6 +23,9 @@ import { CustomerEditModal } from "@/components/modal/customer/customerEditModal
 import { customerListAtom } from "@/state/data/customer/customerListAtom";
 import { CustomerDeleteModal } from "@/components/modal/customer/customerDeleteModal";
 import { CustomerApproveModal } from "@/components/modal/customer/customerApproveModal";
+import useGetListLeave from "@/hooks/leave/useGetListLeave";
+import { leaveListAtom } from "@/state/data/leave/leaveListAtom";
+import { LeaveTable } from "@/components/table/leaveTable";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -53,7 +56,7 @@ export default function user() {
         sales_id: null
     })
 
-    const customerList = useAtomValue(customerListAtom)
+    const leaveList = useAtomValue(leaveListAtom)
 
     const { height, width } = useViewportSize();
     const { getCountryList, cities, isLoadingGetCities } = useGetCities()
@@ -62,7 +65,7 @@ export default function user() {
     const { getSubDistrictList, isLoadingGetSubDistrict, subDistricts } = useGetSubDistricts();
     const { isLoadingAddCustomer, postNewCustomer } = useAddCustomer();
     const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
-    const { isLoadingGetListSales, getListSales, salesData, listForSelesSelect } = useGetListSales();
+    const { getListLeave, isLoadingGetListLeave, leaveData } = useGetListLeave();
     const { assignSalesToCustomer, isLoadingAssignSales } = useAssignSalesToCustomer();
 
 
@@ -78,7 +81,6 @@ export default function user() {
     }
 
     const searchSales = (e: string) => {
-        getListSales(1, 10, e)
     }
 
     const searchSubDistrict = (e: string) => {
@@ -179,7 +181,7 @@ export default function user() {
     };
 
     useEffect(() => {
-        getListCustomer(page, 10, searchedCustomer)
+        getListLeave(page, 10, searchedCustomer)
         getProvinceList()
     }, [])
 
@@ -221,8 +223,8 @@ export default function user() {
                 <div className="header-page">
                     <Flex justify={'space-between'}>
                         <Box>
-                            <Title order={2}>Customers</Title>
-                            <Text size='sm' mt={10} style={{ color: theme.colors['secondary-gray'][9] }}>Here is the list of customers</Text>
+                            <Title order={2}>Leave</Title>
+                            <Text size='sm' mt={10} style={{ color: theme.colors['secondary-gray'][9] }}>Here is the list of leave</Text>
                         </Box>
                         <Box>
                             <Text ta={'right'} size='sm' mt={10} >Current time</Text>
@@ -233,35 +235,18 @@ export default function user() {
                 <Card withBorder radius={"md"} px={20} py={30} mah={'screen'} mt={20}>
                     <Group justify='space-between'>
                         <Group align="center">
-                            <TextInput onChange={(e) => handleSearch(e)} placeholder="Search Customers" />
+                            <TextInput onChange={(e) => handleSearch(e)} placeholder="Search sales leave application" />
                             <Select
-                                placeholder="Filter Customer By Status"
+                                placeholder="Filter Leave By Status"
                                 data={['All', 'Assigned', 'In Review', 'Unassigned']}
                                 name="religion"
                                 onChange={(e) => handleSelectedStatus(e)}
                                 defaultValue={"All"}
                             />
-                            <Select
-                                placeholder="Filter customer by sales name"
-                                data={listForSelesSelect}
-                                name="search_by_sales"
-                                searchable
-                                onSearchChange={(e) => searchSales(e)}
-                                onChange={(e) => handleFilterBySales(e)}
-                                clearable
-                            />
-                        </Group>
-                        <Group>
-                            <Button color="primary-red" variant="filled" onClick={() => setShowAddModal(true)}>
-                                Add Bulk
-                            </Button>
-                            <Button color="primary-red" variant="filled" onClick={() => setShowAddModal(true)}>
-                                <IconPlus size={20} stroke={1.5} />
-                            </Button>
                         </Group>
                     </Group>
-                    {customerList ? (
-                        <CustomerTable page={page} handleChangePage={handleChangePage} onAssignSales={handleAssignSales} />
+                    {leaveList ? (
+                        <LeaveTable page={page} handleChangePage={handleChangePage} />
                     ) : (
                         <Loader color='white' size={'lg'} />
                     )}
@@ -375,24 +360,6 @@ export default function user() {
                             name="address"
                             withAsterisk
                             required
-                        />
-                        <Button type="submit" variant="filled" color="primary-red" mt={20} fullWidth>
-                            Save
-                        </Button>
-                    </form>
-                </Modal>
-                <Modal opened={showAssignSalesModal} onClose={() => setShowAssignSalesModal(false)} title="Pick sales to assign to this customer">
-                    <form onSubmit={processAssignSales}>
-                        <Select
-                            label="Sales"
-                            placeholder="Search sales name"
-                            mt={10}
-                            data={listForSelesSelect}
-                            name="sales_id"
-                            searchable
-                            onSearchChange={(e) => searchSales(e)}
-                            onChange={(e) => selectSalesToAssign(e)}
-                            withAsterisk
                         />
                         <Button type="submit" variant="filled" color="primary-red" mt={20} fullWidth>
                             Save

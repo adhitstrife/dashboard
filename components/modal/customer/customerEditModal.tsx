@@ -6,7 +6,7 @@ import useGetDistrict from "@/hooks/region/useGetDistrict";
 import useGetProvinces from "@/hooks/region/useGetProvince";
 import useGetSubDistricts from "@/hooks/region/useGetSubDistrict";
 import { customerEditModalAtom } from "@/state/component_state/modal/customerEditModalAtom";
-import { customerDetailAtom } from "@/state/data/customerDetailAtom";
+import { customerDetailAtom } from "@/state/data/customer/customerDetailAtom";
 import { Button, Loader, Modal, NumberInput, Select, TextInput } from "@mantine/core"
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
