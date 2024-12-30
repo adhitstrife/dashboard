@@ -95,7 +95,7 @@ export default function user() {
     }, [])
 
     const handleChangePage = async (e: any) => {
-        await getListCustomer(e, 10, searchedLeave);
+        await getListLeave(e, 10, selectedStatus, parseInt(searchedLeave));
         setPage(e);
     }
 
@@ -152,7 +152,7 @@ export default function user() {
                         </Group>
                     </Group>
                     {leaveList ? (
-                        <LeaveTable />
+                        <LeaveTable page={page} handleChangePage={handleChangePage} />
                     ) : (
                         <Loader color='white' size={'lg'} />
                     )}
