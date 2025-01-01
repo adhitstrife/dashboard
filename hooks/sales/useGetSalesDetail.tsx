@@ -16,7 +16,7 @@ const useGetSalesDetail = () => {
     const getDetailSales = async (id: number) => {
         try {
             setIsLoadingGetDetailSales(true);
-            const url = `/backend/api/sales/${id}`;
+            const url = `/backend/api/visit/${id}`;
             const response = await axios.get(url, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`

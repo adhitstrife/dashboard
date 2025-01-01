@@ -1,39 +1,70 @@
 import customerListResponse from "@/app/interface/response/customer/customerListResponse"
+import visitData from "@/app/interface/response/visit/visitData"
 import visitListResponse from "@/app/interface/response/visit/visitListResponse"
-import { Table, Text } from "@mantine/core"
+import { visitDetailModalAtom } from "@/state/component_state/modal/visit/visitDetailModalAtom"
+import { visitDetailAtom } from "@/state/data/visit/visitDetailAtom"
+import { visitListAtom } from "@/state/data/visit/visitListAtom"
+import { ActionIcon, Box, Table, Text } from "@mantine/core"
+import { IconEye } from "@tabler/icons-react"
+import { useAtomValue, useSetAtom } from "jotai"
+import Link from "next/link"
 import { FC } from "react"
 
-interface visitTable {
-    visitList: visitListResponse
-}
-export const VisitTable: FC<visitTable> = ({ visitList }) => {
+export const VisitTable = () => {
+    const visitList = useAtomValue(visitListAtom)
+
+    const setOpenModal = useSetAtom(visitDetailModalAtom);
+    const setVisitDetail = useSetAtom(visitDetailAtom);
+
+    const openDetailVisitModal = (visit: visitData) => {
+        setVisitDetail(visit)
+        setOpenModal(true)
+    }
     return (
-        <Table.ScrollContainer minWidth={200} mt={20}>
-            <Table>
-                <Table.Thead>
-                    <Table.Tr>
-                        <Table.Th>Name</Table.Th>
-                        <Table.Th>Sales</Table.Th>
-                        <Table.Th>Category</Table.Th>
-                        <Table.Th>Visit Date</Table.Th>
-                        <Table.Th>Participant</Table.Th>
-                        <Table.Th>Products</Table.Th>
-                        <Table.Th>Quantity</Table.Th>
-                        <Table.Th>Notes</Table.Th>
-                        <Table.Th>Location</Table.Th>
-                        <Table.Th>Image</Table.Th>
-                    </Table.Tr>
-                </Table.Thead>
-                <Table.Tbody>
-                    {visitList.results.length <= 0 && (
-                        <Table.Tr>
-                            <Table.Td colSpan={12} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-                                <Text>No visit yet </Text>
-                            </Table.Td>
-                        </Table.Tr>
-                    )}
-                </Table.Tbody>
-            </Table>
-        </Table.ScrollContainer>
+        <Box>
+            {visitList && (
+                <Table.ScrollContainer minWidth={200} mt={20}>
+                    <Table>
+                        <Table.Thead>
+                            <Table.Tr>
+                                <Table.Th>Name</Table.Th>
+                                <Table.Th>Sales</Table.Th>
+                                <Table.Th>Category</Table.Th>
+                                <Table.Th>Visit Date</Table.Th>
+                                <Table.Th>Notes</Table.Th>
+                                <Table.Th>Action</Table.Th>
+                            </Table.Tr>
+                        </Table.Thead>
+                        {visitList.results.length <= 0 ? (
+                            <Table.Tbody>
+                                <Table.Tr>
+                                    <Table.Td colSpan={12} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                                        <Text>No visit yet </Text>
+                                    </Table.Td>
+                                </Table.Tr>
+                            </Table.Tbody>
+                        ) : (
+                            <Table.Tbody>
+                                {visitList.results.map((visit, index) => (
+                                    <Table.Tr key={index}>
+                                        <Table.Td>{visit.customer.name}</Table.Td>
+                                        <Table.Td>{visit.sales.name}</Table.Td>
+                                        <Table.Td>{visit.category}</Table.Td>
+                                        <Table.Td>{visit.visit_date}</Table.Td>
+                                        <Table.Td>{visit.notes}</Table.Td>
+                                        <Table.Td>
+                                            <ActionIcon component={Link} href={`/dashboard/visit/${visit.id}`}  variant="transparent">
+                                                <IconEye size={20} stroke={1.5} />
+                                            </ActionIcon>
+                                        </Table.Td>
+                                    </Table.Tr>
+
+                                ))}
+                            </Table.Tbody>
+                        )}
+                    </Table>
+                </Table.ScrollContainer>
+            )}
+        </Box>
     )
 }

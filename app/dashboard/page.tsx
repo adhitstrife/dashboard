@@ -5,6 +5,10 @@ import { ActionIcon, AppShell, AppShellMain, Avatar, Badge, Box, Card, Flex, Gri
 import { BarChart, DonutChart } from '@mantine/charts';
 import { IconCalendarClock, IconChartColumn, IconChevronRight, IconSearch } from '@tabler/icons-react';
 import useUserProfile from '@/hooks/auth/useUserProfile';
+import { useAtomValue } from 'jotai';
+import { visitListAtom } from '@/state/data/visit/visitListAtom';
+import useGetListVisit from '@/hooks/visit/useGetListVisit';
+import { VisitTable } from '@/components/table/visitTable';
 
 export default function Dashboard() {
   const theme = useMantineTheme();
@@ -17,74 +21,24 @@ export default function Dashboard() {
   ];
   const { getUserProfile, userProfile, isLoading } = useUserProfile()
 
+  const visitList = useAtomValue(visitListAtom)
+  const { getListVisit, isLoadingGetListVisit } = useGetListVisit();
+
+
+
   useEffect(() => {
     getUserProfile()
-    console.log("foo")
-  },[])
-
-  const teamData = [
-    {
-      name: 'JohnDoe', thisWeek: 32, lastWeek: 40
-    },
-    {
-      name: 'Ricky', thisWeek: 32, lastWeek: 40
-    },
-    {
-      name: 'Steve', thisWeek: 32, lastWeek: 40
-    },
-    {
-      name: 'Jane', thisWeek: 32, lastWeek: 40
-    },
-    {
-      name: 'Cole', thisWeek: 32, lastWeek: 40
-    },
-    {
-      name: 'Freeman', thisWeek: 32, lastWeek: 40
-    },
-  ];
-
-  const elements = [
-    {
-      name: 'JohnDoe', date: 'Monday, 5 Dec 2024', role: 'Sales', time: '07:58', customer_name: 'Jokowi', status: 'Done', location: 'Rs. Tajuddin Khalid', image: null, product: 'tooth brush', quantity: 2
-    },
-    {
-      name: 'Ricky', date: 'Monday, 5 Dec 2024', role: 'Sales', time: '07:58', customer_name: 'Jokowi', status: 'Done', location: 'Rs. Tajuddin Khalid', image: null, product: 'tooth brush', quantity: 2
-    },
-    {
-      name: 'Steve', date: 'Monday, 5 Dec 2024', role: 'Sales', time: '07:58', customer_name: 'Jokowi', status: 'Done', location: 'Rs. Tajuddin Khalid', image: null, product: 'tooth brush', quantity: 2
-    },
-    {
-      name: 'Jane', date: 'Monday, 5 Dec 2024', role: 'Sales', time: '07:58', customer_name: 'Jokowi', status: 'Done', location: 'Rs. Tajuddin Khalid', image: null, product: 'tooth brush', quantity: 2
-    },
-    {
-      name: 'Cole', date: 'Monday, 5 Dec 2024', role: 'Sales', time: '07:58', customer_name: 'Jokowi', status: 'Done', location: 'Rs. Tajuddin Khalid', image: null, product: 'tooth brush', quantity: 2
-    },
-    {
-      name: 'Freeman', date: 'Monday, 5 Dec 2024', role: 'Sales', time: '07:58', customer_name: 'Jokowi', status: 'Done', location: 'Rs. Tajuddin Khalid', image: null, product: 'tooth brush', quantity: 2
-    },
-  ]
-  const rows = elements.map((element) => (
-    <Table.Tr key={element.name}>
-      <Table.Td>{element.name}</Table.Td>
-      <Table.Td>{element.date}</Table.Td>
-      <Table.Td>{element.time}</Table.Td>
-      <Table.Td>{element.customer_name}</Table.Td>
-      <Table.Td>{element.status}</Table.Td>
-      <Table.Td>{element.location}</Table.Td>
-      <Table.Td>{element.image}</Table.Td>
-      <Table.Td>{element.product}</Table.Td>
-      <Table.Td>{element.quantity}</Table.Td>
-    </Table.Tr>
-  ));
+    getListVisit(1, 10)
+  }, [])
 
   const total = data.reduce((sum, item) => sum + item.value, 0);
   return (
     <DashboardLayout>
       <AppShell.Main bg={'#F6F6F6'}>
         <div className="header-page">
-          <Flex direction={{ base: 'column-reverse', md: 'row' }} justify={{ base: 'flex-start', md: 'space-between'}}>
+          <Flex direction={{ base: 'column-reverse', md: 'row' }} justify={{ base: 'flex-start', md: 'space-between' }}>
             <Box mt={{ base: 20, md: 0 }}>
-              { userProfile ? (
+              {userProfile ? (
                 <Title order={2}>Good Afternoon, {userProfile.username}!</Title>
               ) : (
                 <Skeleton height={8} radius="xl" />
@@ -92,7 +46,7 @@ export default function Dashboard() {
               <Text size='sm' mt={10} style={{ color: theme.colors['secondary-gray'][9] }}>You have 2 leave request pending</Text>
             </Box>
             <Box>
-              <Text ta={{ base: 'left', md: 'right'}} size='sm' mt={10} >Current time</Text>
+              <Text ta={{ base: 'left', md: 'right' }} size='sm' mt={10} >Current time</Text>
               <Title order={2}>12:10 PM</Title>
             </Box>
           </Flex>
@@ -203,24 +157,9 @@ export default function Dashboard() {
                     />
                   </Box>
                 </Group>
-                <Table.ScrollContainer minWidth={200}>
-                  <Table>
-                    <Table.Thead>
-                      <Table.Tr>
-                        <Table.Th>Name</Table.Th>
-                        <Table.Th>Date</Table.Th>
-                        <Table.Th>Time</Table.Th>
-                        <Table.Th>Customer name</Table.Th>
-                        <Table.Th>Status</Table.Th>
-                        <Table.Th>Location</Table.Th>
-                        <Table.Th>Image</Table.Th>
-                        <Table.Th>Product</Table.Th>
-                        <Table.Th>Quantity</Table.Th>
-                      </Table.Tr>
-                    </Table.Thead>
-                    <Table.Tbody>{rows}</Table.Tbody>
-                  </Table>
-                </Table.ScrollContainer>
+                {visitList && (
+                  <VisitTable />
+                )}
               </Card>
             </Grid.Col>
             {/* <Grid.Col span={{ base: 12, lg: 4 }}>

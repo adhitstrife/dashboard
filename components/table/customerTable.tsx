@@ -36,7 +36,6 @@ export const CustomerTable: FC<customerTable> = ({ page, handleChangePage, onAss
     }
 
     const handleOpenApproveModal = (customer: customerData) => {
-        console.log("foo")
         setDetailCustomer(customer);
         setIsModalApproveOpen(true);
     }

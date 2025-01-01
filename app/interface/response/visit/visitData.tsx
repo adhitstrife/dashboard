@@ -1,17 +1,22 @@
+import customerData from "../customer/customerData";
+import salesData from "../sales/salesData";
+
+interface product {
+    name: string;
+    quantity: number;
+}
 interface visitData {
     id:number;
-    sales_id: string;
-    customer_id: string;
+    sales: salesData;
+    customer: customerData;
     category: string;
     visit_date: string;
-    visit_time: string;
     participant: string;
-    products: string;
-    quantity: string;
+    products: product[];
     notes: string;
     latitude: string;
     longitude: string;
-    image: number
+    image_path: number
 }
 
 export default visitData

@@ -22,6 +22,7 @@ import useGetListSales from "@/hooks/sales/useGetListSales";
 import { useAtomValue } from "jotai";
 import { customerListAtom } from "@/state/data/customer/customerListAtom";
 import { leaveListAtom } from "@/state/data/leave/leaveListAtom";
+import { visitListAtom } from "@/state/data/visit/visitListAtom";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
@@ -34,11 +35,14 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
     const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
     const { getListLeave, isLoadingGetListLeave } = useGetListLeave();
-    const { isLoadingGetListVisit, getListVisit, visitData } = useGetListVisit();
+    const { isLoadingGetListVisit, getListVisit } = useGetListVisit();
     const { attendanceData, getListAttendance, isLoadingGetListAttendance } = useGetListAttendance();
     const { isLoadingAddTarget, postNewTarget } = useAddTarget()
     const { isLoadingUpdateTarget, updateTarget } = useUpdateTarget()
+
     const leaveData = useAtomValue(leaveListAtom)
+    const visitList = useAtomValue(visitListAtom)
+
     const [showEditTargetModal, setShowEditTargetModal] = useState(false);
     const [showAddTargetModal, setShowAddTargetModal] = useState(false);
     const [pageCustomer, setPageCustomer] = useState(1);
@@ -316,8 +320,8 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                         )}
                                     </Tabs.Panel>
                                     <Tabs.Panel value="visit">
-                                        {visitData && (
-                                            <VisitTable visitList={visitData} />
+                                        {visitList && (
+                                            <VisitTable />
                                         )}
                                     </Tabs.Panel>
                                     <Tabs.Panel value="leave">
