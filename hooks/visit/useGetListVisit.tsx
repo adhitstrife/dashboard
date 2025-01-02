@@ -17,7 +17,8 @@ const useGetListVisit = () => {
     const getListVisit = async (page: number = 1, page_size: number = 10, name?: string, category?: string, sales_id?: number, customer_id?: number ) => {
         try {
             setIsLoadingGetListVisit(true);
-            const url = `/backend/api/visit?sales_id=${sales_id ? sales_id : ''}&customer_id=${customer_id ? customer_id : ""}&page=${page}&page_size=${page_size}&keyword=${name ? name : ''}`;
+            const selectedCategory = category ? `&category=${category}` : ''
+            const url = `/backend/api/visit?sales_id=${sales_id ? sales_id : ''}${selectedCategory}&customer_id=${customer_id ? customer_id : ""}&page=${page}&page_size=${page_size}&keyword=${name ? name : ''}`;
             const response = await axios.get(url, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`

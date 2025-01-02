@@ -1,5 +1,5 @@
 "use client"
-import { ActionIcon, AppShell, Box, Button, Card, Dialog, Flex, Group, Image, Loader, Modal, NumberInput, Select, Table, Text, TextInput, Title, useMantineTheme } from "@mantine/core";
+import { ActionIcon, AppShell, Box, Button, Card, Dialog, Flex, Group, Image, Loader, Modal, NumberInput, Pagination, Select, Table, Text, TextInput, Title, useMantineTheme } from "@mantine/core";
 import DashboardLayout from "../layout";
 import { IconPencil, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
@@ -69,14 +69,14 @@ export default function user() {
 
     const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        // await await getListCustomer(1, 10, value, selectedStatus !== "" ? selectedStatus : undefined, filterBySales !== "" ? parseInt(filterBySales) : undefined);
+        await getListVisit(page, pageSize, value, selectedStatus, parseInt(filterBySales), undefined)
         setSearchedCustomer(value);
     }
 
     const handleSelectedStatus = async (e: string | null) => {
         if (e) {
             const status = e == "All" ? "" : e
-            // await await getListCustomer(1, 10, searchedCustomer, selectedStatus !== "" ? selectedStatus : undefined, filterBySales !== "" ? parseInt(filterBySales) : undefined);
+            await getListVisit(page, pageSize, searchedCustomer, status, parseInt(filterBySales), undefined)
             setSelectedStatus(e);
         }
     }
@@ -85,13 +85,19 @@ export default function user() {
         if (e) {
             console.log(e)
             const value = parseInt(e)
+            await getListVisit(page, pageSize, searchedCustomer, undefined, value, undefined)
             // await await getListCustomer(1, 10, searchedCustomer, selectedStatus !== "" ? selectedStatus : undefined, value);
             setFilterBySales(e);
         } else {
             console.log("foo")
-            // await await getListCustomer(1, 10, searchedCustomer, selectedStatus !== "" ? selectedStatus : undefined, undefined);
+            await getListVisit(page, pageSize, searchedCustomer, undefined, undefined, undefined)
             setFilterBySales("");
         }
+    }
+
+    const handleChangePage = async (e: any) => {
+        await getListVisit(e, pageSize);
+        setPage(e);
     }
 
     return (
@@ -115,13 +121,13 @@ export default function user() {
                             <TextInput onChange={(e) => handleSearch(e)} placeholder="Search Customers" />
                             <Select
                                 placeholder="Filter Customer By Status"
-                                data={['All', 'Assigned', 'In Review', 'Unassigned']}
+                                data={['All', 'No Show', 'Canceled', 'Completed']}
                                 name="religion"
                                 onChange={(e) => handleSelectedStatus(e)}
                                 defaultValue={"All"}
                             />
                             <Select
-                                placeholder="Filter customer by sales name"
+                                placeholder="Filter by sales name"
                                 data={listForSelesSelect}
                                 name="search_by_sales"
                                 searchable
@@ -132,7 +138,10 @@ export default function user() {
                         </Group>
                     </Group>
                     {visitList && (
-                        <VisitTable />
+                        <Box>
+                            <VisitTable />
+                            <Pagination mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(visitList.count / pageSize)} />
+                        </Box>
                     )}
                 </Card>
                 <VisitDetailModal />
