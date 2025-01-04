@@ -1,5 +1,5 @@
-import attendanceData from "./leaveData";
-import leaveData from "./leaveData";
+import attendanceData from "./attendanceData";
+import leaveData from "./attendanceData";
 
 interface attendanceListResponse {
     count: number;

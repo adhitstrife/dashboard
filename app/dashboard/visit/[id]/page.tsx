@@ -36,36 +36,11 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     const theme = useMantineTheme();
     const { height, width } = useViewportSize();
     const { getUserProfile, userProfile, isLoading } = useUserProfile()
-    const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
     const { getDetailVisit, isLoadingGetDetailVisit } = useGetVisitDetail();
-    const { attendanceData, getListAttendance, isLoadingGetListAttendance } = useGetListAttendance();
-    const { isLoadingAddTarget, postNewTarget } = useAddTarget()
-    const { isLoadingUpdateTarget, updateTarget } = useUpdateTarget()
 
-    const leaveData = useAtomValue(leaveListAtom)
     const visitData = useAtomValue(visitDetailAtom)
 
-    const [showEditTargetModal, setShowEditTargetModal] = useState(false);
-    const [showAddTargetModal, setShowAddTargetModal] = useState(false);
-    const [pageCustomer, setPageCustomer] = useState(1);
-    const [pageLeave, setPageLeave] = useState(1);
-    const [addPayload, setAddPayload] = useState<targetAddPayload>({
-        sales_id: null,
-        period: null,
-        target_amount: null,
-        current_progress: null
-    })
-    const [editPayload, setEditPayload] = useState<targetAddPayload>({
-        sales_id: null,
-        period: null,
-        target_amount: null,
-        current_progress: null
-    })
-    const [searchedCustomer, setSearchedCustomer] = useState("");
     const currentYear = new Date().getFullYear();
-    const maxYearDate = new Date(currentYear + 1, 11, 31);
-
-    const customerList = useAtomValue(customerListAtom)
 
     useEffect(() => {
         getUserProfile()

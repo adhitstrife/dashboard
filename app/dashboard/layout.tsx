@@ -1,7 +1,7 @@
 'use client'
 import { AppShell, AppShellMain, Burger, Container, Drawer, Flex, Group, Image, NavLink, ScrollArea, Skeleton, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconCalendarCheck, IconCar, IconHome, IconHome2, IconMessage, IconUserDollar, IconUserStar, IconUsersGroup } from "@tabler/icons-react";
+import { IconCalendarCheck, IconCar, IconClockCheck, IconHome, IconHome2, IconMessage, IconUserDollar, IconUserStar, IconUsersGroup } from "@tabler/icons-react";
 import React, { useEffect } from "react";
 
 export default function DashboardLayout({ children }: { children?: React.ReactNode }) {
@@ -25,6 +25,7 @@ export default function DashboardLayout({ children }: { children?: React.ReactNo
                 <NavLink href="/dashboard/visit" label={"Visit"} leftSection={<IconCar size={20} stroke={1.5} />} />
                 <NavLink href="/dashboard/leave" label={"Leave"} leftSection={<IconCalendarCheck size={20} stroke={1.5} />} />
                 <NavLink href="/dashboard/sales" label={"Sales"} leftSection={<IconUserStar size={20} stroke={1.5} />} />
+                <NavLink href="/dashboard/attendance" label={"Attendance"} leftSection={<IconClockCheck size={20} stroke={1.5} />} />
                 <NavLink href="/dashboard/customer" label={"Customers"} leftSection={<IconUserDollar size={20} stroke={1.5} />} />
             </AppShell.Navbar>
             {children}
@@ -42,6 +43,7 @@ export default function DashboardLayout({ children }: { children?: React.ReactNo
                     <NavLink href="/dashboard/visit" label={"Visit"} leftSection={<IconCar size={20} stroke={1.5} />} />
                     <NavLink href="/dashboard/leave" label={"Leave"} leftSection={<IconCalendarCheck size={20} stroke={1.5} />} />
                     <NavLink href="/dashboard/sales" label={"Sales"} leftSection={<IconUserStar size={20} stroke={1.5} />} />
+                    <NavLink href="/dashboard/attendance" label={"Attendance"} leftSection={<IconClockCheck size={20} stroke={1.5} />} />
                     <NavLink href="/dashboard/customer" label={"Customers"} leftSection={<IconUserDollar size={20} stroke={1.5} />} />
                 </ScrollArea>
             </Drawer>

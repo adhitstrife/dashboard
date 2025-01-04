@@ -1,21 +1,20 @@
-import attendanceListResponse from "@/app/interface/response/attendance/leaveListResponse";
-import customerListResponse from "@/app/interface/response/customer/customerListResponse";
-import leaveListResponse from "@/app/interface/response/leave/leaveListResponse";
-import salesResponse from "@/app/interface/response/sales/salesListResponse";
+import attendanceListResponse from "@/app/interface/response/attendance/attendanceListResponse";
+import { attendanceListAtom } from "@/state/data/attendance/attendanceListAtom";
 import { notifications } from "@mantine/notifications";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import { IconX } from "@tabler/icons-react";
 import axios from "axios";
+import { useSetAtom } from "jotai";
 import Cookies from "js-cookie";
 import { useState } from "react"
 
 const useGetListAttendance = () => {
     const [isLoadingGetListAttendance, setIsLoadingGetListAttendance] = useState(false);
-    const [attendanceData, setAttendanceData] = useState<attendanceListResponse>();
+    const setAttendanceData = useSetAtom(attendanceListAtom)
     
     const getListAttendance = async (page: number = 1, page_size: number = 10, is_active?: boolean, sales_id?: number ) => {
         try {
             setIsLoadingGetListAttendance(true);
-            const url = `/backend/api/attendance?sales_id=${sales_id ? sales_id : ''}&is_active=${is_active ? is_active : ''}page=${page}&page_size=${page_size}`;
+            const url = `/backend/api/attendance?sales_id=${sales_id ? sales_id : ''}&is_active=${is_active ? is_active : ''}&page=${page}&page_size=${page_size}`;
             const response = await axios.get(url, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`
@@ -38,6 +37,6 @@ const useGetListAttendance = () => {
         }
     }
 
-    return { getListAttendance, attendanceData, isLoadingGetListAttendance }
+    return { getListAttendance, isLoadingGetListAttendance }
 }
 export default useGetListAttendance;

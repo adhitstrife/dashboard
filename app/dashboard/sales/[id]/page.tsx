@@ -23,6 +23,7 @@ import { useAtomValue } from "jotai";
 import { customerListAtom } from "@/state/data/customer/customerListAtom";
 import { leaveListAtom } from "@/state/data/leave/leaveListAtom";
 import { visitListAtom } from "@/state/data/visit/visitListAtom";
+import { attendanceListAtom } from "@/state/data/attendance/attendanceListAtom";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
@@ -36,12 +37,14 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
     const { getListLeave, isLoadingGetListLeave } = useGetListLeave();
     const { isLoadingGetListVisit, getListVisit } = useGetListVisit();
-    const { attendanceData, getListAttendance, isLoadingGetListAttendance } = useGetListAttendance();
+    const { getListAttendance, isLoadingGetListAttendance } = useGetListAttendance();
     const { isLoadingAddTarget, postNewTarget } = useAddTarget()
     const { isLoadingUpdateTarget, updateTarget } = useUpdateTarget()
 
     const leaveData = useAtomValue(leaveListAtom)
     const visitList = useAtomValue(visitListAtom)
+    const attendanceList = useAtomValue(attendanceListAtom)
+
 
     const [showEditTargetModal, setShowEditTargetModal] = useState(false);
     const [showAddTargetModal, setShowAddTargetModal] = useState(false);
@@ -310,8 +313,8 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                         </Grid>
                                     </Tabs.Panel>
                                     <Tabs.Panel value="attendance">
-                                        {attendanceData && (
-                                            <AttendanceTable attendanceList={attendanceData} />
+                                        {attendanceList && (
+                                            <AttendanceTable />
                                         )}
                                     </Tabs.Panel>
                                     <Tabs.Panel value="customers">
