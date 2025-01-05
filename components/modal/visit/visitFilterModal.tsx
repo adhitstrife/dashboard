@@ -108,7 +108,7 @@ export const VisitFilterModal = () => {
 
     return (
         <Stack>
-            <Group grow>
+            <Group grow preventGrowOverflow={false}>
                 <Select
                     placeholder={filter.salesId ? filter.salesId.label : "Search sales name"}
                     data={listForSelesSelect}
@@ -118,6 +118,7 @@ export const VisitFilterModal = () => {
                     onChange={(_value, option) => handleChangeSelect('sales', _value, option)}
                     value={filter.salesId ? filter.salesId.value : null}
                     withAsterisk
+                    w={300}
                 />
                 <Select
                     data={['All', 'No Show', 'Canceled', 'Completed']}
@@ -125,11 +126,13 @@ export const VisitFilterModal = () => {
                     onChange={(_value, option) => handleChangeSelect('category', _value, option)}
                     defaultValue={"All"}
                     value={filter.category}
+                    w={200}
                 />
                 <DateInput
                     onChange={(e) => handleChangeDate('startDate', e)}
                     placeholder="Filter Start Date"
                     value={filter.startDate ? new Date(filter.startDate) : null}
+                    w={250}
                 />
                 <DateInput
                     onChange={(e) => handleChangeDate('endDate', e)}
@@ -138,12 +141,12 @@ export const VisitFilterModal = () => {
                     maxDate={new Date()}
                     minDate={startDate == "" ? new Date : addDays(new Date(startDate), 1)}
                     value={filter.endDate ? new Date(filter.endDate) : null}
+                    w={{ base: 300, xs: 400 }}
                 />
-            </Group>
-            <Group justify="right">
                 <Button onClick={handleApplyFilter} color="primary-red">Search</Button>
                 <Button onClick={resetFilter} variant="outline" color="black">Reset</Button>
             </Group>
+            
         </Stack>
     )
 }
