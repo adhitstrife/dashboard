@@ -39,6 +39,7 @@ export default function Dashboard() {
   useEffect(() => {
     getUserProfile()
     getListVisit(1, 10)
+      console.log('Google Maps API Key:', process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
   }, [])
 
   const total = data.reduce((sum, item) => sum + item.value, 0);
