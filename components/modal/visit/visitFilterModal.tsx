@@ -107,8 +107,8 @@ export const VisitFilterModal = () => {
     }
 
     return (
-        <Flex direction={{ base: "column", lg:"row"}} justify={"space-between"}>
-            <Group>
+        <Stack>
+            <Group grow>
                 <Select
                     placeholder={filter.salesId ? filter.salesId.label : "Search sales name"}
                     data={listForSelesSelect}
@@ -140,10 +140,10 @@ export const VisitFilterModal = () => {
                     value={filter.endDate ? new Date(filter.endDate) : null}
                 />
             </Group>
-            <Group mt={{ base: 20, lg: 0}} justify="right">
+            <Group justify="right">
                 <Button onClick={handleApplyFilter} color="primary-red">Search</Button>
                 <Button onClick={resetFilter} variant="outline" color="black">Reset</Button>
             </Group>
-        </Flex>
+        </Stack>
     )
 }
