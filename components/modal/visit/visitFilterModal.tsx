@@ -1,6 +1,6 @@
 import customerData from "@/app/interface/response/customer/customerData";
 import { customerDetailAtom } from "@/state/data/customer/customerDetailAtom";
-import { Box, Button, Center, ComboboxItem, Grid, Group, Modal, Select, Stack, Table, Tabs, Text } from "@mantine/core"
+import { Box, Button, Center, ComboboxItem, Flex, Grid, Group, Modal, Select, Stack, Table, Tabs, Text } from "@mantine/core"
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { FC, useEffect, useState } from "react";
 import { DataLabel } from "../../label/dataLabel";
@@ -63,7 +63,6 @@ export const VisitFilterModal = () => {
     }
 
     const handleChangeSelect = (name: string, e: string | null, option?: ComboboxItem) => {
-        console.log(name, e, option)
         if (e) {
             if (name == 'category') {
                 if (e == 'All') {
@@ -108,7 +107,7 @@ export const VisitFilterModal = () => {
     }
 
     return (
-        <Stack>
+        <Flex direction={{ base: "column", lg:"row"}} justify={"space-between"}>
             <Group>
                 <Select
                     placeholder={filter.salesId ? filter.salesId.label : "Search sales name"}
@@ -140,10 +139,11 @@ export const VisitFilterModal = () => {
                     minDate={startDate == "" ? new Date : addDays(new Date(startDate), 1)}
                     value={filter.endDate ? new Date(filter.endDate) : null}
                 />
+            </Group>
+            <Group mt={{ base: 20, lg: 0}} justify="right">
                 <Button onClick={handleApplyFilter} color="primary-red">Search</Button>
                 <Button onClick={resetFilter} variant="outline" color="black">Reset</Button>
             </Group>
-            
-        </Stack>
+        </Flex>
     )
 }
