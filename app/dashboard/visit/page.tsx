@@ -15,6 +15,7 @@ import { IconFilterSearch } from "@tabler/icons-react";
 import { VisitFilterModal } from "@/components/modal/visit/visitFilterModal";
 import { Map } from "@/components/map/map";
 import { showMapAtom } from "@/state/component_state/switch/map/showMapAtom";
+import TimeDisplay from "@/components/clock/clock";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -87,7 +88,7 @@ export default function user() {
                         </Box>
                         <Box>
                             <Text ta={'right'} size='sm' mt={10} >Current time</Text>
-                            <Title order={2}>12:10 PM</Title>
+                            <TimeDisplay />
                         </Box>
                     </Flex>
                 </div>

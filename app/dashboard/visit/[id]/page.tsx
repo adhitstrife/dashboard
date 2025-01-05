@@ -26,6 +26,7 @@ import { visitListAtom } from "@/state/data/visit/visitListAtom";
 import useGetVisitDetail from "@/hooks/visit/useGetVisitDetail";
 import { visitDetailAtom } from "@/state/data/visit/visitDetailAtom";
 import { useViewportSize } from "@mantine/hooks";
+import TimeDisplay from "@/components/clock/clock";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
@@ -59,7 +60,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                         </Box>
                         <Box>
                             <Text ta={'right'} size='sm' mt={10} >Current time</Text>
-                            <Title order={2}>12:10 PM</Title>
+                            <TimeDisplay />
                         </Box>
                     </Flex>
                 </div>

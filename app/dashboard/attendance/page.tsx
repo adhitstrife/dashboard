@@ -13,6 +13,7 @@ import { AttendanceTable } from "@/components/table/attendanceTable";
 import useGetListAttendance from "@/hooks/attendance/useGetListAttendance";
 import { attendanceListAtom } from "@/state/data/attendance/attendanceListAtom";
 import { AttendanceModal } from "@/components/modal/attendance/attendanceModal";
+import TimeDisplay from "@/components/clock/clock";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -72,7 +73,7 @@ export default function user() {
                         </Box>
                         <Box>
                             <Text ta={'right'} size='sm' mt={10} >Current time</Text>
-                            <Title order={2}>12:10 PM</Title>
+                            <TimeDisplay />
                         </Box>
                     </Flex>
                 </div>

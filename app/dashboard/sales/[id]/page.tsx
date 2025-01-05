@@ -26,6 +26,7 @@ import { attendanceListAtom } from "@/state/data/attendance/attendanceListAtom";
 import { useViewportSize } from "@mantine/hooks";
 import { visitFilterModalAtom } from "@/state/component_state/modal/visit/visitFilterModalAtom";
 import { visitFilterAtom } from "@/state/data/visit/visitFilterAtom";
+import TimeDisplay from "@/components/clock/clock";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
@@ -224,7 +225,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                         </Box>
                         <Box>
                             <Text ta={'right'} size='sm' mt={10} >Current time</Text>
-                            <Title order={2}>12:10 PM</Title>
+                            <TimeDisplay />
                         </Box>
                     </Flex>
                 </div>

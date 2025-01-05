@@ -13,6 +13,7 @@ import useGetSalesDetail from "@/hooks/sales/useGetSalesDetail";
 import useEditSales from "@/hooks/sales/useEditSales";
 import useDeleteSales from "@/hooks/sales/useDeleteSales";
 import Link from "next/link";
+import TimeDisplay from "@/components/clock/clock";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -247,7 +248,7 @@ export default function user() {
                         </Box>
                         <Box>
                             <Text ta={'right'} size='sm' mt={10} >Current time</Text>
-                            <Title order={2}>12:10 PM</Title>
+                            <TimeDisplay />
                         </Box>
                     </Flex>
                 </div>

@@ -13,6 +13,7 @@ import { Map } from '@/components/map/map';
 import { VisitFilterModal } from '@/components/modal/visit/visitFilterModal';
 import { visitFilterModalAtom } from '@/state/component_state/modal/visit/visitFilterModalAtom';
 import { showMapAtom } from '@/state/component_state/switch/map/showMapAtom';
+import TimeDisplay from '@/components/clock/clock';
 
 export default function Dashboard() {
   const theme = useMantineTheme();
@@ -58,7 +59,7 @@ export default function Dashboard() {
             </Box>
             <Box>
               <Text ta={{ base: 'left', md: 'right' }} size='sm' mt={10} >Current time</Text>
-              <Title order={2}>12:10 PM</Title>
+              <TimeDisplay />
             </Box>
           </Flex>
         </div>
@@ -160,7 +161,7 @@ export default function Dashboard() {
                 <Group justify='space-between'>
                   <Box>
                     <Title order={3}>Visits</Title>
-                    <Text ta={'right'} size='sm' mt={10} style={{ color: theme.colors['secondary-gray'][9] }}>From 4-10 Sep, 2023</Text>
+                    
                   </Box>
                   <Box>
                     <ActionIcon onClick={() => setVisitFilterModal(true)} color='primary-red'>
