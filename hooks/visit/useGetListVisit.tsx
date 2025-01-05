@@ -5,20 +5,22 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { leaveListAtom } from "@/state/data/leave/leaveListAtom";
 import axios from "axios";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import Cookies from "js-cookie";
 import { useState } from "react"
 import { visitListAtom } from "@/state/data/visit/visitListAtom";
+import { visitFilterAtom } from "@/state/data/visit/visitFilterAtom";
 
 const useGetListVisit = () => {
     const [isLoadingGetListVisit, setIsLoadingGetListVisit] = useState(false);
     const setVisitData = useSetAtom(visitListAtom);
+    const visitFilter = useAtomValue(visitFilterAtom)
     
-    const getListVisit = async (page: number = 1, page_size: number = 10, name?: string, category?: string, sales_id?: number, customer_id?: number ) => {
+    const getListVisit = async (page: number = 1, page_size: number = 10) => {
         try {
             setIsLoadingGetListVisit(true);
-            const selectedCategory = category ? `&category=${category}` : ''
-            const url = `/backend/api/visit?sales_id=${sales_id ? sales_id : ''}${selectedCategory}&customer_id=${customer_id ? customer_id : ""}&page=${page}&page_size=${page_size}&keyword=${name ? name : ''}`;
+            const selectedCategory = visitFilter.category ? `&category=${visitFilter.category}` : ''
+            const url = `/backend/api/visit?sales_id=${visitFilter.salesId ? visitFilter.salesId : ''}${selectedCategory}&customer_id=${visitFilter.customerId ? visitFilter.customerId : ""}&page=${page}&page_size=${page_size}&start_date=${visitFilter.startDate ? visitFilter.startDate : ''}&end_date=${visitFilter.endDate ? visitFilter.endDate : ''}`;
             const response = await axios.get(url, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`

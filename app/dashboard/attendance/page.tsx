@@ -9,7 +9,6 @@ import { useAtomValue, useSetAtom } from "jotai";
 import useGetListVisit from "@/hooks/visit/useGetListVisit";
 import { visitListAtom } from "@/state/data/visit/visitListAtom";
 import { VisitTable } from "@/components/table/visitTable";
-import { VisitDetailModal } from "@/components/modal/visit/visitDetailModal";
 import { AttendanceTable } from "@/components/table/attendanceTable";
 import useGetListAttendance from "@/hooks/attendance/useGetListAttendance";
 import { attendanceListAtom } from "@/state/data/attendance/attendanceListAtom";

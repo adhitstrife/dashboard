@@ -4,7 +4,7 @@ import DashboardLayout from "../../layout";
 import useUserProfile from "@/hooks/auth/useUserProfile";
 import { use, useEffect, useState } from "react";
 import useGetSalesDetail from "@/hooks/sales/useGetSalesDetail";
-import { IconCalendarCheck, IconClockCheck, IconEdit, IconFileDollar, IconUser, IconUserDollar } from "@tabler/icons-react";
+import { IconCalendarCheck, IconClockCheck, IconEdit, IconFileDollar, IconMap, IconTable, IconUser, IconUserDollar } from "@tabler/icons-react";
 import { DataLabel } from "../../../../components/label/dataLabel";
 import { YearPickerInput } from "@mantine/dates";
 import targetAddPayload from "@/app/interface/payload/targetAddPayload";
@@ -18,12 +18,14 @@ import useGetListLeave from "@/hooks/leave/useGetListLeave";
 import { LeaveTable } from "@/components/table/leaveTable";
 import { AttendanceTable } from "@/components/table/attendanceTable";
 import useGetListAttendance from "@/hooks/attendance/useGetListAttendance";
-import useGetListSales from "@/hooks/sales/useGetListSales";
-import { useAtomValue } from "jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { customerListAtom } from "@/state/data/customer/customerListAtom";
 import { leaveListAtom } from "@/state/data/leave/leaveListAtom";
 import { visitListAtom } from "@/state/data/visit/visitListAtom";
 import { attendanceListAtom } from "@/state/data/attendance/attendanceListAtom";
+import { useViewportSize } from "@mantine/hooks";
+import { visitFilterModalAtom } from "@/state/component_state/modal/visit/visitFilterModalAtom";
+import { visitFilterAtom } from "@/state/data/visit/visitFilterAtom";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
@@ -32,6 +34,7 @@ interface SalesDetailProps {
 export default function salesDetail({ params }: { params: Promise<{ id: number }> }) {
     const { id } = use(params);
     const theme = useMantineTheme();
+    const { height, width } = useViewportSize();
     const { getUserProfile, userProfile, isLoading } = useUserProfile()
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
     const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
@@ -62,11 +65,12 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
         target_amount: null,
         current_progress: null
     })
-    const [ searchedCustomer, setSearchedCustomer ] = useState("");
+    const [searchedCustomer, setSearchedCustomer] = useState("");
     const currentYear = new Date().getFullYear();
     const maxYearDate = new Date(currentYear + 1, 11, 31);
 
     const customerList = useAtomValue(customerListAtom)
+    const [filterVisit, setFilterVisit] = useAtom(visitFilterAtom)
 
     useEffect(() => {
         getUserProfile()
@@ -78,11 +82,20 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
             }
             return payload
         })
+
+        setFilterVisit({
+            ...filterVisit,
+            salesId: id.toString()
+        });
+
         getListCustomer(1, 10, undefined, undefined, id);
-        getListVisit(1, 10, undefined, undefined, id);
-        getListLeave(1, 10, undefined,  id)
+        getListLeave(1, 10, undefined, id)
         getListAttendance(1, 10, true, id)
     }, [id])
+
+    useEffect(() => {
+        getListVisit(1, 10);
+    },[filterVisit])
 
     useEffect(() => {
         if (salesDetail && salesDetail.results.target) {
@@ -323,9 +336,31 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                         )}
                                     </Tabs.Panel>
                                     <Tabs.Panel value="visit">
-                                        {visitList && (
-                                            <VisitTable />
-                                        )}
+                                        <Tabs mt={20} variant="pills" defaultValue="list">
+                                            <Tabs.List>
+                                                <Tabs.Tab value="list" leftSection={<IconTable size={20} stroke={1.5} />}>
+                                                    List
+                                                </Tabs.Tab>
+                                                <Tabs.Tab value="maps" leftSection={<IconMap size={20} stroke={1.5} />}>
+                                                    Maps
+                                                </Tabs.Tab>
+                                            </Tabs.List>
+                                            <Tabs.Panel value="list">
+                                                {visitList && (
+                                                    <VisitTable />
+                                                )}
+                                            </Tabs.Panel>
+                                            <Tabs.Panel value="maps">
+                                                <iframe
+                                                    id="map"
+                                                    width={width}
+                                                    height="600"
+                                                    loading="lazy"
+                                                    src="https://www.google.com/maps?q=37.7749,-122.4194&hl=en&z=14&output=embed">
+                                                </iframe>
+                                            </Tabs.Panel>
+                                        </Tabs>
+
                                     </Tabs.Panel>
                                     <Tabs.Panel value="leave">
                                         {leaveData && (

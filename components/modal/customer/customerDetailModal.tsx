@@ -8,6 +8,7 @@ import { DataLabel } from "../../label/dataLabel";
 import useGetListVisit from "@/hooks/visit/useGetListVisit";
 import { VisitTable } from "../../table/visitTable";
 import { visitListAtom } from "@/state/data/visit/visitListAtom";
+import { visitFilterAtom } from "@/state/data/visit/visitFilterAtom";
 
 
 export const CustomerDetailModal = () => {
@@ -15,6 +16,8 @@ export const CustomerDetailModal = () => {
     const [isModalOpen, setIsModalOpen] = useAtom(customerDetailModalAtom);
     const { isLoadingGetListVisit, getListVisit } = useGetListVisit();
     const visitData = useAtomValue(visitListAtom)
+    const [filterVisit, setFilterVisit] = useAtom(visitFilterAtom)
+
 
     const onCloseModal = () => {
         setDetailCustomer(null)
@@ -23,10 +26,21 @@ export const CustomerDetailModal = () => {
 
     useEffect(() => {
         if (isModalOpen && detailCustomer) {
-            getListVisit(1,10,undefined,undefined,undefined,detailCustomer.id)
+            setFilterVisit({
+                ...filterVisit,
+                customerId: detailCustomer.id.toString()
+            });
+
+            
         }
         console.log(isModalOpen)
     },[isModalOpen])
+
+    useEffect(() => {
+        if (isModalOpen) {
+            getListVisit(1,10);
+        }
+    },[filterVisit])
 
     return (
         <Modal size={'lg'} opened={isModalOpen} onClose={onCloseModal} title="Customer Detail">

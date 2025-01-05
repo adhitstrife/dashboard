@@ -1,7 +1,6 @@
 import customerListResponse from "@/app/interface/response/customer/customerListResponse"
 import visitData from "@/app/interface/response/visit/visitData"
 import visitListResponse from "@/app/interface/response/visit/visitListResponse"
-import { visitDetailModalAtom } from "@/state/component_state/modal/visit/visitDetailModalAtom"
 import { visitDetailAtom } from "@/state/data/visit/visitDetailAtom"
 import { visitListAtom } from "@/state/data/visit/visitListAtom"
 import { ActionIcon, Box, Table, Text } from "@mantine/core"
@@ -13,12 +12,10 @@ import { FC } from "react"
 export const VisitTable = () => {
     const visitList = useAtomValue(visitListAtom)
 
-    const setOpenModal = useSetAtom(visitDetailModalAtom);
     const setVisitDetail = useSetAtom(visitDetailAtom);
 
     const openDetailVisitModal = (visit: visitData) => {
         setVisitDetail(visit)
-        setOpenModal(true)
     }
     return (
         <Box>

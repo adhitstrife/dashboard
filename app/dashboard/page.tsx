@@ -1,14 +1,18 @@
 "use client"
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardLayout from './layout';
-import { ActionIcon, AppShell, AppShellMain, Avatar, Badge, Box, Card, Flex, Grid, Group, ScrollArea, Select, Skeleton, Stack, Table, Text, TextInput, Title, useMantineTheme } from '@mantine/core';
+import { ActionIcon, AppShell, AppShellMain, Avatar, Badge, Box, Card, Flex, Grid, Group, Pagination, ScrollArea, Select, Skeleton, Stack, Switch, Table, Text, TextInput, Title, useMantineTheme } from '@mantine/core';
 import { BarChart, DonutChart } from '@mantine/charts';
-import { IconCalendarClock, IconChartColumn, IconChevronRight, IconSearch } from '@tabler/icons-react';
+import { IconCalendarClock, IconChartColumn, IconChevronRight, IconFilter, IconFilterBolt, IconFilterSearch, IconSearch } from '@tabler/icons-react';
 import useUserProfile from '@/hooks/auth/useUserProfile';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import { visitListAtom } from '@/state/data/visit/visitListAtom';
 import useGetListVisit from '@/hooks/visit/useGetListVisit';
 import { VisitTable } from '@/components/table/visitTable';
+import { Map } from '@/components/map/map';
+import { VisitFilterModal } from '@/components/modal/visit/visitFilterModal';
+import { visitFilterModalAtom } from '@/state/component_state/modal/visit/visitFilterModalAtom';
+import { showMapAtom } from '@/state/component_state/switch/map/showMapAtom';
 
 export default function Dashboard() {
   const theme = useMantineTheme();
@@ -22,9 +26,15 @@ export default function Dashboard() {
   const { getUserProfile, userProfile, isLoading } = useUserProfile()
 
   const visitList = useAtomValue(visitListAtom)
+  const setVisitFilterModal = useSetAtom(visitFilterModalAtom)
+  const [showMap, setShowMap] = useAtom(showMapAtom);
+
   const { getListVisit, isLoadingGetListVisit } = useGetListVisit();
+  const [page, setPage] = useState(1);
 
-
+  const handleChangePage = async (e: any) => {
+    await getListVisit(e, 10);
+  }
 
   useEffect(() => {
     getUserProfile()
@@ -145,20 +155,41 @@ export default function Dashboard() {
           </Grid> */}
           <Grid mt={20}>
             <Grid.Col span={{ base: 12, lg: 12 }}>
-              <Card withBorder radius={"md"} px={20} py={30} h={400}>
+              <Card withBorder radius={"md"} px={20} py={30}>
                 <Group justify='space-between'>
                   <Box>
                     <Title order={3}>Visits</Title>
                     <Text ta={'right'} size='sm' mt={10} style={{ color: theme.colors['secondary-gray'][9] }}>From 4-10 Sep, 2023</Text>
                   </Box>
                   <Box>
-                    <Select
-                      data={select}
-                    />
+                    <ActionIcon onClick={() => setVisitFilterModal(true)} color='primary-red'>
+                      <IconFilterSearch size={20} stroke={1.5} />
+                    </ActionIcon>
                   </Box>
                 </Group>
                 {visitList && (
-                  <VisitTable />
+                  <Box mt={20}>
+                    <Grid>
+                      <Grid.Col span={{ base: 12, lg: 6 }}>
+                        <Switch
+                          color='primary-red'
+                          checked={showMap}
+                          onChange={(e) => setShowMap(e.currentTarget.checked)}
+                          label="Show Map"
+                        />
+                      </Grid.Col>
+                      <Grid.Col span={{ base: 12, lg: 6 }}>
+                        <Flex justify={'right'}>
+                          <Pagination my={20} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(visitList.count / 10)} />
+                        </Flex>
+                      </Grid.Col>
+                    </Grid>
+                    {showMap && (
+                      <Map />
+                    )}
+                    <VisitTable />
+                    <VisitFilterModal />
+                  </Box>
                 )}
               </Card>
             </Grid.Col>
