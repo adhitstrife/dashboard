@@ -56,7 +56,7 @@ export const VisitFilterModal = () => {
             } else {
                 setFilter({
                     ...filter,
-                    startDate: formattedDate
+                    endDate: formattedDate
                 })
             }
         }
