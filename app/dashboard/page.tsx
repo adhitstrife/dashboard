@@ -161,21 +161,13 @@ export default function Dashboard() {
                 <Group justify='space-between'>
                   <Box>
                     <Title order={3}>Visits</Title>
-                    
-                  </Box>
-                  <Box>
-                    <ActionIcon onClick={() => setVisitFilterModal(true)} color='primary-red'>
-                      <IconFilterSearch size={20} stroke={1.5} />
-                    </ActionIcon>
                   </Box>
                 </Group>
                 {visitList && (
                   <Box mt={20}>
-                    <Flex justify={'right'}>
-                      <Pagination my={20} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(visitList.count / 10)} />
-                    </Flex>
-                    <VisitTable />
                     <VisitFilterModal />
+                    <VisitTable />
+                    <Pagination my={20} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(visitList.count / 10)} />
                   </Box>
                 )}
               </Card>
