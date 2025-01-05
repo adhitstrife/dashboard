@@ -39,7 +39,7 @@ export default function Dashboard() {
   useEffect(() => {
     getUserProfile()
     getListVisit(1, 10)
-      console.log('Google Maps API Key:', process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
+    console.log('Google Maps API Key:', process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
   }, [])
 
   const total = data.reduce((sum, item) => sum + item.value, 0);
@@ -170,24 +170,9 @@ export default function Dashboard() {
                 </Group>
                 {visitList && (
                   <Box mt={20}>
-                    <Grid>
-                      <Grid.Col span={{ base: 12, lg: 6 }}>
-                        <Switch
-                          color='primary-red'
-                          checked={showMap}
-                          onChange={(e) => setShowMap(e.currentTarget.checked)}
-                          label="Show Map"
-                        />
-                      </Grid.Col>
-                      <Grid.Col span={{ base: 12, lg: 6 }}>
-                        <Flex justify={'right'}>
-                          <Pagination my={20} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(visitList.count / 10)} />
-                        </Flex>
-                      </Grid.Col>
-                    </Grid>
-                    {showMap && (
-                      <Map />
-                    )}
+                    <Flex justify={'right'}>
+                      <Pagination my={20} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(visitList.count / 10)} />
+                    </Flex>
                     <VisitTable />
                     <VisitFilterModal />
                   </Box>

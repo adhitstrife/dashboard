@@ -1,6 +1,6 @@
 import customerData from "@/app/interface/response/customer/customerData";
 import { customerDetailAtom } from "@/state/data/customer/customerDetailAtom";
-import { Box, Button, Center, Grid, Modal, Select, Table, Tabs, Text } from "@mantine/core"
+import { Box, Button, Center, ComboboxItem, Grid, Modal, Select, Table, Tabs, Text } from "@mantine/core"
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { FC, useEffect, useState } from "react";
 import { DataLabel } from "../../label/dataLabel";
@@ -61,7 +61,8 @@ export const VisitFilterModal = () => {
         }
     }
 
-    const handleChangeSelect = (name: string, e: string | null) => {
+    const handleChangeSelect = (name: string, e: string | null, option?: ComboboxItem) => {
+        console.log(name, e, option)
         if (e) {
             if (name == 'category') {
                 if (e == 'All') {
@@ -78,14 +79,14 @@ export const VisitFilterModal = () => {
             } else {
                 setFilter({
                     ...filter,
-                    salesId: e
+                    salesId: option
                 })
             }
         }
     }
 
-    const handleApplyFilter = () => {
-        getListVisit(1, 10)
+    const handleApplyFilter = async() => {
+        await getListVisit(1, 10)
         onCloseModal()
     }
 
@@ -98,34 +99,41 @@ export const VisitFilterModal = () => {
             endDate: "",
         })
         getListVisit(1, 10)
+        onCloseModal()
+    }
+
+    const setValue = (option: any) => {
+        console.log(option)
     }
 
     return (
         <Modal size={'lg'} opened={isModalOpen} onClose={onCloseModal} title="Filter Visit Data">
             <Select
                 label="Sales"
-                placeholder="Search sales name"
+                placeholder={filter.salesId ? filter.salesId.label : "Search sales name"}
                 mt={10}
                 data={listForSelesSelect}
                 name="sales_id"
                 searchable
                 onSearchChange={(e) => searchSales(e)}
-                onChange={(e) => handleChangeSelect('sales', e)}
+                onChange={(_value, option) => handleChangeSelect('sales', _value, option)}
+                value={filter.salesId ? filter.salesId.value : null}
                 withAsterisk
             />
             <Select
                 label="Category"
                 data={['All', 'No Show', 'Canceled', 'Completed']}
                 name="religion"
-                onChange={(e) => handleChangeSelect('category', e)}
+                onChange={(_value, option) => handleChangeSelect('category', _value, option)}
                 defaultValue={"All"}
-                value={category}
+                value={filter.category}
                 mt={10}
             />
             <DateInput
                 onChange={(e) => handleChangeDate('startDate', e)}
                 label="Start Date"
                 placeholder="Filter Start Date"
+                value={filter.startDate ? new Date(filter.startDate) : null}
                 mt={10}
             />
             <DateInput
@@ -136,6 +144,7 @@ export const VisitFilterModal = () => {
                 disabled={startDate == "" ? true : false}
                 maxDate={new Date()}
                 minDate={startDate == "" ? new Date : addDays(new Date(startDate), 1)}
+                value={filter.endDate ? new Date(filter.endDate) : null}
             />
             <Grid mt={40}>
                 <Grid.Col span={{ base: 12, lg: 6 }}>

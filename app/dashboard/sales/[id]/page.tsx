@@ -83,15 +83,22 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
             return payload
         })
 
-        setFilterVisit({
-            ...filterVisit,
-            salesId: id.toString()
-        });
-
         getListCustomer(1, 10, undefined, undefined, id);
         getListLeave(1, 10, undefined, id)
         getListAttendance(1, 10, true, id)
     }, [id])
+
+    useEffect(() => {
+        if (userProfile) {
+            setFilterVisit({
+                ...filterVisit,
+                salesId: {
+                    label: userProfile.username,
+                    value: userProfile.id.toString()
+                }
+            });
+        }
+    },[userProfile])
 
     useEffect(() => {
         getListVisit(1, 10);

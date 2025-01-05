@@ -1,5 +1,7 @@
+import { ComboboxItem } from "@mantine/core";
+
 interface visitFilterInterface {
-    salesId: string | undefined;
+    salesId: ComboboxItem | undefined;
     category: string | undefined;
     startDate: string | undefined;
     endDate: string | undefined

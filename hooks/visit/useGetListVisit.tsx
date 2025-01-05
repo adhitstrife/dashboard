@@ -20,7 +20,7 @@ const useGetListVisit = () => {
         try {
             setIsLoadingGetListVisit(true);
             const selectedCategory = visitFilter.category ? `&category=${visitFilter.category}` : ''
-            const url = `/backend/api/visit?sales_id=${visitFilter.salesId ? visitFilter.salesId : ''}${selectedCategory}&customer_id=${visitFilter.customerId ? visitFilter.customerId : ""}&page=${page}&page_size=${page_size}&start_date=${visitFilter.startDate ? visitFilter.startDate : ''}&end_date=${visitFilter.endDate ? visitFilter.endDate : ''}`;
+            const url = `/backend/api/visit?sales_id=${visitFilter.salesId ? visitFilter.salesId.value : ''}${selectedCategory}&customer_id=${visitFilter.customerId ? visitFilter.customerId : ""}&page=${page}&page_size=${page_size}&start_date=${visitFilter.startDate ? visitFilter.startDate : ''}&end_date=${visitFilter.endDate ? visitFilter.endDate : ''}`;
             const response = await axios.get(url, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`
