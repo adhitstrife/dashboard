@@ -111,7 +111,6 @@ export const VisitFilterModal = () => {
         <Stack>
             <Group>
                 <Select
-                    label="Sales"
                     placeholder={filter.salesId ? filter.salesId.label : "Search sales name"}
                     data={listForSelesSelect}
                     name="sales_id"
@@ -122,33 +121,29 @@ export const VisitFilterModal = () => {
                     withAsterisk
                 />
                 <Select
-                    label="Category"
                     data={['All', 'No Show', 'Canceled', 'Completed']}
-                    name="religion"
+                    placeholder={filter.category ? filter.category : "Select Category"}
                     onChange={(_value, option) => handleChangeSelect('category', _value, option)}
                     defaultValue={"All"}
                     value={filter.category}
                 />
                 <DateInput
                     onChange={(e) => handleChangeDate('startDate', e)}
-                    label="Start Date"
                     placeholder="Filter Start Date"
                     value={filter.startDate ? new Date(filter.startDate) : null}
                 />
                 <DateInput
                     onChange={(e) => handleChangeDate('endDate', e)}
-                    label="End Date"
                     placeholder="Filter End Date"
                     disabled={startDate == "" ? true : false}
                     maxDate={new Date()}
                     minDate={startDate == "" ? new Date : addDays(new Date(startDate), 1)}
                     value={filter.endDate ? new Date(filter.endDate) : null}
                 />
-            </Group>
-            <Group justify="right">
                 <Button onClick={handleApplyFilter} color="primary-red">Search</Button>
                 <Button onClick={resetFilter} variant="outline" color="black">Reset</Button>
             </Group>
+            
         </Stack>
     )
 }
