@@ -1,6 +1,6 @@
 import customerData from "@/app/interface/response/customer/customerData";
 import { customerDetailAtom } from "@/state/data/customer/customerDetailAtom";
-import { Box, Button, Center, ComboboxItem, Grid, Modal, Select, Table, Tabs, Text } from "@mantine/core"
+import { Box, Button, Center, ComboboxItem, Grid, Group, Modal, Select, Stack, Table, Tabs, Text } from "@mantine/core"
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import { FC, useEffect, useState } from "react";
 import { DataLabel } from "../../label/dataLabel";
@@ -14,6 +14,7 @@ import useGetListSales from "@/hooks/sales/useGetListSales";
 import { DateInput, DateValue } from "@mantine/dates";
 import { addDays, format } from "date-fns";
 import { visitFilterAtom } from "@/state/data/visit/visitFilterAtom";
+import { clear } from "console";
 
 
 export const VisitFilterModal = () => {
@@ -85,7 +86,7 @@ export const VisitFilterModal = () => {
         }
     }
 
-    const handleApplyFilter = async() => {
+    const handleApplyFilter = async () => {
         await getListVisit(1, 10)
         onCloseModal()
     }
@@ -107,53 +108,47 @@ export const VisitFilterModal = () => {
     }
 
     return (
-        <Modal size={'lg'} opened={isModalOpen} onClose={onCloseModal} title="Filter Visit Data">
-            <Select
-                label="Sales"
-                placeholder={filter.salesId ? filter.salesId.label : "Search sales name"}
-                mt={10}
-                data={listForSelesSelect}
-                name="sales_id"
-                searchable
-                onSearchChange={(e) => searchSales(e)}
-                onChange={(_value, option) => handleChangeSelect('sales', _value, option)}
-                value={filter.salesId ? filter.salesId.value : null}
-                withAsterisk
-            />
-            <Select
-                label="Category"
-                data={['All', 'No Show', 'Canceled', 'Completed']}
-                name="religion"
-                onChange={(_value, option) => handleChangeSelect('category', _value, option)}
-                defaultValue={"All"}
-                value={filter.category}
-                mt={10}
-            />
-            <DateInput
-                onChange={(e) => handleChangeDate('startDate', e)}
-                label="Start Date"
-                placeholder="Filter Start Date"
-                value={filter.startDate ? new Date(filter.startDate) : null}
-                mt={10}
-            />
-            <DateInput
-                onChange={(e) => handleChangeDate('endDate', e)}
-                label="End Date"
-                placeholder="Filter End Date"
-                mt={10}
-                disabled={startDate == "" ? true : false}
-                maxDate={new Date()}
-                minDate={startDate == "" ? new Date : addDays(new Date(startDate), 1)}
-                value={filter.endDate ? new Date(filter.endDate) : null}
-            />
-            <Grid mt={40}>
-                <Grid.Col span={{ base: 12, lg: 6 }}>
-                    <Button onClick={handleApplyFilter} color="primary-red" fullWidth>Apply</Button>
-                </Grid.Col>
-                <Grid.Col span={{ base: 12, lg: 6 }}>
-                    <Button onClick={resetFilter} variant="outline" color="black" fullWidth>Reset</Button>
-                </Grid.Col>
-            </Grid>
-        </Modal>
+        <Stack>
+            <Group>
+                <Select
+                    label="Sales"
+                    placeholder={filter.salesId ? filter.salesId.label : "Search sales name"}
+                    data={listForSelesSelect}
+                    name="sales_id"
+                    searchable
+                    onSearchChange={(e) => searchSales(e)}
+                    onChange={(_value, option) => handleChangeSelect('sales', _value, option)}
+                    value={filter.salesId ? filter.salesId.value : null}
+                    withAsterisk
+                />
+                <Select
+                    label="Category"
+                    data={['All', 'No Show', 'Canceled', 'Completed']}
+                    name="religion"
+                    onChange={(_value, option) => handleChangeSelect('category', _value, option)}
+                    defaultValue={"All"}
+                    value={filter.category}
+                />
+                <DateInput
+                    onChange={(e) => handleChangeDate('startDate', e)}
+                    label="Start Date"
+                    placeholder="Filter Start Date"
+                    value={filter.startDate ? new Date(filter.startDate) : null}
+                />
+                <DateInput
+                    onChange={(e) => handleChangeDate('endDate', e)}
+                    label="End Date"
+                    placeholder="Filter End Date"
+                    disabled={startDate == "" ? true : false}
+                    maxDate={new Date()}
+                    minDate={startDate == "" ? new Date : addDays(new Date(startDate), 1)}
+                    value={filter.endDate ? new Date(filter.endDate) : null}
+                />
+            </Group>
+            <Group justify="right">
+                <Button onClick={handleApplyFilter} color="primary-red">Search</Button>
+                <Button onClick={resetFilter} variant="outline" color="black">Reset</Button>
+            </Group>
+        </Stack>
     )
 }

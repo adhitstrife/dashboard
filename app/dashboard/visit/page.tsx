@@ -100,10 +100,10 @@ export default function user() {
                           onChange={(e) => setShowMap(e.currentTarget.checked)}
                           label="Show Map"
                         />
-                        <ActionIcon onClick={() => setVisitFilterModal(true)} color='primary-red'>
-                            <IconFilterSearch size={20} stroke={1.5} />
-                        </ActionIcon>
                     </Group>
+                    <Box my={20}>
+                        <VisitFilterModal />
+                    </Box>
                     {visitList && (
                         <Box>
                             {showMap && (
@@ -111,7 +111,6 @@ export default function user() {
                             )}
                             <VisitTable />
                             <Pagination mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(visitList.count / pageSize)} />
-                            <VisitFilterModal />
                         </Box>
                     )}
                 </Card>
