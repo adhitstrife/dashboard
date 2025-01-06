@@ -108,44 +108,56 @@ export const VisitFilterModal = () => {
 
     return (
         <Stack>
-            <Group grow preventGrowOverflow={false}>
-                <Select
-                    placeholder={filter.salesId ? filter.salesId.label : "Search sales name"}
-                    data={listForSelesSelect}
-                    name="sales_id"
-                    searchable
-                    onSearchChange={(e) => searchSales(e)}
-                    onChange={(_value, option) => handleChangeSelect('sales', _value, option)}
-                    value={filter.salesId ? filter.salesId.value : null}
-                    withAsterisk
-                    w={300}
-                />
-                <Select
-                    data={['All', 'No Show', 'Canceled', 'Completed']}
-                    placeholder={filter.category ? filter.category : "Select Category"}
-                    onChange={(_value, option) => handleChangeSelect('category', _value, option)}
-                    defaultValue={"All"}
-                    value={filter.category}
-                    w={200}
-                />
-                <DateInput
-                    onChange={(e) => handleChangeDate('startDate', e)}
-                    placeholder="Filter Start Date"
-                    value={filter.startDate ? new Date(filter.startDate) : null}
-                    w={250}
-                />
-                <DateInput
-                    onChange={(e) => handleChangeDate('endDate', e)}
-                    placeholder="Filter End Date"
-                    disabled={startDate == "" ? true : false}
-                    maxDate={new Date()}
-                    minDate={startDate == "" ? new Date : addDays(new Date(startDate), 1)}
-                    value={filter.endDate ? new Date(filter.endDate) : null}
-                    w={{ base: 300, xs: 250 }}
-                />
-                <Button onClick={handleApplyFilter} color="primary-red">Search</Button>
-                <Button onClick={resetFilter} variant="outline" color="black">Reset</Button>
-            </Group>
+            <Grid>
+                <Grid.Col span={{ base: 12, md: 3 }}>
+                    <Select
+                        placeholder={filter.salesId ? filter.salesId.label : "Search sales name"}
+                        data={listForSelesSelect}
+                        name="sales_id"
+                        searchable
+                        onSearchChange={(e) => searchSales(e)}
+                        onChange={(_value, option) => handleChangeSelect('sales', _value, option)}
+                        value={filter.salesId ? filter.salesId.value : null}
+                        withAsterisk
+                    />
+                </Grid.Col>
+                <Grid.Col span={{ base: 12, md: 2}}>
+                    <Select
+                        data={['All', 'No Show', 'Canceled', 'Completed']}
+                        placeholder={filter.category ? filter.category : "Select Category"}
+                        onChange={(_value, option) => handleChangeSelect('category', _value, option)}
+                        defaultValue={"All"}
+                        value={filter.category}
+                    />
+                </Grid.Col>
+                <Grid.Col span={{ base: 12, md: 4}}>
+                    <Group grow>
+                        <DateInput
+                            onChange={(e) => handleChangeDate('startDate', e)}
+                            placeholder="Filter Start Date"
+                            value={filter.startDate ? new Date(filter.startDate) : null}
+                        />
+                        <DateInput
+                            onChange={(e) => handleChangeDate('endDate', e)}
+                            placeholder="Filter End Date"
+                            disabled={startDate == "" ? true : false}
+                            maxDate={new Date()}
+                            minDate={startDate == "" ? new Date : addDays(new Date(startDate), 1)}
+                            value={filter.endDate ? new Date(filter.endDate) : null}
+                        />
+                    </Group>
+                </Grid.Col>
+                <Grid.Col span={{ base: 12, md: 3}}>
+                    <Grid>
+                        <Grid.Col span={{ base: 12, md: 6}}>
+                            <Button fullWidth onClick={handleApplyFilter} color="primary-red">Search</Button>
+                        </Grid.Col>
+                        <Grid.Col span={{ base: 12, md: 6}}>
+                            <Button fullWidth onClick={resetFilter} variant="outline" color="black">Reset</Button>
+                        </Grid.Col>
+                    </Grid>
+                </Grid.Col>
+            </Grid>
             
         </Stack>
     )
