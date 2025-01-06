@@ -141,7 +141,7 @@ export const VisitFilterModal = () => {
                     maxDate={new Date()}
                     minDate={startDate == "" ? new Date : addDays(new Date(startDate), 1)}
                     value={filter.endDate ? new Date(filter.endDate) : null}
-                    w={{ base: 300, xs: 400 }}
+                    w={{ base: 300, xs: 250 }}
                 />
                 <Button onClick={handleApplyFilter} color="primary-red">Search</Button>
                 <Button onClick={resetFilter} variant="outline" color="black">Reset</Button>

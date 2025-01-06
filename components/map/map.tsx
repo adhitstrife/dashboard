@@ -24,7 +24,7 @@ export const Map = () => {
         <Box>
             {visitList && (
                 <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}>
-                    <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={8}>
+                    <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={13}>
                         {visitList.results.map((visit, index) => (
                             <Marker key={index} position={{ lat: Number(visit.latitude), lng: Number(visit.longitude)}} />
                         ))}
