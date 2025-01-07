@@ -14,6 +14,8 @@ import useGetListAttendance from "@/hooks/attendance/useGetListAttendance";
 import { attendanceListAtom } from "@/state/data/attendance/attendanceListAtom";
 import { AttendanceModal } from "@/components/modal/attendance/attendanceModal";
 import TimeDisplay from "@/components/clock/clock";
+import useUserProfile from "@/hooks/auth/useUserProfile";
+import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -25,16 +27,21 @@ export default function user() {
     const [filterBySales, setFilterBySales] = useState("");
 
     const attendanceList = useAtomValue(attendanceListAtom)
+    const setActiveMenu = useSetAtom(activeMenuAtom);
     
     const { getListVisit, isLoadingGetListVisit } = useGetListVisit();
     const { isLoadingGetListSales, getListSales, salesData, listForSelesSelect } = useGetListSales();
+    const { getUserProfile, userProfile, isLoading } = useUserProfile()
 
     const searchSales = (e: string) => {
         getListSales(1, 10, e)
+        getUserProfile();
+        setActiveMenu("attendance")
     }
 
     useEffect(() => {
         getListAttendance(page,10,selectedStatus)
+
     }, [])
 
     const handleSelectedStatus = async (e: string | null) => {
@@ -58,7 +65,7 @@ export default function user() {
     }
 
     const handleChangePage = async (e: any) => {
-        await getListAttendance(e, pageSize);
+        await getListAttendance(e, pageSize, selectedStatus, parseInt(filterBySales));
         setPage(e);
     }
 

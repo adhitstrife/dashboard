@@ -14,6 +14,9 @@ import useEditSales from "@/hooks/sales/useEditSales";
 import useDeleteSales from "@/hooks/sales/useDeleteSales";
 import Link from "next/link";
 import TimeDisplay from "@/components/clock/clock";
+import useUserProfile from "@/hooks/auth/useUserProfile";
+import { useSetAtom } from "jotai";
+import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -24,6 +27,7 @@ export default function user() {
     const { isLoadingGetListSales, getListSales, salesData } = useGetListSales();
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
     const { deleteSales, isLoadingDeleteSales } = useDeleteSales()
+    const { getUserProfile, userProfile, isLoading } = useUserProfile()
     const [ page, setPage ] = useState(1);
     const [ pageSize, setPageSize ] = useState(10);
     const [ deletedSales, setDeletedSales ] = useState(0);
@@ -54,9 +58,13 @@ export default function user() {
         city_id: 0,
     })
 
+    const setActiveMenu = useSetAtom(activeMenuAtom)
+
     useEffect(() => {
         getCountryList()
         getListSales()
+        getUserProfile()
+        setActiveMenu("sales")
     }, [])
 
     useEffect(() => {

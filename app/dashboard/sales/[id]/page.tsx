@@ -27,6 +27,7 @@ import { useViewportSize } from "@mantine/hooks";
 import { visitFilterModalAtom } from "@/state/component_state/modal/visit/visitFilterModalAtom";
 import { visitFilterAtom } from "@/state/data/visit/visitFilterAtom";
 import TimeDisplay from "@/components/clock/clock";
+import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
@@ -72,6 +73,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
 
     const customerList = useAtomValue(customerListAtom)
     const [filterVisit, setFilterVisit] = useAtom(visitFilterAtom)
+    const setActiveMenu = useSetAtom(activeMenuAtom)
 
     useEffect(() => {
         getUserProfile()
@@ -87,6 +89,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
         getListCustomer(1, 10, undefined, undefined, id);
         getListLeave(1, 10, undefined, id)
         getListAttendance(1, 10, true, id)
+        setActiveMenu("sales")
     }, [id])
 
     useEffect(() => {

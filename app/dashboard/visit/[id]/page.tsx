@@ -19,7 +19,7 @@ import { LeaveTable } from "@/components/table/leaveTable";
 import { AttendanceTable } from "@/components/table/attendanceTable";
 import useGetListAttendance from "@/hooks/attendance/useGetListAttendance";
 import useGetListSales from "@/hooks/sales/useGetListSales";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { customerListAtom } from "@/state/data/customer/customerListAtom";
 import { leaveListAtom } from "@/state/data/leave/leaveListAtom";
 import { visitListAtom } from "@/state/data/visit/visitListAtom";
@@ -27,6 +27,7 @@ import useGetVisitDetail from "@/hooks/visit/useGetVisitDetail";
 import { visitDetailAtom } from "@/state/data/visit/visitDetailAtom";
 import { useViewportSize } from "@mantine/hooks";
 import TimeDisplay from "@/components/clock/clock";
+import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
@@ -40,12 +41,14 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     const { getDetailVisit, isLoadingGetDetailVisit } = useGetVisitDetail();
 
     const visitData = useAtomValue(visitDetailAtom)
+    const setActiveMenu = useSetAtom(activeMenuAtom);
 
     const currentYear = new Date().getFullYear();
 
     useEffect(() => {
         getUserProfile()
         getDetailVisit(id)
+        setActiveMenu("visit")
     }, [id])
 
 

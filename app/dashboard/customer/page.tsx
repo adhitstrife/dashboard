@@ -24,6 +24,8 @@ import { customerListAtom } from "@/state/data/customer/customerListAtom";
 import { CustomerDeleteModal } from "@/components/modal/customer/customerDeleteModal";
 import { CustomerApproveModal } from "@/components/modal/customer/customerApproveModal";
 import TimeDisplay from "@/components/clock/clock";
+import useUserProfile from "@/hooks/auth/useUserProfile";
+import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -55,6 +57,7 @@ export default function user() {
     })
 
     const customerList = useAtomValue(customerListAtom)
+    const setActiveMenu = useSetAtom(activeMenuAtom);
 
     const { height, width } = useViewportSize();
     const { getCountryList, cities, isLoadingGetCities } = useGetCities()
@@ -65,6 +68,7 @@ export default function user() {
     const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
     const { isLoadingGetListSales, getListSales, salesData, listForSelesSelect } = useGetListSales();
     const { assignSalesToCustomer, isLoadingAssignSales } = useAssignSalesToCustomer();
+    const { getUserProfile, userProfile, isLoading } = useUserProfile()
 
 
     const searchProvince = (e: string) => {
@@ -182,10 +186,12 @@ export default function user() {
     useEffect(() => {
         getListCustomer(page, 10, searchedCustomer)
         getProvinceList()
+        getUserProfile()
+        setActiveMenu("customer")
     }, [])
 
     const handleChangePage = async (e: any) => {
-        await getListCustomer(e, 10, searchedCustomer);
+        await getListCustomer(e, 10, searchedCustomer, selectedStatus, parseInt(filterBySales));
         setPage(e);
     }
 

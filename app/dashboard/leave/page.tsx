@@ -28,6 +28,8 @@ import { leaveListAtom } from "@/state/data/leave/leaveListAtom";
 import { LeaveTable } from "@/components/table/leaveTable";
 import { LeaveApproveModal } from "@/components/modal/leave/leaveApproveModal";
 import TimeDisplay from "@/components/clock/clock";
+import useUserProfile from "@/hooks/auth/useUserProfile";
+import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -59,6 +61,7 @@ export default function user() {
     })
 
     const leaveList = useAtomValue(leaveListAtom)
+    const setActiveMenu = useSetAtom(activeMenuAtom)
 
     const { height, width } = useViewportSize();
     const { getCountryList, cities, isLoadingGetCities } = useGetCities()
@@ -70,6 +73,7 @@ export default function user() {
     const { getListLeave, isLoadingGetListLeave } = useGetListLeave();
     const { assignSalesToCustomer, isLoadingAssignSales } = useAssignSalesToCustomer();
     const { isLoadingGetListSales, getListSales, salesData, listForSelesSelect } = useGetListSales();
+    const { getUserProfile, userProfile, isLoading } = useUserProfile()
 
 
     const searchSales = (e: string) => {
@@ -93,6 +97,8 @@ export default function user() {
     useEffect(() => {
         getListLeave(page, 10, searchedLeave)
         getProvinceList()
+        getUserProfile()
+        setActiveMenu("leave")
     }, [])
 
     const handleChangePage = async (e: any) => {

@@ -1,12 +1,32 @@
 'use client'
-import { AppShell, AppShellMain, Burger, Container, Drawer, Flex, Group, Image, NavLink, ScrollArea, Skeleton, Text } from "@mantine/core";
+import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
+import { AppShell, AppShellMain, Burger, Button, Container, Drawer, Flex, Group, Image, NavLink, ScrollArea, Skeleton, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconCalendarCheck, IconCar, IconClockCheck, IconHome, IconHome2, IconMessage, IconUserDollar, IconUserStar, IconUsersGroup } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
+import { IconCalendarCheck, IconCar, IconCheck, IconClockCheck, IconHome, IconHome2, IconLogout, IconMessage, IconUserDollar, IconUserStar, IconUsersGroup } from "@tabler/icons-react";
+import { useAtomValue } from "jotai";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 export default function DashboardLayout({ children }: { children?: React.ReactNode }) {
     const [opened, { toggle }] = useDisclosure();
     const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] = useDisclosure(false);
+    const activeMenu = useAtomValue(activeMenuAtom);
+    const router = useRouter();
+
+    const handleLogOut = () => {
+        Cookies.remove('authToken');
+        router.push("/")
+
+        notifications.show({
+            title: 'Logout Success',
+            message: 'Good Bye',
+            color: 'primary-red',
+            icon: <IconCheck size={20} stroke={1.5} />,
+            position: 'top-right'
+        })
+    }
     
     return (
         <AppShell
@@ -21,12 +41,18 @@ export default function DashboardLayout({ children }: { children?: React.ReactNo
                 </Group>
             </AppShell.Header>
             <AppShell.Navbar p="md">
-                <NavLink href="/dashboard" label={"Dashboard"} leftSection={<IconHome2 size={20} stroke={1.5} />} color="primary-red" active variant="filled" />
-                <NavLink href="/dashboard/visit" label={"Visit"} leftSection={<IconCar size={20} stroke={1.5} />} />
-                <NavLink href="/dashboard/leave" label={"Leave"} leftSection={<IconCalendarCheck size={20} stroke={1.5} />} />
-                <NavLink href="/dashboard/sales" label={"Sales"} leftSection={<IconUserStar size={20} stroke={1.5} />} />
-                <NavLink href="/dashboard/attendance" label={"Attendance"} leftSection={<IconClockCheck size={20} stroke={1.5} />} />
-                <NavLink href="/dashboard/customer" label={"Customers"} leftSection={<IconUserDollar size={20} stroke={1.5} />} />
+                <AppShell.Section></AppShell.Section>
+                <AppShell.Section grow>
+                    <NavLink href="/dashboard" label={"Dashboard"} leftSection={<IconHome2 size={20} stroke={1.5} />} color="primary-red" active={activeMenu == "dashboard" ? true : false} variant="filled" />
+                    <NavLink href="/dashboard/visit" label={"Visit"} leftSection={<IconCar size={20} stroke={1.5} />} color="primary-red" active={activeMenu == "visit" ? true : false} variant="filled" />
+                    <NavLink href="/dashboard/leave" label={"Leave"} leftSection={<IconCalendarCheck size={20} stroke={1.5} />} color="primary-red" active={activeMenu == "leave" ? true : false} variant="filled" />
+                    <NavLink href="/dashboard/sales" label={"Sales"} leftSection={<IconUserStar size={20} stroke={1.5} />} color="primary-red" active={activeMenu == "sales" ? true : false} variant="filled" />
+                    <NavLink href="/dashboard/attendance" label={"Attendance"} leftSection={<IconClockCheck size={20} stroke={1.5} />} color="primary-red" active={activeMenu == "attendance" ? true : false} variant="filled" />
+                    <NavLink href="/dashboard/customer" label={"Customers"} leftSection={<IconUserDollar size={20} stroke={1.5} />} color="primary-red" active={activeMenu == "customer" ? true : false} variant="filled" />
+                </AppShell.Section>
+                <AppShell.Section>
+                    <Button onClick={handleLogOut} variant="transparent" color="primary-red" rightSection={<IconLogout size={20} stroke={1.5} />} mt={50}>Log Out</Button>
+                </AppShell.Section>
             </AppShell.Navbar>
             {children}
             <Drawer
@@ -45,6 +71,7 @@ export default function DashboardLayout({ children }: { children?: React.ReactNo
                     <NavLink href="/dashboard/sales" label={"Sales"} leftSection={<IconUserStar size={20} stroke={1.5} />} />
                     <NavLink href="/dashboard/attendance" label={"Attendance"} leftSection={<IconClockCheck size={20} stroke={1.5} />} />
                     <NavLink href="/dashboard/customer" label={"Customers"} leftSection={<IconUserDollar size={20} stroke={1.5} />} />
+                    <Button onClick={handleLogOut} variant="transparent" color="primary-red" rightSection={<IconLogout size={20} stroke={1.5} />} mt={50}>Log Out</Button>
                 </ScrollArea>
             </Drawer>
         </AppShell>

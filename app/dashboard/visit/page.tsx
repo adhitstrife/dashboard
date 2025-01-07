@@ -16,6 +16,8 @@ import { VisitFilterModal } from "@/components/modal/visit/visitFilterModal";
 import { Map } from "@/components/map/map";
 import { showMapAtom } from "@/state/component_state/switch/map/showMapAtom";
 import TimeDisplay from "@/components/clock/clock";
+import useUserProfile from "@/hooks/auth/useUserProfile";
+import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -29,11 +31,13 @@ export default function user() {
     const visitList = useAtomValue(visitListAtom)
     const setVisitFilterModal = useSetAtom(visitFilterModalAtom)
     const [showMap, setShowMap] = useAtom(showMapAtom);
+    const setActiveMenu = useSetAtom(activeMenuAtom);
 
     const { getProvinceList, isLoadingGetProvinces, provinces } = useGetProvinces()
 
     const { getListVisit, isLoadingGetListVisit } = useGetListVisit();
     const { isLoadingGetListSales, getListSales, salesData, listForSelesSelect } = useGetListSales();
+    const { getUserProfile, userProfile, isLoading } = useUserProfile()
 
     const searchSales = (e: string) => {
         getListSales(1, 10, e)
@@ -42,6 +46,8 @@ export default function user() {
     useEffect(() => {
         getListVisit(page, 10)
         getProvinceList()
+        getUserProfile()
+        setActiveMenu("visit")
     }, [])
 
     const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
