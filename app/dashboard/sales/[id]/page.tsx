@@ -88,7 +88,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
 
         getListCustomer(1, 10, undefined, undefined, id);
         getListLeave(1, 10, undefined, id)
-        getListAttendance(1, 10, true, id)
+        getListAttendance(1, 10, undefined, id)
         setActiveMenu("sales")
     }, [id])
 

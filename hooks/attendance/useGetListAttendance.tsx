@@ -11,10 +11,11 @@ const useGetListAttendance = () => {
     const [isLoadingGetListAttendance, setIsLoadingGetListAttendance] = useState(false);
     const setAttendanceData = useSetAtom(attendanceListAtom)
     
-    const getListAttendance = async (page: number = 1, page_size: number = 10, is_active?: boolean, sales_id?: number ) => {
+    const getListAttendance = async (page: number = 1, page_size: number = 10, date?: string, sales_id?: number ) => {
         try {
+            console.log(date)
             setIsLoadingGetListAttendance(true);
-            const url = `/backend/api/attendance?sales_id=${sales_id ? sales_id : ''}&is_active=${is_active ? is_active : ''}&page=${page}&page_size=${page_size}`;
+            const url = `/backend/api/attendance?sales_id=${sales_id ? sales_id : ''}&date=${date ? date : ''}&page=${page}&page_size=${page_size}`;
             const response = await axios.get(url, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`

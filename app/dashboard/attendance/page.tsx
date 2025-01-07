@@ -16,6 +16,8 @@ import { AttendanceModal } from "@/components/modal/attendance/attendanceModal";
 import TimeDisplay from "@/components/clock/clock";
 import useUserProfile from "@/hooks/auth/useUserProfile";
 import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
+import { DateInput, DateValue } from "@mantine/dates";
+import { format } from "date-fns";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -23,13 +25,12 @@ export default function user() {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10)
     const [searchedCustomer, setSearchedCustomer] = useState("");
-    const [selectedStatus, setSelectedStatus] = useState<boolean | undefined>(undefined);
+    const [selectedDate, setSelectedDate] = useState("");
     const [filterBySales, setFilterBySales] = useState("");
 
     const attendanceList = useAtomValue(attendanceListAtom)
     const setActiveMenu = useSetAtom(activeMenuAtom);
-    
-    const { getListVisit, isLoadingGetListVisit } = useGetListVisit();
+
     const { isLoadingGetListSales, getListSales, salesData, listForSelesSelect } = useGetListSales();
     const { getUserProfile, userProfile, isLoading } = useUserProfile()
 
@@ -40,33 +41,32 @@ export default function user() {
     }
 
     useEffect(() => {
-        getListAttendance(page,10,selectedStatus)
-
+        getListAttendance(page, 10, selectedDate)
     }, [])
-
-    const handleSelectedStatus = async (e: string | null) => {
-        if (e) {
-            const status = e == "Active" ? true : e == "Non Active" ? false : undefined
-            await getListAttendance(page, pageSize, status, parseInt(filterBySales))
-            setSelectedStatus(status);
-        }
-    }
 
     const handleFilterBySales = async (e: string | null) => {
         if (e) {
             console.log(e)
             const value = parseInt(e)
-            await getListAttendance(page, pageSize, selectedStatus, value)
+            await getListAttendance(page, pageSize, selectedDate, value)
             setFilterBySales(e);
         } else {
-            await getListAttendance(page, pageSize, selectedStatus, undefined)
+            await getListAttendance(page, pageSize, selectedDate, undefined)
             setFilterBySales("");
         }
     }
 
     const handleChangePage = async (e: any) => {
-        await getListAttendance(e, pageSize, selectedStatus, parseInt(filterBySales));
+        await getListAttendance(e, pageSize, selectedDate, parseInt(filterBySales));
         setPage(e);
+    }
+
+    const handleChangeDate = async(date: DateValue) => {
+        if (date) {
+            const formattedDate = format(date, 'yyyy-MM-dd');
+            await getListAttendance(page, pageSize, formattedDate, parseInt(filterBySales));
+            setSelectedDate(formattedDate);
+        }
     }
 
     return (
@@ -87,12 +87,11 @@ export default function user() {
                 <Card withBorder radius={"md"} px={20} py={30} mah={'screen'} mt={20}>
                     <Group justify='space-between'>
                         <Group align="center">
-                        <Select
-                                placeholder="Filter Customer By Status"
-                                data={['All', 'Active', 'Non Active']}
-                                name="religion"
-                                onChange={(e) => handleSelectedStatus(e)}
-                                defaultValue={"All"}
+                            <DateInput
+                                onChange={(e) => handleChangeDate(e)}
+                                placeholder="Filter By Date"
+                                maxDate={new Date()}
+                                value={selectedDate ? new Date(selectedDate) : null}
                             />
                             <Select
                                 placeholder="Filter by sales name"

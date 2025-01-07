@@ -28,7 +28,6 @@ export const VisitTable = () => {
                                 <Table.Th>Sales</Table.Th>
                                 <Table.Th>Category</Table.Th>
                                 <Table.Th>Visit Date</Table.Th>
-                                <Table.Th>Notes</Table.Th>
                                 <Table.Th>Action</Table.Th>
                             </Table.Tr>
                         </Table.Thead>
@@ -48,7 +47,6 @@ export const VisitTable = () => {
                                         <Table.Td>{visit.sales.name}</Table.Td>
                                         <Table.Td>{visit.category}</Table.Td>
                                         <Table.Td>{visit.visit_date}</Table.Td>
-                                        <Table.Td>{visit.notes}</Table.Td>
                                         <Table.Td>
                                             <ActionIcon component={Link} href={`/dashboard/visit/${visit.id}`}  variant="transparent">
                                                 <IconEye size={20} stroke={1.5} />

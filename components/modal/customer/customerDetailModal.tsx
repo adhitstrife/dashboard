@@ -90,7 +90,7 @@ export const CustomerDetailModal = () => {
                         </Grid.Col>
                     </Grid>
                     <Box mt={40}>
-                        <DataLabel label="Visit History" value="" withValue={false} />
+                        <DataLabel label="Last 10 Visit History" value="" withValue={false} />
                         {visitData && (
                             <VisitTable />
                         )}
