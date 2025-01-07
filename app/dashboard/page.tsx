@@ -14,6 +14,7 @@ import { VisitFilterModal } from '@/components/modal/visit/visitFilterModal';
 import { visitFilterModalAtom } from '@/state/component_state/modal/visit/visitFilterModalAtom';
 import { showMapAtom } from '@/state/component_state/switch/map/showMapAtom';
 import TimeDisplay from '@/components/clock/clock';
+import { activeMenuAtom } from '@/state/component_state/menu/activeMenuAtom';
 
 export default function Dashboard() {
   const theme = useMantineTheme();
@@ -29,6 +30,7 @@ export default function Dashboard() {
   const visitList = useAtomValue(visitListAtom)
   const setVisitFilterModal = useSetAtom(visitFilterModalAtom)
   const [showMap, setShowMap] = useAtom(showMapAtom);
+  const setActiveMenu = useSetAtom(activeMenuAtom)
 
   const { getListVisit, isLoadingGetListVisit } = useGetListVisit();
   const [page, setPage] = useState(1);
@@ -41,6 +43,7 @@ export default function Dashboard() {
     getUserProfile()
     getListVisit(1, 10)
     console.log('Google Maps API Key:', process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
+    setActiveMenu("dashboard")
   }, [])
 
   const total = data.reduce((sum, item) => sum + item.value, 0);
