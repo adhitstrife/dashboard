@@ -122,7 +122,9 @@ export const CustomerTable: FC<customerTable> = ({ page, handleChangePage, onAss
                             )}
                         </Table>
                     </Table.ScrollContainer>
-                    <Pagination mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(customerList.count / 10)} />
+                    {customerList.count > 10 && (
+                        <Pagination color="primary-red" mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(customerList.count / 10)} />
+                    )}
                 </div>
             )}
         </Box>

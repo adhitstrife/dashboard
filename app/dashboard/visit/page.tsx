@@ -116,7 +116,9 @@ export default function user() {
                                 <Map />
                             )}
                             <VisitTable />
-                            <Pagination mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(visitList.count / pageSize)} />
+                            {visitList.count > 10 && (
+                                <Pagination color="primary-red" mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(visitList.count / pageSize)} />
+                            )}
                         </Box>
                     )}
                 </Card>

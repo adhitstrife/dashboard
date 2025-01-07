@@ -126,7 +126,9 @@ export const LeaveTable: FC<leaveTable> = ({ page, handleChangePage }) => {
                             )}
                         </Table>
                     </Table.ScrollContainer>
-                    <Pagination mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(leaveList.count / 10)} />
+                    {leaveList.count > 10 && (
+                        <Pagination mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(leaveList.count / 10)} />
+                    )}
                 </div>
             )}
         </Box>

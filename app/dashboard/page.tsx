@@ -170,7 +170,9 @@ export default function Dashboard() {
                   <Box mt={20}>
                     <VisitFilterModal />
                     <VisitTable />
-                    <Pagination my={20} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(visitList.count / 10)} />
+                    {visitList.count > 10 && (
+                      <Pagination color='primary-red' my={20} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(visitList.count / 10)} />
+                    )}
                   </Box>
                 )}
               </Card>

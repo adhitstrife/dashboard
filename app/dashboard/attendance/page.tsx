@@ -108,7 +108,9 @@ export default function user() {
                     {attendanceList && (
                         <Box>
                             <AttendanceTable />
-                            <Pagination mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(attendanceList.count / pageSize)} />
+                            {attendanceList.count > 10 && (
+                                <Pagination mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(attendanceList.count / pageSize)} />
+                            )}
                         </Box>
                     )}
                 </Card>

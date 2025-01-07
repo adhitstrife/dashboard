@@ -269,55 +269,57 @@ export default function user() {
                             <IconPlus size={20} stroke={1.5} />
                         </Button>
                     </Group>
-                    <Table.ScrollContainer minWidth={200} mt={20}>
-                        <Table>
-                            <Table.Thead>
-                                <Table.Tr>
-                                    <Table.Th>Username</Table.Th>
-                                    <Table.Th>Fullname</Table.Th>
-                                    <Table.Th>Email</Table.Th>
-                                    <Table.Th>Phone</Table.Th>
-                                    <Table.Th>NIP</Table.Th>
-                                    <Table.Th>Actions</Table.Th>
-                                </Table.Tr>
-                            </Table.Thead>
-                            <Table.Tbody>
-                                {!isLoadingGetListSales && salesData ? (
-                                    salesData.results.map((sales, index) => (
-                                        <Table.Tr key={index}>
-                                            <Table.Td>{sales.username}</Table.Td>
-                                            <Table.Td>{sales.name}</Table.Td>
-                                            <Table.Td>{sales.email}</Table.Td>
-                                            <Table.Td>{sales.phone}</Table.Td>
-                                            <Table.Td>{sales.nip}</Table.Td>
-                                            <Table.Td>
-                                                <Group>
-                                                    <ActionIcon variant="transparent" component={Link} href={`/dashboard/sales/${sales.id}`} >
-                                                        <IconEye size={20} stroke={1.5} />
-                                                    </ActionIcon>
-                                                    <ActionIcon variant="transparent" onClick={() => openEditSalesModal(sales.id)}>
-                                                        <IconPencil size={20} stroke={1.5} />
-                                                    </ActionIcon>
-                                                    <ActionIcon variant="transparent" onClick={() => handleModalDelete(sales.id)}>
-                                                        <IconTrash color="red" size={20} stroke={1.5} />
-                                                    </ActionIcon>
-                                                </Group>
+                    {salesData && (
+                        <Table.ScrollContainer minWidth={200} mt={20}>
+                            <Table>
+                                <Table.Thead>
+                                    <Table.Tr>
+                                        <Table.Th>Username</Table.Th>
+                                        <Table.Th>Fullname</Table.Th>
+                                        <Table.Th>Email</Table.Th>
+                                        <Table.Th>Phone</Table.Th>
+                                        <Table.Th>NIP</Table.Th>
+                                        <Table.Th>Actions</Table.Th>
+                                    </Table.Tr>
+                                </Table.Thead>
+                                <Table.Tbody>
+                                    {!isLoadingGetListSales && salesData ? (
+                                        salesData.results.map((sales, index) => (
+                                            <Table.Tr key={index}>
+                                                <Table.Td>{sales.username}</Table.Td>
+                                                <Table.Td>{sales.name}</Table.Td>
+                                                <Table.Td>{sales.email}</Table.Td>
+                                                <Table.Td>{sales.phone}</Table.Td>
+                                                <Table.Td>{sales.nip}</Table.Td>
+                                                <Table.Td>
+                                                    <Group>
+                                                        <ActionIcon variant="transparent" component={Link} href={`/dashboard/sales/${sales.id}`} >
+                                                            <IconEye size={20} stroke={1.5} />
+                                                        </ActionIcon>
+                                                        <ActionIcon variant="transparent" onClick={() => openEditSalesModal(sales.id)}>
+                                                            <IconPencil size={20} stroke={1.5} />
+                                                        </ActionIcon>
+                                                        <ActionIcon variant="transparent" onClick={() => handleModalDelete(sales.id)}>
+                                                            <IconTrash color="red" size={20} stroke={1.5} />
+                                                        </ActionIcon>
+                                                    </Group>
+                                                </Table.Td>
+                                            </Table.Tr>
+                                        ))
+                                    ) : (
+                                        <Table.Tr>
+                                            <Table.Td colSpan={6} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                                                <Loader color="primary-red" size="lg" />
                                             </Table.Td>
                                         </Table.Tr>
-                                    ))
-                                ) : (
-                                    <Table.Tr>
-                                        <Table.Td colSpan={6} style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-                                            <Loader color="primary-red" size="lg" />
-                                        </Table.Td>
-                                    </Table.Tr>
-                                )}
-                            </Table.Tbody>
-                        </Table>
-                        {salesData && (
-                            <Pagination mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(salesData.count / pageSize)} />
-                        )}
-                    </Table.ScrollContainer>
+                                    )}
+                                </Table.Tbody>
+                            </Table>
+                            {salesData.count > 10 && (
+                                <Pagination color="1q" mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(salesData.count / pageSize)} />
+                            )}
+                        </Table.ScrollContainer>
+                    )}
                 </Card>
                 <Modal opened={showAddModal} onClose={handleCloseModal} title="Add new sales">
                     <form onSubmit={handleSubmit}>
