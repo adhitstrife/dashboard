@@ -15,6 +15,7 @@ export const CustomerBulkModal = () => {
     const [file, setFile] = useState<File | null>(null)
 
     const { customerData, isLoadingAddCustomerBulk, postNewCustomerBulk } = useAddCustomerBulk();
+    const { isLoadingGetListCustomer,  getListCustomer } = useGetListCustomer();
 
     const onCloseModal = () => {
         setIsModalOpen(false)
@@ -28,6 +29,7 @@ export const CustomerBulkModal = () => {
             } catch (error) {
                 console.log(error)
             } finally {
+                getListCustomer(1,10)
                 onCloseModal()
             }
         }
