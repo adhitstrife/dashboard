@@ -26,6 +26,8 @@ import { CustomerApproveModal } from "@/components/modal/customer/customerApprov
 import TimeDisplay from "@/components/clock/clock";
 import useUserProfile from "@/hooks/auth/useUserProfile";
 import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
+import { customerBulkModalAtom } from "@/state/component_state/modal/customer/customerBulkModalAtom";
+import { CustomerBulkModal } from "@/components/modal/customer/customerBulkModal";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -58,6 +60,7 @@ export default function user() {
 
     const customerList = useAtomValue(customerListAtom)
     const setActiveMenu = useSetAtom(activeMenuAtom);
+    const setCustomerBulkModal = useSetAtom(customerBulkModalAtom)
 
     const { height, width } = useViewportSize();
     const { getCountryList, cities, isLoadingGetCities } = useGetCities()
@@ -259,7 +262,7 @@ export default function user() {
                             />
                         </Group>
                         <Group>
-                            <Button color="primary-red" variant="filled" onClick={() => setShowAddModal(true)}>
+                            <Button color="primary-red" variant="filled" onClick={() => setCustomerBulkModal(true)}>
                                 Add Bulk
                             </Button>
                             <Button color="primary-red" variant="filled" onClick={() => setShowAddModal(true)}>
@@ -277,6 +280,7 @@ export default function user() {
                 <CustomerEditModal />
                 <CustomerDeleteModal />
                 <CustomerApproveModal />
+                <CustomerBulkModal />
                 <Modal opened={showAddModal} onClose={() => setShowAddModal(false)} title="Add new sales">
                     <form onSubmit={handleSubmit}>
                         <TextInput
