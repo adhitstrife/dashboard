@@ -87,6 +87,10 @@ export const VisitFilterModal = () => {
 
     const handleApplyFilter = async () => {
         await getListVisit(1, 10)
+        setFilter({
+            ...filter,
+            is_filtered: true
+        })
         onCloseModal()
     }
 
@@ -97,6 +101,7 @@ export const VisitFilterModal = () => {
             category: undefined,
             startDate: "",
             endDate: "",
+            is_filtered: false
         })
         getListVisit(1, 10)
         onCloseModal()

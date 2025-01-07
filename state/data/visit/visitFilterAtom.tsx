@@ -7,4 +7,5 @@ export const visitFilterAtom = atom<visitFilterInterface>({
     category: undefined,
     startDate: "",
     endDate: "",
+    is_filtered: false,
 })

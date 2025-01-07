@@ -6,6 +6,7 @@ interface visitFilterInterface {
     startDate: string | undefined;
     endDate: string | undefined
     customerId: string | undefined
+    is_filtered: boolean
 }
 
 export default visitFilterInterface;

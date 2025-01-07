@@ -1,3 +1,5 @@
+import useGetListVisit from "@/hooks/visit/useGetListVisit"
+import { visitFilterAtom } from "@/state/data/visit/visitFilterAtom"
 import { visitListAtom } from "@/state/data/visit/visitListAtom"
 import { Box } from "@mantine/core"
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api"
@@ -5,6 +7,8 @@ import { useAtomValue } from "jotai"
 
 export const Map = () => {
     const visitList = useAtomValue(visitListAtom)
+    const visitFilter = useAtomValue(visitFilterAtom)
+    const { isLoadingGetListVisit, getListVisit } = useGetListVisit();
 
     const containerStyle = {
         width: '100%',
@@ -24,11 +28,24 @@ export const Map = () => {
         <Box>
             {visitList && (
                 <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}>
-                    <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={12.5}>
+                    {visitFilter.salesId && visitFilter.is_filtered ? (
+                        <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={12.5}>
                         {visitList.results.map((visit, index) => (
-                            <Marker key={index} position={{ lat: Number(visit.latitude), lng: Number(visit.longitude)}} />
+                            <Marker key={index} position={{ lat: Number(visit.latitude), lng: Number(visit.longitude)}} label={{
+                                text: `${index + 1}`, // Display order number
+                                color: 'white',
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                            }} />
                         ))}
                     </GoogleMap>
+                    ) : (
+                        <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={12.5}>
+                            {visitList.results.map((visit, index) => (
+                                <Marker key={index} position={{ lat: Number(visit.latitude), lng: Number(visit.longitude)}}  />
+                            ))}
+                        </GoogleMap>
+                    )}
                 </LoadScript>
 
             )}
