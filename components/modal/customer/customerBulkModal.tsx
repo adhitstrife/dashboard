@@ -5,14 +5,14 @@ import useGetListCustomer from "@/hooks/customer/useGetListCustomer";
 import { customerBulkModalAtom } from "@/state/component_state/modal/customer/customerBulkModalAtom";
 import { customerApproveModalAtom } from "@/state/component_state/modal/customerApproveModalAtom";
 import { customerDetailAtom } from "@/state/data/customer/customerDetailAtom";
-import { Button, FileInput, Group, Loader, Modal } from "@mantine/core"
+import { Anchor, Button, FileInput, Group, Loader, Modal, Text } from "@mantine/core"
 import { useAtom } from "jotai";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export const CustomerBulkModal = () => {
     const [isModalOpen, setIsModalOpen] = useAtom(customerBulkModalAtom);
-    const [ file, setFile ] = useState<File | null>(null)
+    const [file, setFile] = useState<File | null>(null)
 
     const { customerData, isLoadingAddCustomerBulk, postNewCustomerBulk } = useAddCustomerBulk();
 
@@ -21,12 +21,12 @@ export const CustomerBulkModal = () => {
         setFile(null)
     }
 
-    const handleUploadBulk = async() => {
+    const handleUploadBulk = async () => {
         if (file) {
             try {
                 await postNewCustomerBulk(file)
             } catch (error) {
-                console.log(error)   
+                console.log(error)
             } finally {
                 onCloseModal()
             }
@@ -40,20 +40,23 @@ export const CustomerBulkModal = () => {
         link.download = 'customers.csv'; // The name of the file to save as
         link.click();
     };
-    
+
 
     return (
         <Modal opened={isModalOpen} withCloseButton onClose={onCloseModal} size="lg" title="Import Bulk Customer">
             <FileInput
                 label="Customer csv file"
-                description="you can download csv template from button bellow"
+                description={<Text size="sm">
+                    You can download the CSV template{' '}
+                    <Anchor c={"primary-red"} href="/file/customers.csv" target="_blank" rel="noopener noreferrer">
+                        here
+                    </Anchor>
+                    .
+                </Text>}
                 placeholder="Input customer csv file in here"
                 onChange={setFile}
             />
             <Group justify="right" mt={40}>
-                <Button onClick={handleDownload} color="secondary-gray" variant="filled">
-                    Download CSV Template
-                </Button>
                 <Button onClick={handleUploadBulk} color="primary-red" variant="filled">
                     Import
                 </Button>
