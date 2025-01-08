@@ -36,10 +36,10 @@ export const CustomerBulkModal = () => {
     }
 
     const handleDownload = () => {
-        const fileUrl = '/file/customers.csv'; // Path to the file in the public directory
+        const fileUrl = '/file/customers.xlsx'; // Path to the file in the public directory
         const link = document.createElement('a');
         link.href = fileUrl;
-        link.download = 'customers.csv'; // The name of the file to save as
+        link.download = 'customers.xlsx'; // The name of the file to save as
         link.click();
     };
 
