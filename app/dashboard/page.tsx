@@ -15,6 +15,7 @@ import { visitFilterModalAtom } from '@/state/component_state/modal/visit/visitF
 import { showMapAtom } from '@/state/component_state/switch/map/showMapAtom';
 import TimeDisplay from '@/components/clock/clock';
 import { activeMenuAtom } from '@/state/component_state/menu/activeMenuAtom';
+import useGetDashboardData from '@/hooks/dashboard/useGetDashboardData';
 
 export default function Dashboard() {
   const theme = useMantineTheme();
@@ -33,6 +34,7 @@ export default function Dashboard() {
   const setActiveMenu = useSetAtom(activeMenuAtom)
 
   const { getListVisit, isLoadingGetListVisit } = useGetListVisit();
+  const { dashboardData, getDashboardData, isLoadingGetDashboardData } = useGetDashboardData()
   const [page, setPage] = useState(1);
 
   const handleChangePage = async (e: any) => {
@@ -42,8 +44,8 @@ export default function Dashboard() {
   useEffect(() => {
     getUserProfile()
     getListVisit(1, 10)
-    console.log('Google Maps API Key:', process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY);
     setActiveMenu("dashboard")
+    getDashboardData();
   }, [])
 
   const total = data.reduce((sum, item) => sum + item.value, 0);
@@ -54,7 +56,7 @@ export default function Dashboard() {
           <Flex direction={{ base: 'column-reverse', md: 'row' }} justify={{ base: 'flex-start', md: 'space-between' }}>
             <Box mt={{ base: 20, md: 0 }}>
               {userProfile ? (
-                <Title order={2}>Good Afternoon, {userProfile.username}!</Title>
+                <Title order={2}>Welcome, {userProfile.username}!</Title>
               ) : (
                 <Skeleton height={8} radius="xl" />
               )}
@@ -67,41 +69,44 @@ export default function Dashboard() {
           </Flex>
         </div>
         <Box mt={20} className="content">
-          <Grid>
-            <Grid.Col span={{ base: 12, lg: 4 }}>
-              <Card>
-                <Group justify='space-between'>
-                  <Text size='sm' c='primary-red' fw={900}>Today Visits</Text>
-                  <IconCalendarClock size={20} stroke={1.5} />
-                </Group>
-                <Box>
-                  <Title>30</Title>
-                </Box>
-              </Card>
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, lg: 4 }}>
-              <Card>
-                <Group justify='space-between'>
-                  <Text size='sm' c='primary-red' fw={900}>This Week Visits</Text>
-                  <IconCalendarClock size={20} stroke={1.5} />
-                </Group>
-                <Box>
-                  <Title>30</Title>
-                </Box>
-              </Card>
-            </Grid.Col>
-            <Grid.Col span={{ base: 12, lg: 4 }}>
-              <Card>
-                <Group justify='space-between'>
-                  <Text size='sm' c='primary-red' fw={900}>This Month Visits</Text>
-                  <IconCalendarClock size={20} stroke={1.5} />
-                </Group>
-                <Box>
-                  <Title>30</Title>
-                </Box>
-              </Card>
-            </Grid.Col>
-          </Grid>
+          {dashboardData && (
+
+            <Grid>
+              <Grid.Col span={{ base: 12, lg: 4 }}>
+                <Card>
+                  <Group justify='space-between'>
+                    <Text size='sm' c='primary-red' fw={900}>Today Visits</Text>
+                    <IconCalendarClock size={20} stroke={1.5} />
+                  </Group>
+                  <Box>
+                    <Title>{dashboardData.visits_today}</Title>
+                  </Box>
+                </Card>
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, lg: 4 }}>
+                <Card>
+                  <Group justify='space-between'>
+                    <Text size='sm' c='primary-red' fw={900}>This Week Visits</Text>
+                    <IconCalendarClock size={20} stroke={1.5} />
+                  </Group>
+                  <Box>
+                    <Title>{dashboardData.visits_this_week}</Title>
+                  </Box>
+                </Card>
+              </Grid.Col>
+              <Grid.Col span={{ base: 12, lg: 4 }}>
+                <Card>
+                  <Group justify='space-between'>
+                    <Text size='sm' c='primary-red' fw={900}>This Month Visits</Text>
+                    <IconCalendarClock size={20} stroke={1.5} />
+                  </Group>
+                  <Box>
+                    <Title>{dashboardData.visits_this_month}</Title>
+                  </Box>
+                </Card>
+              </Grid.Col>
+            </Grid>
+          )}
           {/* <Grid>
             <Grid.Col span={{ base: 12, lg: 6 }}>
               <Card withBorder radius={"md"} px={20} py={30}>

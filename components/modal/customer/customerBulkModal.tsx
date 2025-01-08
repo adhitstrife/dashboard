@@ -50,7 +50,7 @@ export const CustomerBulkModal = () => {
                 label="Customer csv file"
                 description={<Text size="sm">
                     You can download the CSV template{' '}
-                    <Anchor c={"primary-red"} href="/file/customers.csv" target="_blank" rel="noopener noreferrer">
+                    <Anchor c={"primary-red"} href="/file/customers.xlsx" target="_blank" rel="noopener noreferrer">
                         here
                     </Anchor>
                     .
