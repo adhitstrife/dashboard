@@ -208,7 +208,7 @@ export default function user() {
         if (e) {
             const status = e == "All" ? "" : e
             await await getListCustomer(1, 10, searchedCustomer, status !== "" ? status : undefined, filterBySales !== "" ? parseInt(filterBySales) : undefined);
-            setSelectedStatus(e);
+            setSelectedStatus(status);
         }
     }
 
