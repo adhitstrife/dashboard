@@ -28,10 +28,10 @@ export default function user() {
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
     const { deleteSales, isLoadingDeleteSales } = useDeleteSales()
     const { getUserProfile, userProfile, isLoading } = useUserProfile()
-    const [ page, setPage ] = useState(1);
-    const [ pageSize, setPageSize ] = useState(10);
-    const [ deletedSales, setDeletedSales ] = useState(0);
-    const [ searchedSales, setSearchedSales ] = useState("");
+    const [page, setPage] = useState(1);
+    const [pageSize, setPageSize] = useState(10);
+    const [deletedSales, setDeletedSales] = useState(0);
+    const [searchedSales, setSearchedSales] = useState("");
     const [showAddModal, setShowAddModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -43,7 +43,6 @@ export default function user() {
         birth_place_id: 0,
         gender: '',
         religion: '',
-        blood_type: '',
         email: '',
         phone: '',
         address: '',
@@ -52,9 +51,6 @@ export default function user() {
         employee_status: '',
         job_level: 'staff',
         joining_date: '',
-        bank_name: '',
-        account_name: '',
-        account_number: '',
         city_id: 0,
     })
 
@@ -78,7 +74,6 @@ export default function user() {
                 birth_place_id: sales.birth_place.id,
                 gender: sales.gender,
                 religion: sales.religion,
-                blood_type: sales.blood_type,
                 email: sales.email,
                 phone: sales.phone,
                 address: sales.address,
@@ -87,9 +82,6 @@ export default function user() {
                 employee_status: sales.employee_status,
                 job_level: sales.job_level,
                 joining_date: sales.joining_date,
-                bank_name: sales.bank_name,
-                account_name: sales.account_name,
-                account_number: sales.account_number,
                 city_id: sales.city.id,
             })
         }
@@ -155,7 +147,6 @@ export default function user() {
             birth_place_id: 0,
             gender: '',
             religion: '',
-            blood_type: '',
             email: '',
             phone: '',
             address: '',
@@ -164,9 +155,6 @@ export default function user() {
             employee_status: '',
             job_level: '',
             joining_date: '',
-            bank_name: '',
-            account_name: '',
-            account_number: '',
             city_id: 0,
         })
     }
@@ -371,14 +359,14 @@ export default function user() {
                             mt={10}
                             onChange={(e) => handleSelectChange('religion', e)}
                         />
-                        <Select
+                        {/* <Select
                             label="Blood Type"
                             placeholder="Pick sales blood type"
                             data={['A', 'B', 'AB', '0']}
                             name="blood_type"
                             mt={10}
                             onChange={(e) => handleSelectChange('blood_type', e)}
-                        />
+                        /> */}
                         <TextInput
                             label="Email"
                             placeholder="Input email address"
@@ -415,6 +403,9 @@ export default function user() {
                             name="postal_code"
                             withAsterisk
                             required
+                            min={0}
+                            max={999999}
+                            clampBehavior="strict"
                             mt={10}
                             onChange={(e) => handleNumberInput('postal_code', e)}
                         />
@@ -445,13 +436,11 @@ export default function user() {
                             onChange={(e) => handleSelectDate('joining_date', e)}
 
                         />
-                        <TextInput
+                        {/* <TextInput
                             label="Bank name"
                             placeholder="Input bank name"
                             mt={10}
                             name="bank_name"
-                            withAsterisk
-                            required
                             onChange={handleChange}
                         />
                         <TextInput
@@ -459,8 +448,6 @@ export default function user() {
                             placeholder="Input account name"
                             mt={10}
                             name="account_name"
-                            withAsterisk
-                            required
                             onChange={handleChange}
                         />
                         <NumberInput
@@ -469,10 +456,8 @@ export default function user() {
                             mt={10}
                             hideControls
                             name="account_number"
-                            withAsterisk
-                            required
                             onChange={(e) => handleNumberInput('account_number', e)}
-                        />
+                        /> */}
                         <Select
                             label="City"
                             placeholder="Pick sales city"
@@ -540,7 +525,7 @@ export default function user() {
                                 onChange={(e) => handleSelectChange('religion', e)}
                                 value={salesPayload.religion}
                             />
-                            <Select
+                            {/* <Select
                                 label="Blood Type"
                                 placeholder="Pick sales blood type"
                                 data={['A', 'B', 'AB', '0']}
@@ -548,7 +533,7 @@ export default function user() {
                                 mt={10}
                                 onChange={(e) => handleSelectChange('blood_type', e)}
                                 value={salesPayload.blood_type}
-                            />
+                            /> */}
                             <TextInput
                                 label="Email"
                                 placeholder="Input email address"
@@ -589,6 +574,9 @@ export default function user() {
                                 withAsterisk
                                 required
                                 mt={10}
+                                min={0}
+                                max={999999}
+                                clampBehavior="strict"
                                 onChange={(e) => handleNumberInput('postal_code', e)}
                                 value={salesPayload.postal_code}
                             />
@@ -620,13 +608,11 @@ export default function user() {
                                 onChange={(e) => handleSelectDate('joining_date', e)}
                                 value={salesPayload.joining_date ? new Date(salesPayload.joining_date) : null}
                             />
-                            <TextInput
+                            {/* <TextInput
                                 label="Bank name"
                                 placeholder="Input bank name"
                                 mt={10}
                                 name="bank_name"
-                                withAsterisk
-                                required
                                 onChange={handleChange}
                                 value={salesPayload.bank_name}
 
@@ -636,8 +622,6 @@ export default function user() {
                                 placeholder="Input account name"
                                 mt={10}
                                 name="account_name"
-                                withAsterisk
-                                required
                                 onChange={handleChange}
                                 value={salesPayload.account_name}
                             />
@@ -647,11 +631,9 @@ export default function user() {
                                 mt={10}
                                 hideControls
                                 name="account_number"
-                                withAsterisk
-                                required
                                 onChange={(e) => handleNumberInput('account_number', e)}
                                 value={salesPayload.account_number}
-                            />
+                            /> */}
                             <Select
                                 label="City"
                                 placeholder={salesDetail.results.city.name}
