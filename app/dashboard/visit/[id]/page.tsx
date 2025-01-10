@@ -117,7 +117,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                                         <Table.Tbody>
                                                             {visitData.products.map((product, index) => (
                                                                 <Table.Tr>
-                                                                    <Table.Td>{product.name}</Table.Td>
+                                                                    <Table.Td>{product.product}</Table.Td>
                                                                     <Table.Td>{product.quantity}</Table.Td>
                                                                 </Table.Tr>
                                                             ))}

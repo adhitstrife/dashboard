@@ -2,7 +2,7 @@ import customerData from "../customer/customerData";
 import salesData from "../sales/salesData";
 
 interface product {
-    name: string;
+    product: string;
     quantity: number;
 }
 interface visitData {
