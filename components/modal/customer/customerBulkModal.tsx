@@ -47,15 +47,15 @@ export const CustomerBulkModal = () => {
     return (
         <Modal opened={isModalOpen} withCloseButton onClose={onCloseModal} size="lg" title="Import Bulk Customer">
             <FileInput
-                label="Customer csv file"
+                label="Customer excel file"
                 description={<Text size="sm">
-                    You can download the CSV template{' '}
+                    You can download the Excel template{' '}
                     <Anchor c={"primary-red"} href="/file/customers.xlsx" target="_blank" rel="noopener noreferrer">
                         here
                     </Anchor>
                     .
                 </Text>}
-                placeholder="Input customer csv file in here"
+                placeholder="Input customer excel file in here"
                 onChange={setFile}
             />
             <Group justify="right" mt={40}>
