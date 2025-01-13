@@ -146,7 +146,8 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                     </Box>
                                 </Tabs.Panel>
                                 <Tabs.Panel value="image">
-                                    <Image mt={20} src={`/backend/${visitData.image_path}`} w={width} />
+                                    <Image mt={20} src={`${visitData.image_path}`} w="auto"
+                                        fit="contain" />
                                 </Tabs.Panel>
                             </Tabs>
                         </Box>
