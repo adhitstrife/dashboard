@@ -113,7 +113,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                                             <Table.Th>Quantity</Table.Th>
                                                         </Table.Tr>
                                                     </Table.Thead>
-                                                    {visitData.products.length > 0 ? (
+                                                    {(visitData.products && visitData.products.length > 0) ? (
                                                         <Table.Tbody>
                                                             {visitData.products.map((product, index) => (
                                                                 <Table.Tr>
