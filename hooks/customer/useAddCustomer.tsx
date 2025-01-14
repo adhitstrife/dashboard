@@ -3,12 +3,15 @@ import customerPayload from "@/app/interface/payload/customerPayload";
 import salesPayload from "@/app/interface/payload/salesPayload";
 import countryResponse from "@/app/interface/response/country";
 import customerDetailResponse from "@/app/interface/response/customer/customerDetailResponse";
+import ErrorResponse from "@/app/interface/response/error/error";
 import salesResponse from "@/app/interface/response/sales/salesListResponse";
 import { notifications } from "@mantine/notifications";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import axios from "axios";
 import Cookies from "js-cookie";
 import { useState } from "react"
+
+
 
 const useAddCustomer = () => {
     const [isLoadingAddCustomer, setIsLoadingAddCustomer] = useState(false);
@@ -35,14 +38,28 @@ const useAddCustomer = () => {
                 position: 'top-right'
             })
 
-        } catch (error) {
-            notifications.show({
-                title: 'Saving Failed',
-                message: `Error when store new customer data ${error}`,
-                color: 'red',
-                icon: <IconX size={20} stroke={1.5} />,
-                position: 'top-right'
-            })
+        } catch (error: any) {
+            const errorResponse: ErrorResponse = error.response.data;
+            if (errorResponse.code == 400) {
+                for (const [field, errorsMessage] of Object.entries(errorResponse.message)) {
+                    console.log(error)
+                    notifications.show({
+                        title: `THere is error at field ${field}`,
+                        message: `Details: ${errorsMessage}`,
+                        color: 'red',
+                        icon: <IconX size={20} stroke={1.5} />,
+                        position: 'top-right'
+                    })
+                  }
+            } else {
+                notifications.show({
+                    title: 'Saving Failed',
+                    message: `Error when store new customer data ${error}`,
+                    color: 'red',
+                    icon: <IconX size={20} stroke={1.5} />,
+                    position: 'top-right'
+                })
+            }
             return error;
         } finally {
             setIsLoadingAddCustomer(false)
