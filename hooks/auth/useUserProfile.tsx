@@ -37,7 +37,7 @@ const useUserProfile = () => {
 
 
             }
-            return router.push("/");
+            return router.push("/login");
         }
     }
 
