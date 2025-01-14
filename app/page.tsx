@@ -130,14 +130,14 @@ export default function HomePage() {
         }
       `}</style>
       <div className="">
-        <div className={style.overlay}></div>
-        <div className={style.stars} aria-hidden="true"></div>
-        <div className={style.starts2} aria-hidden="true"></div>
-        <div className={style.stars3} aria-hidden="true"></div>
-        <main className={style.main}>
-          <section className={style.contact}>
-            <h1 className={style.title}>Awesome Thing</h1>
-            <h2 className={style.subTitle}>Site Under Construction</h2>
+        <div className="overlay"></div>
+        <div className="stars" aria-hidden="true"></div>
+        <div className="starts2" aria-hidden="true"></div>
+        <div className="stars3" aria-hidden="true"></div>
+        <main className="main">
+          <section className="contact">
+            <h1 className="title">Awesome Thing</h1>
+            <h2 className="subTitle">Site Under Construction</h2>
           </section>
         </main>
       </div>
