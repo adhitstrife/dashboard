@@ -77,16 +77,16 @@ export const CustomerDetailModal = () => {
                             <DataLabel label="Address" value={detailCustomer.address} />
                         </Grid.Col>
                         <Grid.Col span={6}>
-                            <DataLabel label="Province" value={detailCustomer.province.name} />
+                            <DataLabel label="Province" value={detailCustomer.province ? detailCustomer.province.name : "-"} />
                         </Grid.Col>
                         <Grid.Col span={6}>
-                            <DataLabel label="City" value={detailCustomer.city.name} />
+                            <DataLabel label="City" value={detailCustomer.city ? detailCustomer.city.name : "-"} />
                         </Grid.Col>
                         <Grid.Col span={6}>
-                            <DataLabel label="District" value={detailCustomer.district.name} />
+                            <DataLabel label="District" value={detailCustomer.district ? detailCustomer.district.name : "-"} />
                         </Grid.Col>
                         <Grid.Col span={6}>
-                            <DataLabel label="Sub District" value={detailCustomer.sub_district.name} />
+                            <DataLabel label="Sub District" value={detailCustomer.sub_district ? detailCustomer.sub_district.name : "-"} />
                         </Grid.Col>
                     </Grid>
                     <Box mt={40}>

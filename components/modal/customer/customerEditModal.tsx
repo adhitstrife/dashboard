@@ -187,7 +187,7 @@ export const CustomerEditModal = () => {
                 />
                 <Select
                     label="Province"
-                    placeholder={detailCustomer?.province.name || "Pick customer province"}
+                    placeholder={detailCustomer?.province?.name || "Pick customer province"}
                     mt={10}
                     data={provinces}
                     name="province_id"
@@ -198,7 +198,7 @@ export const CustomerEditModal = () => {
                 />
                 <Select
                     label="City"
-                    placeholder={detailCustomer?.city.name || "Pick customer city"}
+                    placeholder={detailCustomer?.city?.name || "Pick customer city"}
                     mt={10}
                     data={cities}
                     name="city_id"
@@ -211,7 +211,7 @@ export const CustomerEditModal = () => {
                 />
                 <Select
                     label="District"
-                    placeholder={detailCustomer?.district.name || "Pick customer district"}
+                    placeholder={detailCustomer?.district?.name || "Pick customer district"}
                     mt={10}
                     data={districts}
                     name="district_id"
@@ -224,7 +224,7 @@ export const CustomerEditModal = () => {
                 />
                 <Select
                     label="Sub District"
-                    placeholder={detailCustomer?.sub_district.name || "Pick customer sub district"}
+                    placeholder={detailCustomer?.sub_district?.name || "Pick customer sub district"}
                     mt={10}
                     data={subDistricts}
                     name="sub_district_id"
