@@ -77,15 +77,15 @@ export const CustomerEditModal = () => {
         if (isModalOpen && detailCustomer) {
             setEditCustomerPayload({
                 address: detailCustomer.address,
-                city_id: detailCustomer.city.id,
+                city_id: detailCustomer.city ? detailCustomer.city.id : null,
                 contact_person: detailCustomer.contact_person,
-                district_id: detailCustomer.district.id,
+                district_id: detailCustomer.district ? detailCustomer.district.id : null,
                 name: detailCustomer.name,
                 npwp: detailCustomer.npwp,
                 permission_letter: detailCustomer.permission_letter,
                 phone: detailCustomer.phone,
-                province_id: detailCustomer.province.id,
-                sub_district_id: detailCustomer.sub_district.id,
+                province_id: detailCustomer.province ? detailCustomer.province.id : null,
+                sub_district_id: detailCustomer.sub_district ? detailCustomer.sub_district.id : null,
             })
         }
     },[isModalOpen])
