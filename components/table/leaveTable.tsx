@@ -43,12 +43,14 @@ export const LeaveTable: FC<leaveTable> = ({ page, handleChangePage }) => {
     const isDatePassed = (leaveDate: string) => {
         const givenDate = new Date(leaveDate);
         const todayDate = new Date();
-        if (givenDate >= todayDate) {
-            return true
-        } else {
-            return false;
-        }
+
+        // Normalize both dates to midnight
+        givenDate.setHours(0, 0, 0, 0);
+        todayDate.setHours(0, 0, 0, 0);
+
+        return givenDate >= todayDate;
     };
+    
     return (
         <Box>
             {leaveList && (
@@ -109,7 +111,7 @@ export const LeaveTable: FC<leaveTable> = ({ page, handleChangePage }) => {
                                                             </Group>
                                                         ) : leave.status == 'Approved' ? (
                                                             <Group>
-                                                                <ActionIcon onClick={() => handleOpenCancelModal(leave)}  variant="transparent">
+                                                                <ActionIcon onClick={() => handleOpenCancelModal(leave)} variant="transparent">
                                                                     <IconX color="red" size={20} stroke={1.5} />
                                                                 </ActionIcon>
                                                             </Group>
