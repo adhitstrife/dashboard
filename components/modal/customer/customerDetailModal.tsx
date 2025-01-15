@@ -31,29 +31,24 @@ export const CustomerDetailModal = () => {
                 customerId: detailCustomer.id.toString()
             });
 
-            
+
         }
         console.log(isModalOpen)
-    },[isModalOpen])
+    }, [isModalOpen])
 
     useEffect(() => {
         if (isModalOpen) {
-            getListVisit(1,10);
+            getListVisit(1, 10);
         }
-    },[filterVisit])
+    }, [filterVisit])
 
     return (
         <Modal size={'lg'} opened={isModalOpen} onClose={onCloseModal} title="Customer Detail">
             {detailCustomer && (
                 <Box>
-                    <div className="customer-name">
-                        <Center>
-                            <DataLabel label="Customer Name" value={detailCustomer.name} />
-                        </Center>
-                    </div>
                     <Grid mt={20}>
-                    <Grid.Col span={6}>
-                            <DataLabel label="Id" value={detailCustomer.id.toString()} />
+                        <Grid.Col span={6}>
+                            <DataLabel label="Customer Name" value={detailCustomer.name} />
                         </Grid.Col>
                         <Grid.Col span={6}>
                             <DataLabel label="Contact Person" value={detailCustomer.contact_person} />
@@ -89,12 +84,14 @@ export const CustomerDetailModal = () => {
                             <DataLabel label="Sub District" value={detailCustomer.sub_district ? detailCustomer.sub_district.name : "-"} />
                         </Grid.Col>
                     </Grid>
-                    <Box mt={40}>
-                        <DataLabel label="Last 10 Visit History" value="" withValue={false} />
-                        {visitData && (
-                            <VisitTable />
-                        )}
-                    </Box>
+                    {detailCustomer.status != "In Review" && (
+                        <Box mt={40}>
+                            <DataLabel label="Last 10 Visit History" value="" withValue={false} />
+                            {visitData && (
+                                <VisitTable />
+                            )}
+                        </Box>
+                    )}
                 </Box>
             )}
         </Modal>

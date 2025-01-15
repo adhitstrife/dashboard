@@ -1,21 +1,22 @@
+import { DataLabel } from "@/components/label/dataLabel";
 import useApproveCustomer from "@/hooks/customer/useApproveCustomer";
 import useDeleteCustomer from "@/hooks/customer/useDeleteCustomer";
 import useGetListCustomer from "@/hooks/customer/useGetListCustomer";
 import { customerApproveModalAtom } from "@/state/component_state/modal/customerApproveModalAtom";
 import { customerDetailAtom } from "@/state/data/customer/customerDetailAtom";
-import { Button, Loader, Modal } from "@mantine/core"
+import { Box, Button, Grid, Group, Loader, Modal } from "@mantine/core"
 import { useAtom } from "jotai";
 import { useEffect } from "react";
 
 export const CustomerApproveModal = () => {
     const [detailCustomer, setDetailCustomer] = useAtom(customerDetailAtom);
     const [isModalOpen, setIsModalOpen] = useAtom(customerApproveModalAtom);
-    const { isLoadingGetListCustomer,  getListCustomer } = useGetListCustomer();
+    const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
     const { approveCustomer, isLoadingApproveCustomer } = useApproveCustomer();
 
     useEffect(() => {
         console.log(isModalOpen)
-    },[isModalOpen])
+    }, [isModalOpen])
 
     const onCloseModal = () => {
         setDetailCustomer(null)
@@ -38,9 +39,56 @@ export const CustomerApproveModal = () => {
 
     return (
         <Modal opened={isModalOpen} withCloseButton onClose={onCloseModal} size="lg" title={`Arpprove ${detailCustomer?.name} as customer`}>
-            <Button onClick={handleApprove} type="submit" variant="filled" color="primary-red" mt={20} fullWidth>
-                {isLoadingApproveCustomer ? <Loader color='white' size={'sm'} /> : 'Approve'}
-            </Button>
+            <Box>
+                {detailCustomer && (
+                    <Grid mt={20}>
+                        <Grid.Col span={6}>
+                            <DataLabel label="Customer Name" value={detailCustomer.name} />
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                            <DataLabel label="Contact Person" value={detailCustomer.contact_person} />
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                            <DataLabel label="Phonenumber" value={detailCustomer.phone} />
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                            <DataLabel label="NPWP" value={detailCustomer.npwp} />
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                            <DataLabel label="Permission Letter" value={detailCustomer.permission_letter} />
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                            <DataLabel label="Status" value={detailCustomer.status} />
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                            <DataLabel label="Sales Name" value={detailCustomer.sales ? detailCustomer.sales.name : "-"} />
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                            <DataLabel label="Address" value={detailCustomer.address} />
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                            <DataLabel label="Province" value={detailCustomer.province ? detailCustomer.province.name : "-"} />
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                            <DataLabel label="City" value={detailCustomer.city ? detailCustomer.city.name : "-"} />
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                            <DataLabel label="District" value={detailCustomer.district ? detailCustomer.district.name : "-"} />
+                        </Grid.Col>
+                        <Grid.Col span={6}>
+                            <DataLabel label="Sub District" value={detailCustomer.sub_district ? detailCustomer.sub_district.name : "-"} />
+                        </Grid.Col>
+                    </Grid>
+                )}
+            </Box>
+            <Group justify="right" mt={20}>
+                <Button onClick={handleApprove} type="submit" variant="filled" color="primary-red">
+                    {isLoadingApproveCustomer ? <Loader color='white' size={'sm'} /> : 'Approve'}
+                </Button>
+                <Button onClick={onCloseModal} variant="filled" color="secondary-gray">
+                    Cancel
+                </Button>
+            </Group>
         </Modal>
     )
 }
