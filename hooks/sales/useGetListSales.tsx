@@ -29,6 +29,7 @@ const useGetListSales = () => {
                 value: sales.id.toString(),
                 label: sales.name
             })))
+            console.log(listForSelesSelect)
         } catch (error) {
             notifications.show({
                 title: 'Fetch Failed',

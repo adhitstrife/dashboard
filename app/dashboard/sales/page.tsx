@@ -17,6 +17,8 @@ import TimeDisplay from "@/components/clock/clock";
 import useUserProfile from "@/hooks/auth/useUserProfile";
 import { useSetAtom } from "jotai";
 import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
+import { salesBulkAssignAtom } from "@/state/component_state/modal/sales/salesBulkAssignAtom";
+import { BulkAssignModal } from "@/components/modal/sales/bulkAssignModal";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -55,6 +57,7 @@ export default function user() {
     })
 
     const setActiveMenu = useSetAtom(activeMenuAtom)
+    const setBulkAssignModal = useSetAtom(salesBulkAssignAtom);
 
     useEffect(() => {
         getCountryList()
@@ -253,9 +256,14 @@ export default function user() {
                         <Group>
                             <TextInput placeholder="Search Sales" onChange={(e) => handleSearch(e)} />
                         </Group>
-                        <Button color="primary-red" variant="filled" onClick={() => setShowAddModal(true)}>
-                            <IconPlus size={20} stroke={1.5} />
-                        </Button>
+                        <Group>
+                            <Button color="primary-red" variant="filled" onClick={() => setBulkAssignModal(true)}>
+                                Assign Bulk
+                            </Button>
+                            <Button color="primary-red" variant="filled" onClick={() => setShowAddModal(true)}>
+                                <IconPlus size={20} stroke={1.5} />
+                            </Button>
+                        </Group>
                     </Group>
                     {salesData && (
                         <Table.ScrollContainer minWidth={200} mt={20}>
@@ -309,6 +317,7 @@ export default function user() {
                         </Table.ScrollContainer>
                     )}
                 </Card>
+                <BulkAssignModal />
                 <Modal opened={showAddModal} onClose={handleCloseModal} title="Add new sales">
                     <form onSubmit={handleSubmit}>
                         <TextInput

@@ -1,3 +1,4 @@
+import selectData from "@/app/interface/component/selectData";
 import customerListResponse from "@/app/interface/response/customer/customerListResponse";
 import salesResponse from "@/app/interface/response/sales/salesListResponse";
 import { customerListAtom } from "@/state/data/customer/customerListAtom";
@@ -11,6 +12,7 @@ import { useState } from "react"
 const useGetListCustomer = () => {
     const [isLoadingGetListCustomer, setIsLoadingGetListCustomer] = useState(false);
     const setListCustomer = useSetAtom(customerListAtom);
+    const [listForCustomerSelect, setListForCustomerSelect] = useState<selectData[]>([]);
     
     const getListCustomer = async (page: number = 1, page_size: number = 10, name?: string, status?: string, sales_id?: number ) => {
         try {
@@ -25,6 +27,10 @@ const useGetListCustomer = () => {
             );
             const json: customerListResponse = response.data
             setListCustomer(json)
+            setListForCustomerSelect(json.results.map((customer) => ({
+                value: customer.id.toString(),
+                label: customer.name
+            })))
         } catch (error) {
             notifications.show({
                 title: 'Fetch Failed',
@@ -39,6 +45,6 @@ const useGetListCustomer = () => {
         }
     }
 
-    return { getListCustomer, isLoadingGetListCustomer }
+    return { getListCustomer, isLoadingGetListCustomer, listForCustomerSelect }
 }
 export default useGetListCustomer;
