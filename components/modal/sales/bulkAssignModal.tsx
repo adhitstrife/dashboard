@@ -1,6 +1,7 @@
 import customerBulkAssign from "@/app/interface/payload/customerBulkAssign";
 import salesData from "@/app/interface/response/sales/salesData";
 import useGetListCustomer from "@/hooks/customer/useGetListCustomer";
+import useGetListCustomerForSelect from "@/hooks/customer/useGetListCustomerForSelect";
 import useBulkAssignCustomer from "@/hooks/sales/useBulkAssignCustomer";
 import useGetListSales from "@/hooks/sales/useGetListSales";
 import { salesBulkAssignAtom } from "@/state/component_state/modal/sales/salesBulkAssignAtom";
@@ -20,7 +21,7 @@ export const BulkAssignModal: React.FC<selectedSalesProps> = ({ salesData }) => 
     })
 
     const { isLoadingGetListSales, getListSales, listForSelesSelect } = useGetListSales();
-    const { isLoadingGetListCustomer, getListCustomer, listForCustomerSelect } = useGetListCustomer();
+    const { isLoadingGetListCustomer, getListCustomer, listForCustomerSelect } = useGetListCustomerForSelect();
     const { isLoadingBulkAssignCustomer, assignCustomers } = useBulkAssignCustomer()
 
     const onCloseModal = () => {
