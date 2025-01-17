@@ -50,15 +50,14 @@ export const BulkAssignModal: React.FC<selectedSalesProps> = ({ salesData }) => 
     }
 
     useEffect(() => {
-        console.log(salesData)
-        // If salesData is passed, set the sales_id in the payload
-        if (salesData?.id) {
-          setBulkAssignPayload((prevPayload) => ({
-            ...prevPayload,
-            sales_id: salesData.id,
-          }));
-        }
-      }, [salesData]);
+        if (isModalOpen) {
+            // Initialize `sales_id` if modal is opened and `salesData` is provided
+            setBulkAssignPayload((prevPayload) => ({
+              ...prevPayload,
+              sales_id: salesData?.id || null,
+            }));
+          }
+      }, [isModalOpen, salesData]);
 
     const updateCustomerPayload = (e: string[]) => {
         setBulkAssignPayload((prevPayload) => {
