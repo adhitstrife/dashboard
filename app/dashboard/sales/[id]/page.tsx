@@ -28,6 +28,12 @@ import { visitFilterModalAtom } from "@/state/component_state/modal/visit/visitF
 import { visitFilterAtom } from "@/state/data/visit/visitFilterAtom";
 import TimeDisplay from "@/components/clock/clock";
 import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
+import { CustomerDetailModal } from "@/components/modal/customer/customerDetailModal";
+import { CustomerEditModal } from "@/components/modal/customer/customerEditModal";
+import { CustomerDeleteModal } from "@/components/modal/customer/customerDeleteModal";
+import { CustomerApproveModal } from "@/components/modal/customer/customerApproveModal";
+import { salesBulkAssignAtom } from "@/state/component_state/modal/sales/salesBulkAssignAtom";
+import { BulkAssignModal } from "@/components/modal/sales/bulkAssignModal";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
@@ -49,6 +55,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     const leaveData = useAtomValue(leaveListAtom)
     const visitList = useAtomValue(visitListAtom)
     const attendanceList = useAtomValue(attendanceListAtom)
+    const setBulkAssignModal = useSetAtom(salesBulkAssignAtom);
 
 
     const [showEditTargetModal, setShowEditTargetModal] = useState(false);
@@ -102,11 +109,11 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                 }
             });
         }
-    },[userProfile])
+    }, [userProfile])
 
     useEffect(() => {
         getListVisit(1, 10);
-    },[filterVisit])
+    }, [filterVisit])
 
     useEffect(() => {
         if (salesDetail && salesDetail.results.target) {
@@ -342,8 +349,18 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                         )}
                                     </Tabs.Panel>
                                     <Tabs.Panel value="customers">
+                                        <Button color="primary-red" mt={20} variant="filled" onClick={() => setBulkAssignModal(true)}>
+                                            Assign Bulk
+                                        </Button>
                                         {customerList && (
-                                            <CustomerTable page={pageCustomer} handleChangePage={handleChangePageCustomer} />
+                                            <Box>
+                                                <CustomerTable page={pageCustomer} handleChangePage={handleChangePageCustomer} />
+                                                <CustomerDetailModal />
+                                                <CustomerEditModal />
+                                                <CustomerDeleteModal />
+                                                <CustomerApproveModal />
+                                                <BulkAssignModal salesData={salesDetail.results}/>
+                                            </Box>
                                         )}
                                     </Tabs.Panel>
                                     <Tabs.Panel value="visit">

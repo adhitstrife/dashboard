@@ -1,4 +1,5 @@
 import customerBulkAssign from "@/app/interface/payload/customerBulkAssign";
+import salesData from "@/app/interface/response/sales/salesData";
 import useGetListCustomer from "@/hooks/customer/useGetListCustomer";
 import useBulkAssignCustomer from "@/hooks/sales/useBulkAssignCustomer";
 import useGetListSales from "@/hooks/sales/useGetListSales";
@@ -7,14 +8,18 @@ import { Button, Modal, MultiSelect, Select } from "@mantine/core"
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 
-export const BulkAssignModal = () => {
+interface selectedSalesProps {
+    salesData?: salesData | null
+}
+
+export const BulkAssignModal: React.FC<selectedSalesProps> = ({ salesData }) => {
     const [isModalOpen, setIsModalOpen] = useAtom(salesBulkAssignAtom);
     const [bulkAssignPayload, setBulkAssignPayload] = useState<customerBulkAssign>({
         sales_id: null,
         customer_ids: []
     })
 
-    const { isLoadingGetListSales, getListSales, salesData, listForSelesSelect } = useGetListSales();
+    const { isLoadingGetListSales, getListSales, listForSelesSelect } = useGetListSales();
     const { isLoadingGetListCustomer, getListCustomer, listForCustomerSelect } = useGetListCustomer();
     const { isLoadingBulkAssignCustomer, assignCustomers } = useBulkAssignCustomer()
 
@@ -44,8 +49,15 @@ export const BulkAssignModal = () => {
     }
 
     useEffect(() => {
-        console.log(listForCustomerSelect)
-    }, [listForSelesSelect])
+        console.log(salesData)
+        // If salesData is passed, set the sales_id in the payload
+        if (salesData?.id) {
+          setBulkAssignPayload((prevPayload) => ({
+            ...prevPayload,
+            sales_id: salesData.id,
+          }));
+        }
+      }, [salesData]);
 
     const updateCustomerPayload = (e: string[]) => {
         setBulkAssignPayload((prevPayload) => {
@@ -73,20 +85,22 @@ export const BulkAssignModal = () => {
     }
 
     return (
-        <Modal opened={isModalOpen} withCloseButton onClose={onCloseModal} size="lg" title="Bulk assign customer to sales">
+        <Modal opened={isModalOpen} withCloseButton onClose={onCloseModal} size="lg" title={salesData ? `Bulk assign customer to ${salesData.username}` : "Bulk assign customer to sales"}>
             <form onSubmit={handleSubmit}>
-                <Select
-                    label="Sales"
-                    placeholder="Search sales name"
-                    mt={10}
-                    data={listForSelesSelect}
-                    name="sales_id"
-                    searchable
-                    onSearchChange={(e) => searchSales(e)}
-                    onChange={(e) => selectSalesToAssign(e)}
-                    withAsterisk
-                    nothingFoundMessage="No sales found..."
-                />
+                {!salesData && (
+                    <Select
+                        label="Sales"
+                        placeholder="Search sales name"
+                        mt={10}
+                        data={listForSelesSelect}
+                        name="sales_id"
+                        searchable
+                        onSearchChange={(e) => searchSales(e)}
+                        onChange={(e) => selectSalesToAssign(e)}
+                        withAsterisk
+                        nothingFoundMessage="No sales found..."
+                    />
+                )}
                 <MultiSelect
                     label="Customers"
                     placeholder="Select customers that will be assign to above sales"

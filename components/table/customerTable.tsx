@@ -7,7 +7,7 @@ import { customerEditModalAtom } from "@/state/component_state/modal/customerEdi
 import { customerDetailAtom } from "@/state/data/customer/customerDetailAtom"
 import { customerListAtom } from "@/state/data/customer/customerListAtom"
 import { ActionIcon, Badge, Box, Button, Group, Pagination, Table, Text } from "@mantine/core"
-import { IconCheck, IconEye, IconPencil, IconTrash } from "@tabler/icons-react"
+import { IconCheck, IconEdit, IconEye, IconPencil, IconTrash } from "@tabler/icons-react"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import Link from "next/link"
 import { FC, useState } from "react"
@@ -26,6 +26,7 @@ export const CustomerTable: FC<customerTable> = ({ page, handleChangePage, onAss
     const customerList = useAtomValue(customerListAtom)
 
     const handleOpenDetailModal = (customer: customerData) => {
+        console.log("foo")
         setDetailCustomer(customer);
         setIsModalOpen(true);
     }
@@ -94,7 +95,14 @@ export const CustomerTable: FC<customerTable> = ({ page, handleChangePage, onAss
                                                             Assign Sales
                                                         </Button>
                                                     ) : (
-                                                        customer.sales?.name
+                                                        <Group>
+                                                            <Text>
+                                                                {customer.sales?.name}
+                                                            </Text>
+                                                            <ActionIcon color="primary-red" size={"sm"} onClick={() => onAssignSales(customer.id)} variant="transparent">
+                                                                <IconEdit size={20} stroke={1.5} />
+                                                            </ActionIcon>
+                                                        </Group>
                                                     )}
                                                 </Table.Td>
                                             )}
