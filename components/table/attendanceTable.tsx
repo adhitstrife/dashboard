@@ -42,7 +42,7 @@ export const AttendanceTable = () => {
                                     <Table.Tr>
                                         <Table.Td>{attendance.sales.name}</Table.Td>
                                         <Table.Td>{`${attendance.clock_in_date} : ${attendance.clock_in_time}`}</Table.Td>
-                                        <Table.Td>{`${attendance.clock_out_date} : ${attendance.clock_out_time}`}</Table.Td>
+                                        <Table.Td>{`${attendance.clock_out_date ? attendance.clock_out_date : "-"} : ${attendance.clock_out_time ? attendance.clock_out_time : "-"}`}</Table.Td>
                                         <Table.Td>
                                             <Button variant="transparent" c={"primary-red"} onClick={() => openDetailAttendanceModal(attendance)}>Show Location</Button>
                                         </Table.Td>

@@ -6,6 +6,7 @@ import { leaveApproveModalAtom } from "@/state/component_state/modal/leave/leave
 import { leaveDetailAtom } from "@/state/data/leave/leaveDetailAtom"
 import { leaveListAtom } from "@/state/data/leave/leaveListAtom"
 import { leaveStatusAtom } from "@/state/data/leave/leaveStatusAtom"
+import { userProfileAtom } from "@/state/data/user/userProfileAtom"
 import { ActionIcon, Badge, Box, Group, Pagination, Table, Text } from "@mantine/core"
 import { IconCheck, IconX } from "@tabler/icons-react"
 import { useAtomValue, useSetAtom } from "jotai"
@@ -21,6 +22,7 @@ export const LeaveTable: FC<leaveTable> = ({ page, handleChangePage }) => {
     const setIsModalOpen = useSetAtom(leaveApproveModalAtom);
     const setDetailLeave = useSetAtom(leaveDetailAtom);
     const setStatusLeave = useSetAtom(leaveStatusAtom);
+    const userProfile = useAtomValue(userProfileAtom);
 
     const handleOpenApproveModal = (leave: leaveData) => {
         setIsModalOpen(true);
@@ -64,7 +66,9 @@ export const LeaveTable: FC<leaveTable> = ({ page, handleChangePage }) => {
                                     <Table.Th>Category</Table.Th>
                                     <Table.Th>Start Date</Table.Th>
                                     <Table.Th>End Date</Table.Th>
-                                    <Table.Th>Action</Table.Th>
+                                    {userProfile?.user_type == 'manager' && (
+                                        <Table.Th>Action</Table.Th>
+                                    )}
                                 </Table.Tr>
                             </Table.Thead>
                             {leaveList.results.length <= 0 ? (
@@ -95,6 +99,7 @@ export const LeaveTable: FC<leaveTable> = ({ page, handleChangePage }) => {
                                             <Table.Td>
                                                 {leave.end_date}
                                             </Table.Td>
+                                        {userProfile?.user_type == 'manager' && (
                                             <Table.Td>
                                                 {isDatePassed(leave.start_date) ? (
                                                     <Badge color="secondary-gray">Expired</Badge>
@@ -121,6 +126,8 @@ export const LeaveTable: FC<leaveTable> = ({ page, handleChangePage }) => {
                                                     </Box>
                                                 )}
                                             </Table.Td>
+
+                                        )}
                                         </Table.Tr>
 
                                     ))}

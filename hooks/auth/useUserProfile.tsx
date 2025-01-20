@@ -5,12 +5,16 @@ import { notifications } from "@mantine/notifications";
 import { IconCheck } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import UserProfile from "@/app/interface/response/userProfile";
+import { useSetAtom } from "jotai";
+import { userProfileAtom } from "@/state/data/user/userProfileAtom";
 
 
 const useUserProfile = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [userProfile, setUserProfile] = useState<UserProfile>();
     const router = useRouter();
+
+    const setUserProfileAtom = useSetAtom(userProfileAtom);
 
     const getUserProfile = async () => {
         try {
@@ -24,6 +28,7 @@ const useUserProfile = () => {
             );
             const json: UserProfile = response.data
             setUserProfile(json)
+            setUserProfileAtom(json)
         } catch (error) {
             setIsLoading(false);
             if (axios.isAxiosError(error) && error.response?.status === 401) {
