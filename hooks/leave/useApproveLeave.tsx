@@ -51,6 +51,15 @@ const useApproveLeave = () => {
                         position: 'top-right'
                     })
                   }
+            } else if (error.response.status == 403) {
+                console.log(errorResponse.message)
+                notifications.show({
+                    title: `Failed to approve leave`,
+                    message: `${errorResponse.detail}`,
+                    color: 'red',
+                    icon: <IconX size={20} stroke={1.5} />,
+                    position: 'top-right'
+                })
             } else {
                 notifications.show({
                     title: 'Saving Failed',
