@@ -235,7 +235,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                         </Box>
                         <Box>
                             <Text ta={'right'} size='sm' mt={10} >Current time</Text>
-                            <TimeDisplay />
+                            {/* <TimeDisplay /> */}
                         </Box>
                     </Flex>
                 </div>
@@ -251,7 +251,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                 />
                             </Center>
                             <Title mt={30} order={3} ta={"center"}>{salesDetail.results.name}</Title>
-                            <Text size='md' mt={10} ta={"center"} style={{ color: theme.colors['secondary-gray'][9] }}>Sales Area {salesDetail.results.city.name}</Text>
+                            <Text size='md' mt={10} ta={"center"} style={{ color: theme.colors['secondary-gray'][9] }}>Sales Area {salesDetail.results.city ? salesDetail.results.city.name : "-"}</Text>
                             <Box>
                                 {salesDetail.results.target ? (
                                     <Box>
@@ -300,46 +300,46 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                                 <DataLabel label="Fullname" value={salesDetail.results.name} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="NIP" value={salesDetail.results.nip} />
+                                                <DataLabel label="NIP" value={salesDetail.results.nip ? salesDetail.results.nip : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Status Pekerja" value={salesDetail.results.employee_status} />
+                                                <DataLabel label="Status Pekerja" value={salesDetail.results.employee_status ? salesDetail.results.employee_status : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Level" value={salesDetail.results.job_level} />
+                                                <DataLabel label="Level" value={salesDetail.results.job_level ? salesDetail.results.job_level : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Joining Date" value={salesDetail.results.joining_date} />
+                                                <DataLabel label="Joining Date" value={salesDetail.results.joining_date ? salesDetail.results.joining_date : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Birthplace" value={salesDetail.results.birth_place.name} />
+                                                <DataLabel label="Birthplace" value={salesDetail.results.birth_place ? salesDetail.results.birth_place.name : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Gender" value={salesDetail.results.gender} />
+                                                <DataLabel label="Gender" value={salesDetail.results.gender ? salesDetail.results.gender : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Religion" value={salesDetail.results.religion} />
+                                                <DataLabel label="Religion" value={salesDetail.results.religion ? salesDetail.results.religion : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Blood Type" value={salesDetail.results.blood_type} />
+                                                <DataLabel label="Blood Type" value={salesDetail.results.blood_type ? salesDetail.results.blood_type : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Email" value={salesDetail.results.email} />
+                                                <DataLabel label="Email" value={salesDetail.results.email ? salesDetail.results.email : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Phone Number" value={salesDetail.results.phone} />
+                                                <DataLabel label="Phone Number" value={salesDetail.results.phone ? salesDetail.results.phone : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Address" value={salesDetail.results.address} />
+                                                <DataLabel label="Address" value={salesDetail.results.address ? salesDetail.results.address : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Bank Name" value={salesDetail.results.bank_name} />
+                                                <DataLabel label="Bank Name" value={salesDetail.results.bank_name ? salesDetail.results.bank_name : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Account Name" value={salesDetail.results.account_name} />
+                                                <DataLabel label="Account Name" value={salesDetail.results.account_name ? salesDetail.results.account_name : "-"} />
                                             </Grid.Col>
                                             <Grid.Col span={6}>
-                                                <DataLabel label="Account Number" value={salesDetail.results.account_number} />
+                                                <DataLabel label="Account Number" value={salesDetail.results.account_number ? salesDetail.results.account_number : "-"} />
                                             </Grid.Col>
                                         </Grid>
                                     </Tabs.Panel>

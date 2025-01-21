@@ -3,7 +3,7 @@ interface salesPayload {
     name: string;
     password: string;
     password2: string;
-    birth_place_id: number;
+    birth_place_id: number | null;
     gender: string;
     religion: string;
     email: string;
@@ -14,7 +14,7 @@ interface salesPayload {
     employee_status: string;
     job_level: string;
     joining_date: string;
-    city_id: number;
+    city_id: number | null;
 }
 
 export default salesPayload;

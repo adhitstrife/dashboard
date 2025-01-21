@@ -74,7 +74,7 @@ export default function user() {
                 name: sales.name,
                 password: sales.password,
                 password2: sales.password2,
-                birth_place_id: sales.birth_place.id,
+                birth_place_id: sales.birth_place ? sales.birth_place.id : null,
                 gender: sales.gender,
                 religion: sales.religion,
                 email: sales.email,
@@ -85,7 +85,7 @@ export default function user() {
                 employee_status: sales.employee_status,
                 job_level: sales.job_level,
                 joining_date: sales.joining_date,
-                city_id: sales.city.id,
+                city_id: sales.city ? sales.city.id : null,
             })
         }
     }, [salesDetail])
@@ -247,7 +247,7 @@ export default function user() {
                         </Box>
                         <Box>
                             <Text ta={'right'} size='sm' mt={10} >Current time</Text>
-                            <TimeDisplay />
+                            {/* <TimeDisplay /> */}
                         </Box>
                     </Flex>
                 </div>
@@ -312,7 +312,7 @@ export default function user() {
                                 </Table.Tbody>
                             </Table>
                             {salesData.count > 10 && (
-                                <Pagination color="1q" mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(salesData.count / pageSize)} />
+                                <Pagination color="primary-red" mt={10} value={page} onChange={(e) => handleChangePage(e)} total={Math.ceil(salesData.count / pageSize)} />
                             )}
                         </Table.ScrollContainer>
                     )}
@@ -342,7 +342,7 @@ export default function user() {
                             required onChange={handleChange} />
                         <PasswordInput label="Confirm Password" placeholder="Input Password" mt={10} name="password2" withAsterisk
                             required onChange={handleChange} />
-                        <Select
+                        {/* <Select
                             label="Birthplace"
                             placeholder="Pick sales birthplace"
                             mt={10}
@@ -351,8 +351,8 @@ export default function user() {
                             searchable
                             onSearchChange={(e) => searchCity(e)}
                             onChange={(e) => handleSelectChange('birth_place_id', e)}
-                        />
-                        <Select
+                        /> */}
+                        {/* <Select
                             label="Gender"
                             placeholder="Pick sales gender"
                             data={['pria', 'wanita']}
@@ -367,7 +367,7 @@ export default function user() {
                             name="religion"
                             mt={10}
                             onChange={(e) => handleSelectChange('religion', e)}
-                        />
+                        /> */}
                         {/* <Select
                             label="Blood Type"
                             placeholder="Pick sales blood type"
@@ -386,7 +386,7 @@ export default function user() {
                             type="email"
                             onChange={handleChange}
                         />
-                        <NumberInput
+                        {/* <NumberInput
                             label="Phonenumber"
                             placeholder="Input Phone Number"
                             hideControls
@@ -444,7 +444,7 @@ export default function user() {
                             valueFormat="YYYY-MM-DD"
                             onChange={(e) => handleSelectDate('joining_date', e)}
 
-                        />
+                        /> */}
                         {/* <TextInput
                             label="Bank name"
                             placeholder="Input bank name"
@@ -467,7 +467,7 @@ export default function user() {
                             name="account_number"
                             onChange={(e) => handleNumberInput('account_number', e)}
                         /> */}
-                        <Select
+                        {/* <Select
                             label="City"
                             placeholder="Pick sales city"
                             data={cities}
@@ -476,7 +476,7 @@ export default function user() {
                             onSearchChange={(e) => searchCity(e)}
                             onChange={(e) => handleSelectChange('city_id', e)}
                             mt={10}
-                        />
+                        /> */}
                         <Button type="submit" variant="filled" color="primary-red" mt={20} fullWidth>
                             Save
                         </Button>
@@ -507,7 +507,7 @@ export default function user() {
                             />
                             <Select
                                 label="Birthplace"
-                                placeholder={salesDetail.results.birth_place.name}
+                                placeholder={salesDetail.results.birth_place ? salesDetail.results.birth_place.name : "Select birth place"}
                                 mt={10}
                                 data={cities}
                                 name="city_id"
@@ -645,7 +645,7 @@ export default function user() {
                             /> */}
                             <Select
                                 label="City"
-                                placeholder={salesDetail.results.city.name}
+                                placeholder={salesDetail.results.city ? salesDetail.results.city.name : "Select city"}
                                 data={cities}
                                 name="city_id"
                                 searchable
