@@ -559,8 +559,6 @@ export default function user() {
                                 placeholder="Input Phone Number"
                                 hideControls
                                 name="phone"
-                                withAsterisk
-                                required
                                 mt={10}
                                 onChange={(e) => handleNumberInput('phone', e)}
                                 value={salesPayload.phone}
@@ -569,8 +567,6 @@ export default function user() {
                                 label="Address"
                                 placeholder="Input Address"
                                 name="address"
-                                withAsterisk
-                                required
                                 mt={10}
                                 onChange={handleChange}
                                 value={salesPayload.address}
@@ -580,8 +576,6 @@ export default function user() {
                                 placeholder="Input postla code"
                                 hideControls
                                 name="postal_code"
-                                withAsterisk
-                                required
                                 mt={10}
                                 min={0}
                                 max={999999}
@@ -595,8 +589,6 @@ export default function user() {
                                 mt={10}
                                 hideControls
                                 name="nip"
-                                withAsterisk
-                                required
                                 onChange={(e) => handleNumberInput('nip', e)}
                                 value={salesPayload.nip}
                             />
