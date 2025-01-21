@@ -147,7 +147,7 @@ export const VisitFilterModal = () => {
                             placeholder="Filter End Date"
                             disabled={startDate == "" ? true : false}
                             maxDate={new Date()}
-                            minDate={startDate == "" ? new Date : addDays(new Date(startDate), 1)}
+                            minDate={startDate == "" ? new Date : new Date(startDate)}
                             value={filter.endDate ? new Date(filter.endDate) : null}
                         />
                     </Group>

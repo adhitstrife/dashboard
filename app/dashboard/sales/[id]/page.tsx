@@ -100,16 +100,16 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     }, [id])
 
     useEffect(() => {
-        if (userProfile) {
+        if (salesDetail) {
             setFilterVisit({
                 ...filterVisit,
                 salesId: {
-                    label: userProfile.username,
-                    value: userProfile.id.toString()
+                    label: salesDetail.results.username,
+                    value: salesDetail.results.id.toString()
                 }
             });
         }
-    }, [userProfile])
+    }, [salesDetail])
 
     useEffect(() => {
         getListVisit(1, 10);
@@ -173,12 +173,10 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                 [name]: value  // Update the specific field
             }));
         }
-        console.log(editPayload)
     }
 
     const handleShowEditTargetModal = () => {
         if (salesDetail && salesDetail.results.target) {
-            console.log(editPayload)
             return setShowEditTargetModal(true)
         }
         return setShowEditTargetModal(false)
@@ -235,7 +233,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                         </Box>
                         <Box>
                             <Text ta={'right'} size='sm' mt={10} >Current time</Text>
-                            {/* <TimeDisplay /> */}
+                            <TimeDisplay />
                         </Box>
                     </Flex>
                 </div>
