@@ -28,6 +28,7 @@ import useUserProfile from "@/hooks/auth/useUserProfile";
 import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
 import { customerBulkModalAtom } from "@/state/component_state/modal/customer/customerBulkModalAtom";
 import { CustomerBulkModal } from "@/components/modal/customer/customerBulkModal";
+import { DateInput, DateValue } from "@mantine/dates";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -53,6 +54,7 @@ export default function user() {
     const [searchedCustomer, setSearchedCustomer] = useState("");
     const [selectedStatus, setSelectedStatus] = useState("");
     const [filterBySales, setFilterBySales] = useState("");
+    const [filterCreatedAt, setFilterCreatedAt] = useState("")
     const [assignSalesPayload, setAssignSalesPayload] = useState<assignSales>({
         customer_id: null,
         sales_id: null
@@ -194,34 +196,44 @@ export default function user() {
     }, [])
 
     const handleChangePage = async (e: any) => {
-        await getListCustomer(e, 10, searchedCustomer, selectedStatus, parseInt(filterBySales));
+        await getListCustomer(e, 10, searchedCustomer, selectedStatus, parseInt(filterBySales), filterCreatedAt);
         setPage(e);
     }
 
     const handleSearch = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        await await getListCustomer(1, 10, value, selectedStatus !== "" ? selectedStatus : undefined, filterBySales !== "" ? parseInt(filterBySales) : undefined);
+        await await getListCustomer(1, 10, value, selectedStatus !== "" ? selectedStatus : undefined, filterBySales !== "" ? parseInt(filterBySales) : undefined, filterCreatedAt);
         setSearchedCustomer(value);
     }
 
     const handleSelectedStatus = async (e: string | null) => {
         if (e) {
             const status = e == "All" ? "" : e
-            await await getListCustomer(1, 10, searchedCustomer, status !== "" ? status : undefined, filterBySales !== "" ? parseInt(filterBySales) : undefined);
+            await await getListCustomer(1, 10, searchedCustomer, status !== "" ? status : undefined, filterBySales !== "" ? parseInt(filterBySales) : undefined, filterCreatedAt);
             setSelectedStatus(status);
         }
     }
 
     const handleFilterBySales = async (e: string | null) => {
         if (e) {
-            console.log(e)
             const value = parseInt(e)
-            await await getListCustomer(1, 10, searchedCustomer, selectedStatus !== "" ? selectedStatus : undefined, value);
+            await await getListCustomer(1, 10, searchedCustomer, selectedStatus !== "" ? selectedStatus : undefined, value, filterCreatedAt);
             setFilterBySales(e);
         } else {
-            console.log("foo")
-            await await getListCustomer(1, 10, searchedCustomer, selectedStatus !== "" ? selectedStatus : undefined, undefined);
+            await await getListCustomer(1, 10, searchedCustomer, selectedStatus !== "" ? selectedStatus : undefined, undefined, filterCreatedAt);
             setFilterBySales("");
+        }
+    }
+
+    const handleChangeDate = async (e: DateValue) => {
+        if (e) {
+            const date = new Date(e);
+            const day = String(date.getDate()).padStart(2, '0'); // Get day with leading zero
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Get month (0-based) with leading zero
+            const year = date.getFullYear();
+            const formattedDate = `${year}-${month}-${day}`; 
+            await await getListCustomer(1, 10, searchedCustomer, selectedStatus !== "" ? selectedStatus : undefined, filterBySales !== "" ? parseInt(filterBySales) : undefined, formattedDate);
+            setFilterCreatedAt(formattedDate)
         }
     }
 
@@ -259,6 +271,10 @@ export default function user() {
                                 onSearchChange={(e) => searchSales(e)}
                                 onChange={(e) => handleFilterBySales(e)}
                                 clearable
+                            />
+                            <DateInput
+                                onChange={(e) => handleChangeDate(e)}
+                                placeholder="Filter by joined date"
                             />
                         </Group>
                         <Group>
