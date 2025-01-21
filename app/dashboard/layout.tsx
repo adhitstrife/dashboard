@@ -3,7 +3,7 @@ import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
 import { AppShell, AppShellMain, Burger, Button, Container, Drawer, Flex, Group, Image, NavLink, ScrollArea, Skeleton, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
-import { IconCalendarCheck, IconCar, IconCheck, IconClockCheck, IconHome, IconHome2, IconLogout, IconMessage, IconUserDollar, IconUserStar, IconUsersGroup } from "@tabler/icons-react";
+import { IconCalendarCheck, IconCar, IconCheck, IconClockCheck, IconHome, IconHome2, IconLogout, IconLogs, IconMessage, IconUserDollar, IconUserStar, IconUsersGroup } from "@tabler/icons-react";
 import { useAtomValue } from "jotai";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
@@ -49,6 +49,7 @@ export default function DashboardLayout({ children }: { children?: React.ReactNo
                     <NavLink href="/dashboard/sales" label={"Sales"} leftSection={<IconUserStar size={20} stroke={1.5} />} color="primary-red" active={activeMenu == "sales" ? true : false} variant="filled" />
                     <NavLink href="/dashboard/attendance" label={"Attendance"} leftSection={<IconClockCheck size={20} stroke={1.5} />} color="primary-red" active={activeMenu == "attendance" ? true : false} variant="filled" />
                     <NavLink href="/dashboard/customer" label={"Customers"} leftSection={<IconUserDollar size={20} stroke={1.5} />} color="primary-red" active={activeMenu == "customer" ? true : false} variant="filled" />
+                    <NavLink href="/dashboard/activity-logs" label={"Logs"} leftSection={<IconLogs size={20} stroke={1.5} />} color="primary-red" active={activeMenu == "logs" ? true : false} variant="filled" />
                 </AppShell.Section>
                 <AppShell.Section>
                     <Button onClick={handleLogOut} variant="transparent" color="primary-red" rightSection={<IconLogout size={20} stroke={1.5} />} mt={50}>Log Out</Button>
@@ -71,6 +72,7 @@ export default function DashboardLayout({ children }: { children?: React.ReactNo
                     <NavLink href="/dashboard/sales" label={"Sales"} leftSection={<IconUserStar size={20} stroke={1.5} />} />
                     <NavLink href="/dashboard/attendance" label={"Attendance"} leftSection={<IconClockCheck size={20} stroke={1.5} />} />
                     <NavLink href="/dashboard/customer" label={"Customers"} leftSection={<IconUserDollar size={20} stroke={1.5} />} />
+                    <NavLink href="/dashboard/activity-logs" label={"Logs"} leftSection={<IconLogs size={20} stroke={1.5} />} />
                     <Button onClick={handleLogOut} variant="transparent" color="primary-red" rightSection={<IconLogout size={20} stroke={1.5} />} mt={50}>Log Out</Button>
                 </ScrollArea>
             </Drawer>
