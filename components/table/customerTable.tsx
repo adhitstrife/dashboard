@@ -57,6 +57,7 @@ export const CustomerTable: FC<customerTable> = ({ page, handleChangePage, onAss
                                     <Table.Th>Name</Table.Th>
                                     <Table.Th>Status</Table.Th>
                                     <Table.Th>Contact Person</Table.Th>
+                                    <Table.Th>Joined Date</Table.Th>
                                     <Table.Th>Phone</Table.Th>
                                     {onAssignSales && (
                                         <Table.Th>Sales</Table.Th>
@@ -84,6 +85,9 @@ export const CustomerTable: FC<customerTable> = ({ page, handleChangePage, onAss
                                             </Table.Td>
                                             <Table.Td>
                                                 {customer.contact_person}
+                                            </Table.Td>
+                                            <Table.Td>
+                                                {new Date(customer.created_at).toLocaleDateString()}
                                             </Table.Td>
                                             <Table.Td>
                                                 {customer.phone}

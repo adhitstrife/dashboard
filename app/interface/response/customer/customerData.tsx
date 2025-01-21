@@ -39,6 +39,7 @@ interface customerData {
     district: customerDistrict;
     sub_district: customerSubDistrict;
     npwp: string;
+    created_at: string;
     sales: salesData | null
 }
 
