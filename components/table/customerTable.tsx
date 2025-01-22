@@ -16,8 +16,9 @@ interface customerTable {
     page: number
     handleChangePage: (page: number) => void;
     onAssignSales?: (customerId: number) => void;
+    isHideActionButton?: boolean
 }
-export const CustomerTable: FC<customerTable> = ({ page, handleChangePage, onAssignSales }) => {
+export const CustomerTable: FC<customerTable> = ({ page, handleChangePage, onAssignSales, isHideActionButton }) => {
     const setDetailCustomer = useSetAtom(customerDetailAtom);
     const setIsModalOpen = useSetAtom(customerDetailModalAtom);
     const setIsModalEditOpen = useSetAtom(customerEditModalAtom);
@@ -62,7 +63,9 @@ export const CustomerTable: FC<customerTable> = ({ page, handleChangePage, onAss
                                     {onAssignSales && (
                                         <Table.Th>Sales</Table.Th>
                                     )}
-                                    <Table.Th>Action</Table.Th>
+                                    {!isHideActionButton && (
+                                        <Table.Th>Action</Table.Th>
+                                    )}
                                 </Table.Tr>
                             </Table.Thead>
                             {customerList.results.length <= 0 ? (
@@ -111,22 +114,24 @@ export const CustomerTable: FC<customerTable> = ({ page, handleChangePage, onAss
                                                 </Table.Td>
                                             )}
                                             <Table.Td>
-                                                <Group>
-                                                    {customer.status == "In Review" && (
-                                                        <ActionIcon onClick={() => handleOpenApproveModal(customer)} variant="transparent">
-                                                            <IconCheck color="green" size={20} stroke={1.5} />
+                                                {!isHideActionButton && (
+                                                    <Group>
+                                                        {customer.status == "In Review" && (
+                                                            <ActionIcon onClick={() => handleOpenApproveModal(customer)} variant="transparent">
+                                                                <IconCheck color="green" size={20} stroke={1.5} />
+                                                            </ActionIcon>
+                                                        )}
+                                                        <ActionIcon onClick={() => handleOpenDetailModal(customer)} variant="transparent">
+                                                            <IconEye size={20} stroke={1.5} />
                                                         </ActionIcon>
-                                                    )}
-                                                    <ActionIcon onClick={() => handleOpenDetailModal(customer)} variant="transparent">
-                                                        <IconEye size={20} stroke={1.5} />
-                                                    </ActionIcon>
-                                                    <ActionIcon onClick={() => handleOpenEditModal(customer)} variant="transparent">
-                                                        <IconPencil size={20} stroke={1.5} />
-                                                    </ActionIcon>
-                                                    <ActionIcon onClick={() => handleOpenDeleteModal(customer)} variant="transparent">
-                                                        <IconTrash color="red" size={20} stroke={1.5} />
-                                                    </ActionIcon>
-                                                </Group>
+                                                        <ActionIcon onClick={() => handleOpenEditModal(customer)} variant="transparent">
+                                                            <IconPencil size={20} stroke={1.5} />
+                                                        </ActionIcon>
+                                                        <ActionIcon onClick={() => handleOpenDeleteModal(customer)} variant="transparent">
+                                                            <IconTrash color="red" size={20} stroke={1.5} />
+                                                        </ActionIcon>
+                                                    </Group>
+                                                )}
                                             </Table.Td>
                                         </Table.Tr>
                                     ))}

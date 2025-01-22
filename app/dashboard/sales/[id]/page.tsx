@@ -1,5 +1,5 @@
 "use client"
-import { ActionIcon, AppShell, Box, Button, Card, Center, Flex, Grid, Group, Image, Modal, NumberInput, Progress, Tabs, Text, Title, useMantineTheme } from "@mantine/core";
+import { ActionIcon, AppShell, Box, Button, Card, Center, Flex, Grid, Group, Image, Modal, NumberInput, Progress, Select, Tabs, Text, Title, useMantineTheme } from "@mantine/core";
 import DashboardLayout from "../../layout";
 import useUserProfile from "@/hooks/auth/useUserProfile";
 import { use, useEffect, useState } from "react";
@@ -34,6 +34,8 @@ import { CustomerDeleteModal } from "@/components/modal/customer/customerDeleteM
 import { CustomerApproveModal } from "@/components/modal/customer/customerApproveModal";
 import { salesBulkAssignAtom } from "@/state/component_state/modal/sales/salesBulkAssignAtom";
 import { BulkAssignModal } from "@/components/modal/sales/bulkAssignModal";
+import useGetListSales from "@/hooks/sales/useGetListSales";
+import useAssignSalesToCustomer from "@/hooks/customer/useAssignSalesToCustomer";
 
 interface SalesDetailProps {
     params: { id: string }; // id is usually passed as a string in params
@@ -51,13 +53,19 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     const { getListAttendance, isLoadingGetListAttendance } = useGetListAttendance();
     const { isLoadingAddTarget, postNewTarget } = useAddTarget()
     const { isLoadingUpdateTarget, updateTarget } = useUpdateTarget()
+    const { isLoadingGetListSales, getListSales, salesData, listForSelesSelect } = useGetListSales();
+    const [assignSalesPayload, setAssignSalesPayload] = useState<assignSales>({
+        customer_id: null,
+        sales_id: null
+    })
+    const { assignSalesToCustomer, isLoadingAssignSales } = useAssignSalesToCustomer();
 
     const leaveData = useAtomValue(leaveListAtom)
     const visitList = useAtomValue(visitListAtom)
     const attendanceList = useAtomValue(attendanceListAtom)
     const setBulkAssignModal = useSetAtom(salesBulkAssignAtom);
 
-
+    const [showAssignSalesModal, setShowAssignSalesModal] = useState(false);
     const [showEditTargetModal, setShowEditTargetModal] = useState(false);
     const [showAddTargetModal, setShowAddTargetModal] = useState(false);
     const [pageCustomer, setPageCustomer] = useState(1);
@@ -135,6 +143,15 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
             return (salesDetail.results.target.current_progress / salesDetail.results.target.target_amount) * 100
         } else {
             return 0
+        }
+    }
+
+    const selectSalesToAssign = (e: string | null) => {
+        if (e) {
+            setAssignSalesPayload({
+                ...assignSalesPayload,
+                sales_id: parseInt(e)
+            })
         }
     }
 
@@ -220,6 +237,33 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
     const handleChangePageLeave = async (e: any) => {
         await getListLeave(e, 10, undefined, id);
         setPageCustomer(e);
+    }
+
+    const handleAssignSales = (customerId: number) => {
+        setAssignSalesPayload({
+            ...assignSalesPayload,
+            customer_id: customerId
+        })
+        setShowAssignSalesModal(true)
+    };
+
+    const processAssignSales = async (e: React.FormEvent) => {
+        e.preventDefault
+        try {
+            await assignSalesToCustomer(assignSalesPayload)
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setShowAssignSalesModal(false)
+            setAssignSalesPayload({
+                customer_id: null,
+                sales_id: null
+            })
+        }
+    }
+
+    const searchSales = (e: string) => {
+        getListSales(1, 10, e)
     }
 
     return (
@@ -352,12 +396,12 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                         </Button>
                                         {customerList && (
                                             <Box>
-                                                <CustomerTable page={pageCustomer} handleChangePage={handleChangePageCustomer} />
+                                                <CustomerTable page={pageCustomer} handleChangePage={handleChangePageCustomer} onAssignSales={handleAssignSales} isHideActionButton={true} />
                                                 <CustomerDetailModal />
                                                 <CustomerEditModal />
                                                 <CustomerDeleteModal />
                                                 <CustomerApproveModal />
-                                                <BulkAssignModal salesData={salesDetail.results}/>
+                                                <BulkAssignModal salesData={salesDetail.results} />
                                             </Box>
                                         )}
                                     </Tabs.Panel>
@@ -463,6 +507,24 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                 <Text>Rp</Text>
                             }
                             onChange={(e) => handleNumberInput('target_amount', e)}
+                        />
+                        <Button type="submit" variant="filled" color="primary-red" mt={20} fullWidth>
+                            Save
+                        </Button>
+                    </form>
+                </Modal>
+                <Modal opened={showAssignSalesModal} onClose={() => setShowAssignSalesModal(false)} title="Pick sales to assign to this customer">
+                    <form onSubmit={processAssignSales}>
+                        <Select
+                            label="Sales"
+                            placeholder="Search sales name"
+                            mt={10}
+                            data={listForSelesSelect}
+                            name="sales_id"
+                            searchable
+                            onSearchChange={(e) => searchSales(e)}
+                            onChange={(e) => selectSalesToAssign(e)}
+                            withAsterisk
                         />
                         <Button type="submit" variant="filled" color="primary-red" mt={20} fullWidth>
                             Save

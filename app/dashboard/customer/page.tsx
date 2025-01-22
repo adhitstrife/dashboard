@@ -180,7 +180,6 @@ export default function user() {
     ]
 
     const handleAssignSales = (customerId: number) => {
-        console.log('Assign Sales clicked for customer ID:', customerId);
         setAssignSalesPayload({
             ...assignSalesPayload,
             customer_id: customerId
