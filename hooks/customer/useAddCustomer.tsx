@@ -16,7 +16,7 @@ import { useState } from "react"
 const useAddCustomer = () => {
     const [isLoadingAddCustomer, setIsLoadingAddCustomer] = useState(false);
     const [customerData, setCustomerData] = useState<customerDetailResponse>();
-    
+
     const postNewCustomer = async (payload: customerPayload) => {
         try {
             setIsLoadingAddCustomer(true);
@@ -41,16 +41,17 @@ const useAddCustomer = () => {
         } catch (error: any) {
             const errorResponse: ErrorResponse = error.response.data;
             if (errorResponse.code == 400) {
-                for (const [field, errorsMessage] of Object.entries(errorResponse.message)) {
-                    console.log(error)
-                    notifications.show({
-                        title: `THere is error at field ${field}`,
-                        message: `Details: ${errorsMessage}`,
-                        color: 'red',
-                        icon: <IconX size={20} stroke={1.5} />,
-                        position: 'top-right'
-                    })
-                  }
+                errorResponse.error.map((error, index) => (
+                    error.messages.map((message, index) => (
+                        notifications.show({
+                            title: `Validation error at ${error.field}`,
+                            message: `${message}`,
+                            color: 'red',
+                            icon: <IconX size={20} stroke={1.5} />,
+                            position: 'top-right'
+                        })
+                    ))
+                ))
             } else {
                 notifications.show({
                     title: 'Saving Failed',

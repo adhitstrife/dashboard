@@ -1,9 +1,15 @@
+interface errorMessage {
+    [key: string]: string[];
+}
+
+interface errorData {
+    field: string;
+    messages: errorMessage[]
+}
+
 interface ErrorResponse {
     code: number;
-    detail: string;
-    message: {
-        [key: string]: string[]; // Generic structure for dynamic keys with string array values
-    };
+    error: errorData[]
 }
 
 export default ErrorResponse
