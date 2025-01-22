@@ -2,7 +2,8 @@ import attendanceData from "@/app/interface/response/attendance/attendanceData"
 import { attendanceLocalModalAtom } from "@/state/component_state/modal/attendance/attendanceLocalModalAtom"
 import { attendanceDetailAtom } from "@/state/data/attendance/attendanceDetailAtom"
 import { attendanceListAtom } from "@/state/data/attendance/attendanceListAtom"
-import { Box, Button, Table, Text } from "@mantine/core"
+import { ActionIcon, Box, Button, Table, Text } from "@mantine/core"
+import { IconDetails, IconEye } from "@tabler/icons-react"
 import { useAtomValue, useSetAtom } from "jotai"
 
 export const AttendanceTable = () => {
@@ -25,7 +26,7 @@ export const AttendanceTable = () => {
                                 <Table.Th>Name</Table.Th>
                                 <Table.Th>Clock In</Table.Th>
                                 <Table.Th>Clock Out</Table.Th>
-                                <Table.Th>Location</Table.Th>
+                                <Table.Th>Details</Table.Th>
                             </Table.Tr>
                         </Table.Thead>
                         {attendanceList.results.length <= 0 ? (
@@ -44,7 +45,9 @@ export const AttendanceTable = () => {
                                         <Table.Td>{`${attendance.clock_in_date} : ${attendance.clock_in_time}`}</Table.Td>
                                         <Table.Td>{`${attendance.clock_out_date ? attendance.clock_out_date : "-"} : ${attendance.clock_out_time ? attendance.clock_out_time : "-"}`}</Table.Td>
                                         <Table.Td>
-                                            <Button variant="transparent" c={"primary-red"} onClick={() => openDetailAttendanceModal(attendance)}>Show Location</Button>
+                                            <ActionIcon onClick={() => openDetailAttendanceModal(attendance)} variant="transparent">
+                                                <IconEye size={20} stroke={1.5} />
+                                            </ActionIcon>
                                         </Table.Td>
                                     </Table.Tr>
                                 ))}
