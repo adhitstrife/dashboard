@@ -426,7 +426,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                                     width={width}
                                                     height="600"
                                                     loading="lazy"
-                                                    src="https://www.google.com/maps?q=37.7749,-122.4194&hl=en&z=14&output=embed">
+                                                    src="https://www.google.com/maps?q=37.7749,-122.4194&hl=en&z=22&output=embed">
                                                 </iframe>
                                             </Tabs.Panel>
                                         </Tabs>

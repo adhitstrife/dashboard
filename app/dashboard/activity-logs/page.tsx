@@ -22,15 +22,19 @@ import useGetListLogs from "@/hooks/activity_logs/useGetListLogs";
 import { logListAtom } from "@/state/data/activity_logs/logsListAtom";
 import { LogTable } from "@/components/table/logTable";
 import { LogModal } from "@/components/modal/activity_logs/LogModal";
+import { DateInput, DateValue } from "@mantine/dates";
+import { format } from "date-fns";
 
 export default function logs() {
     const theme = useMantineTheme();
 
     const { getListLogs, isLoadingGetListLogs } = useGetListLogs();
-    const [ actionType, setActionType ] = useState<string | undefined>(undefined);
+    const [actionType, setActionType] = useState<string | undefined>(undefined);
 
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10)
+    const [selectedDate, setSelectedDate] = useState("");
+
     const setActiveMenu = useSetAtom(activeMenuAtom);
     const logList = useAtomValue(logListAtom)
 
@@ -52,6 +56,17 @@ export default function logs() {
         }
     }
 
+    const handleChangeDate = async(date: DateValue) => {
+        let formattedDate = '';
+        if (date) {
+            formattedDate = format(date, 'yyyy-MM-dd');
+        } else {
+            formattedDate = format(new Date(), 'yyyy-MM-dd');
+        }
+        await getListLogs(page, pageSize, actionType, formattedDate);
+        setSelectedDate(formattedDate);
+    }
+
     return (
         <DashboardLayout>
             <AppShell.Main bg={'#F6F6F6'}>
@@ -68,16 +83,20 @@ export default function logs() {
                     </Flex>
                 </div>
                 <Card withBorder radius={"md"} px={20} py={30} mah={'screen'} mt={20}>
-                    <Group justify='space-between'>
+                    <Group mt={10}>
                         <Select
-                            label="Action Type"
                             placeholder="Pick action type"
                             data={['All', 'Create', 'Update', 'Delete', 'Login', 'Logout', 'Login Failed']}
                             name="gender"
-                            mt={10}
                             onChange={(e) => handleSelectChange(e)}
                         />
-
+                        <DateInput
+                            onChange={(e) => handleChangeDate(e)}
+                            placeholder="Filter By Date"
+                            maxDate={new Date()}
+                            defaultValue={new Date()}
+                            clearable
+                        />
                     </Group>
                     {logList && (
                         <Box>

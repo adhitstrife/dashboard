@@ -17,10 +17,10 @@ const useGetListLogs = () => {
     const [isLoadingGetListLogs, setIsLoadingGetListLogs] = useState(false);
     const setLogsData = useSetAtom(logListAtom);
     
-    const getListLogs = async (page: number = 1, page_size: number = 10, type?: string) => {
+    const getListLogs = async (page: number = 1, page_size: number = 10, type?: string, date?: string) => {
         try {
             setIsLoadingGetListLogs(true);
-            const url = `/backend/api/activity/logs?page=${page}&page_size=${page_size}&action_type=${type ? type : ''}`;
+            const url = `/backend/api/activity/logs?page=${page}&page_size=${page_size}&action_type=${type ? type : ''}&action_time=${date ? date : ''}`;
             const response = await axios.get(url, {
                 headers: {
                     'Authorization': `Bearer ${Cookies.get('authToken')}`

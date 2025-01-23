@@ -43,7 +43,7 @@ export const AttendanceModal = () => {
                             width="600"
                             height="450"
                             loading="lazy"
-                            src={`https://www.google.com/maps?q=${detailAttendance?.latitude},${detailAttendance?.longitude}&hl=en&z=14&output=embed`}>
+                            src={`https://www.google.com/maps?q=${detailAttendance?.latitude},${detailAttendance?.longitude}&hl=en&z=22&output=embed`}>
                         </iframe>
                     </Tabs.Panel>
                     {detailAttendance?.clock_in_image && (

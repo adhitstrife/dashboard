@@ -141,7 +141,7 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                             width={width}
                                             height="450"
                                             loading="lazy"
-                                            src={`https://www.google.com/maps?q=${visitData.latitude},${visitData.longitude}&hl=en&z=14&output=embed`}>
+                                            src={`https://www.google.com/maps?q=${visitData.latitude},${visitData.longitude}&hl=en&z=22&output=embed`}>
                                         </iframe>
                                     </Box>
                                 </Tabs.Panel>

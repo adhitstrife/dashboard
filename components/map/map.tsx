@@ -4,6 +4,7 @@ import { visitListAtom } from "@/state/data/visit/visitListAtom"
 import { Box } from "@mantine/core"
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api"
 import { useAtomValue } from "jotai"
+import { useEffect } from "react"
 
 export const Map = () => {
     const visitList = useAtomValue(visitListAtom)
@@ -24,12 +25,15 @@ export const Map = () => {
         ? { lat: Number(visitList.results[0].latitude), lng: Number(visitList.results[0].longitude) }
         : center;
 
+    useEffect(() => {
+        console.log(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY)
+    },[process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY])
     return (
         <Box>
             {visitList && (
                 <LoadScript googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ''}>
                     {visitFilter.salesId && visitFilter.is_filtered ? (
-                        <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={12.5}>
+                        <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={21}>
                         {visitList.results.map((visit, index) => (
                             <Marker key={index} position={{ lat: Number(visit.latitude), lng: Number(visit.longitude)}} label={{
                                 text: `${index + 1}`, // Display order number
@@ -40,7 +44,7 @@ export const Map = () => {
                         ))}
                     </GoogleMap>
                     ) : (
-                        <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={12.5}>
+                        <GoogleMap mapContainerStyle={containerStyle} center={mapCenter} zoom={21}>
                             {visitList.results.map((visit, index) => (
                                 <Marker key={index} position={{ lat: Number(visit.latitude), lng: Number(visit.longitude)}}  />
                             ))}
