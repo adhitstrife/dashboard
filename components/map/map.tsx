@@ -25,9 +25,6 @@ export const Map = () => {
         ? { lat: Number(visitList.results[0].latitude), lng: Number(visitList.results[0].longitude) }
         : center;
 
-    useEffect(() => {
-        console.log(process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY)
-    },[process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY])
     return (
         <Box>
             {visitList && (
