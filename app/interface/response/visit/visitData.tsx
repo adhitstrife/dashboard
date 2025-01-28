@@ -16,7 +16,8 @@ interface visitData {
     notes: string;
     latitude: string;
     longitude: string;
-    image_path: number
+    image_path: string;
+    image_paths: string[];
 }
 
 export default visitData

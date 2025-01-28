@@ -148,6 +148,14 @@ export default function salesDetail({ params }: { params: Promise<{ id: number }
                                 <Tabs.Panel value="image">
                                     <Image mt={20} src={`${visitData.image_path}`} w="auto"
                                         fit="contain" />
+                                    {visitData.image_paths && visitData.image_paths.length > 0 ? (
+                                        <Box>
+                                            {visitData.image_paths.map((image, index) => (
+                                                <Image mt={20} src={`${image}`} w="auto" key={index}
+                                                    fit="contain" />
+                                            ))}
+                                        </Box>
+                                    ) : ""}
                                 </Tabs.Panel>
                             </Tabs>
                         </Box>
