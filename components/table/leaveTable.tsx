@@ -66,7 +66,7 @@ export const LeaveTable: FC<leaveTable> = ({ page, handleChangePage }) => {
                                     <Table.Th>Category</Table.Th>
                                     <Table.Th>Start Date</Table.Th>
                                     <Table.Th>End Date</Table.Th>
-                                    {userProfile?.user_type == 'manager' && (
+                                    {userProfile?.user_type == 'Manager' && (
                                         <Table.Th>Action</Table.Th>
                                     )}
                                 </Table.Tr>
@@ -99,7 +99,7 @@ export const LeaveTable: FC<leaveTable> = ({ page, handleChangePage }) => {
                                             <Table.Td>
                                                 {leave.end_date}
                                             </Table.Td>
-                                        {userProfile?.user_type == 'manager' && (
+                                        {userProfile?.user_type == 'Manager' && (
                                             <Table.Td>
                                                 {isDatePassed(leave.start_date) ? (
                                                     <Badge color="secondary-gray">Expired</Badge>

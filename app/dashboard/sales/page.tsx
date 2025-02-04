@@ -19,6 +19,7 @@ import { useSetAtom } from "jotai";
 import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
 import { salesBulkAssignAtom } from "@/state/component_state/modal/sales/salesBulkAssignAtom";
 import { BulkAssignModal } from "@/components/modal/sales/bulkAssignModal";
+import useGetListSalesForSelect from "@/hooks/sales/useGetListSalesForSelect";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -27,6 +28,7 @@ export default function user() {
     const { isLoadingAddSales, postNewSales } = useAddSales();
     const { isLoadingEditSales, updateDataSales } = useEditSales();
     const { isLoadingGetListSales, getListSales, salesData } = useGetListSales();
+    const { isLoadingGetListSalesForSelect, getListSalesForSelect, listForSelesSelect } = useGetListSalesForSelect();
     const { getDetailSales, isLoadingGetDetailSales, salesDetail, setSalesDetail } = useGetSalesDetail()
     const { deleteSales, isLoadingDeleteSales } = useDeleteSales()
     const { getUserProfile, userProfile, isLoading } = useUserProfile()
@@ -54,6 +56,10 @@ export default function user() {
         job_level: 'staff',
         joining_date: '',
         city_id: 0,
+        area: '',
+        division: '',
+        supervisor_id: null,
+        user_type: '',
     })
 
     const setActiveMenu = useSetAtom(activeMenuAtom)
@@ -86,9 +92,17 @@ export default function user() {
                 job_level: sales.job_level,
                 joining_date: sales.joining_date,
                 city_id: sales.city ? sales.city.id : null,
+                area: '',
+                division: '',
+                supervisor_id: null,
+                user_type: '',
             })
         }
     }, [salesDetail])
+
+    const searchSuperVisor = (e: string) => {
+        getListSalesForSelect(1,10, e, 'Supervisor')
+    }
 
     const searchCity = (e: string) => {
         getCountryList(e)
@@ -159,6 +173,10 @@ export default function user() {
             job_level: '',
             joining_date: '',
             city_id: 0,
+            area: '',
+            division: '',
+            supervisor_id: null,
+            user_type: '',
         })
     }
 
@@ -342,40 +360,44 @@ export default function user() {
                             required onChange={handleChange} />
                         <PasswordInput label="Confirm Password" placeholder="Input Password" mt={10} name="password2" withAsterisk
                             required onChange={handleChange} />
-                        {/* <Select
-                            label="Birthplace"
-                            placeholder="Pick sales birthplace"
+                        <Select
+                            label="User Type"
+                            placeholder="Pick sales user type"
+                            data={['Sales', 'Supervisor']}
+                            name="user_type"
                             mt={10}
-                            data={cities}
-                            name="city_id"
-                            searchable
-                            onSearchChange={(e) => searchCity(e)}
-                            onChange={(e) => handleSelectChange('birth_place_id', e)}
-                        /> */}
-                        {/* <Select
-                            label="Gender"
-                            placeholder="Pick sales gender"
-                            data={['pria', 'wanita']}
-                            name="gender"
+                            onChange={(e) => handleSelectChange('user_type', e)}
+                        />
+                        {salesPayload.user_type == 'Sales' && (
+                            <Select
+                                label="Supervisor"
+                                placeholder="Pick sales supervisor"
+                                mt={10}
+                                data={listForSelesSelect}
+                                name="supervisor_id"
+                                searchable
+                                onSearchChange={(e) => searchSuperVisor(e)}
+                                onChange={(e) => handleSelectChange('supervisor_id', e)}
+                            />
+
+                        )}
+                        
+                        <Select
+                            label="Division"
+                            placeholder="Pick sales division"
+                            data={['Office', 'Laboratium', 'Pengantaran', 'Reguler']}
+                            name="division"
                             mt={10}
-                            onChange={(e) => handleSelectChange('gender', e)}
+                            onChange={(e) => handleSelectChange('division', e)}
                         />
                         <Select
-                            label="Religion"
-                            placeholder="Pick sales religion"
-                            data={['islam', 'kristen', 'katolik', 'hindu', 'buddha', 'khonghucu']}
-                            name="religion"
+                            label="Area"
+                            placeholder="Pick sales area"
+                            data={['utara', 'selatan']}
+                            name="area"
                             mt={10}
-                            onChange={(e) => handleSelectChange('religion', e)}
-                        /> */}
-                        {/* <Select
-                            label="Blood Type"
-                            placeholder="Pick sales blood type"
-                            data={['A', 'B', 'AB', '0']}
-                            name="blood_type"
-                            mt={10}
-                            onChange={(e) => handleSelectChange('blood_type', e)}
-                        /> */}
+                            onChange={(e) => handleSelectChange('area', e)}
+                        />
                         <TextInput
                             label="Email"
                             placeholder="Input email address"
@@ -386,6 +408,7 @@ export default function user() {
                             type="email"
                             onChange={handleChange}
                         />
+                        {/* 
                         {/* <NumberInput
                             label="Phonenumber"
                             placeholder="Input Phone Number"

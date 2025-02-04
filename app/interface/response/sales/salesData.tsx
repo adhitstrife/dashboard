@@ -29,6 +29,9 @@ interface salesData {
     account_number: string;
     city: salesCity;
     target: target | null;
+    division: string | null;
+    area: string | null;
+    sales_id: string | null;
 }
 
 export default salesData

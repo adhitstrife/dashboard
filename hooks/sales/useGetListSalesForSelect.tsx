@@ -8,14 +8,13 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import { useState } from "react"
 
-const useGetListSales = () => {
-    const [isLoadingGetListSales, setIsLoadingGetListSales] = useState(false);
-    const [salesData, setSalesData] = useState<salesResponse>();
+const useGetListSalesForSelect = () => {
+    const [isLoadingGetListSalesForSelect, setisLoadingGetListSalesForSelect] = useState(false);
     const [listForSelesSelect, setListForSelesSelect] = useState<selectData[]>([]);
     
-    const getListSales = async (page: number = 1, page_size: number = 10, name?: string, user_type?: string) => {
+    const getListSalesForSelect = async (page: number = 1, page_size: number = 10, name?: string, user_type?: string) => {
         try {
-            setIsLoadingGetListSales(true);
+            setisLoadingGetListSalesForSelect(true);
             const url = `/backend/api/sales?page=${page}&page_size=${page_size}&user_type=${user_type ? user_type : ''}&keyword=${name ? name : ''}`;
             const response = await axios.get(url, {
                 headers: {
@@ -24,12 +23,10 @@ const useGetListSales = () => {
             }
             );
             const json: salesResponse = response.data
-            setSalesData(json)
             setListForSelesSelect(json.results.map((sales) => ({
                 value: sales.id.toString(),
                 label: sales.name
             })))
-            console.log(listForSelesSelect)
         } catch (error) {
             notifications.show({
                 title: 'Fetch Failed',
@@ -40,10 +37,10 @@ const useGetListSales = () => {
             })
             return error;
         } finally {
-            setIsLoadingGetListSales(false)
+            setisLoadingGetListSalesForSelect(false)
         }
     }
 
-    return { getListSales, salesData, listForSelesSelect, isLoadingGetListSales }
+    return { getListSalesForSelect, listForSelesSelect, isLoadingGetListSalesForSelect }
 }
-export default useGetListSales;
+export default useGetListSalesForSelect;

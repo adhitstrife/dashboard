@@ -26,6 +26,14 @@ interface customerSubDistrict {
     district_id: number
 }
 
+interface customerSales {
+    id: number;
+    sales_name: string;
+    division: string;
+    area: string;
+    sales_id: number;
+}
+
 interface customerData {
     id:number;
     name: string;
@@ -40,7 +48,9 @@ interface customerData {
     sub_district: customerSubDistrict;
     npwp: string;
     created_at: string;
-    sales: salesData | null
+    area: string;
+    sales: customerSales[]
+    log_note: logData[];
 }
 
 export default customerData

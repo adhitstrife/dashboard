@@ -66,9 +66,6 @@ export const CustomerDetailModal = () => {
                             <DataLabel label="Status" value={detailCustomer.status} />
                         </Grid.Col>
                         <Grid.Col span={6}>
-                            <DataLabel label="Sales Name" value={detailCustomer.sales ? detailCustomer.sales.name : "-"} />
-                        </Grid.Col>
-                        <Grid.Col span={6}>
                             <DataLabel label="Address" value={detailCustomer.address} />
                         </Grid.Col>
                         <Grid.Col span={6}>

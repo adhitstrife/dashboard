@@ -29,6 +29,8 @@ import { activeMenuAtom } from "@/state/component_state/menu/activeMenuAtom";
 import { customerBulkModalAtom } from "@/state/component_state/modal/customer/customerBulkModalAtom";
 import { CustomerBulkModal } from "@/components/modal/customer/customerBulkModal";
 import { DateInput, DateValue } from "@mantine/dates";
+import customerBulkAssign from "@/app/interface/payload/customerBulkAssign";
+import useBulkAssignCustomer from "@/hooks/sales/useBulkAssignCustomer";
 
 export default function user() {
     const theme = useMantineTheme();
@@ -45,7 +47,8 @@ export default function user() {
         sub_district_id: null,
         name: '',
         npwp: '',
-        phone: ''
+        phone: '',
+        area: '',
     })
     const [showAssignSalesModal, setShowAssignSalesModal] = useState(false);
     const [showDetailCustomerModal, setShowDetailCustomerModal] = useState(false);
@@ -55,9 +58,9 @@ export default function user() {
     const [selectedStatus, setSelectedStatus] = useState("");
     const [filterBySales, setFilterBySales] = useState("");
     const [filterCreatedAt, setFilterCreatedAt] = useState("")
-    const [assignSalesPayload, setAssignSalesPayload] = useState<assignSales>({
-        customer_id: null,
-        sales_id: null
+    const [assignSalesPayload, setAssignSalesPayload] = useState<customerBulkAssign>({
+        sales_id: null,
+        customer_ids: []
     })
 
     const customerList = useAtomValue(customerListAtom)
@@ -72,7 +75,7 @@ export default function user() {
     const { isLoadingAddCustomer, postNewCustomer } = useAddCustomer();
     const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
     const { isLoadingGetListSales, getListSales, salesData, listForSelesSelect } = useGetListSales();
-    const { assignSalesToCustomer, isLoadingAssignSales } = useAssignSalesToCustomer();
+    const { isLoadingBulkAssignCustomer, assignCustomers } = useBulkAssignCustomer()
     const { getUserProfile, userProfile, isLoading } = useUserProfile()
 
 
@@ -114,6 +117,15 @@ export default function user() {
         }
     }
 
+    const handleSelectChangeForArea = (name: string, e: string | null) => {
+        if (e) {
+            setCustomerPayload({
+                ...customerPayload,
+                [name]: e
+            })
+        }
+    }
+
     const handleNumberInput = (name: string, value: string | null | number) => {
         setCustomerPayload({
             ...customerPayload,
@@ -144,15 +156,15 @@ export default function user() {
     }
 
     const processAssignSales = async (e: React.FormEvent) => {
-        e.preventDefault
+        e.preventDefault()
         try {
-            await assignSalesToCustomer(assignSalesPayload)
+            await assignCustomers(assignSalesPayload)
         } catch (error) {
             console.log(error)
         } finally {
             setShowAssignSalesModal(false)
             setAssignSalesPayload({
-                customer_id: null,
+                customer_ids: [],
                 sales_id: null
             })
         }
@@ -169,7 +181,8 @@ export default function user() {
             permission_letter: '',
             phone: '',
             province_id: null,
-            sub_district_id: null
+            sub_district_id: null,
+            area: '',
         })
     }
 
@@ -182,7 +195,7 @@ export default function user() {
     const handleAssignSales = (customerId: number) => {
         setAssignSalesPayload({
             ...assignSalesPayload,
-            customer_id: customerId
+            customer_ids: [...assignSalesPayload.customer_ids, customerId]
         })
         setShowAssignSalesModal(true)
     };
@@ -230,7 +243,7 @@ export default function user() {
             const day = String(date.getDate()).padStart(2, '0'); // Get day with leading zero
             const month = String(date.getMonth() + 1).padStart(2, '0'); // Get month (0-based) with leading zero
             const year = date.getFullYear();
-            const formattedDate = `${year}-${month}-${day}`; 
+            const formattedDate = `${year}-${month}-${day}`;
             await await getListCustomer(1, 10, searchedCustomer, selectedStatus !== "" ? selectedStatus : undefined, filterBySales !== "" ? parseInt(filterBySales) : undefined, formattedDate);
             setFilterCreatedAt(formattedDate)
         }
@@ -342,6 +355,14 @@ export default function user() {
                             onChange={(e) => handleNumberInput('npwp', e)}
                             withAsterisk
                             required
+                        />
+                        <Select
+                            label="Area"
+                            placeholder="Pick customer area"
+                            data={['utara', 'selatan']}
+                            name="area"
+                            mt={10}
+                            onChange={(e) => handleSelectChangeForArea('area', e)}
                         />
                         <Select
                             label="Province"

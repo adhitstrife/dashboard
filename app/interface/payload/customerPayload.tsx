@@ -9,6 +9,7 @@ interface customerPayload {
     city_id: number | null;
     district_id: number | null;
     sub_district_id: number | null;
+    area: string;
 }
 
 export default customerPayload;

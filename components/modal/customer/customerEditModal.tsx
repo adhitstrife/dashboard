@@ -25,18 +25,19 @@ export const CustomerEditModal = () => {
         phone: "",
         province_id: null,
         sub_district_id: null,
+        area: ''
     })
     const { getCountryList, cities, isLoadingGetCities } = useGetCities()
     const { getProvinceList, isLoadingGetProvinces, provinces } = useGetProvinces()
-    const { districts, getDistrictList, isLoadingGetDistrict} = useGetDistrict();
-    const { getSubDistrictList, isLoadingGetSubDistrict, subDistricts} = useGetSubDistricts();
+    const { districts, getDistrictList, isLoadingGetDistrict } = useGetDistrict();
+    const { getSubDistrictList, isLoadingGetSubDistrict, subDistricts } = useGetSubDistricts();
     const { isLoadingEditCustomer, updateNewCustomer } = useEditCustomer();
-    const { isLoadingGetListCustomer,  getListCustomer } = useGetListCustomer();
+    const { isLoadingGetListCustomer, getListCustomer } = useGetListCustomer();
 
-    
+
     useEffect(() => {
         console.log(isModalOpen)
-    },[isModalOpen])
+    }, [isModalOpen])
     const clearPayload = () => {
         setEditCustomerPayload({
             address: "",
@@ -49,6 +50,7 @@ export const CustomerEditModal = () => {
             phone: "",
             province_id: null,
             sub_district_id: null,
+            area: ''
         })
     }
 
@@ -72,7 +74,7 @@ export const CustomerEditModal = () => {
     const searchSubDistrict = (e: string) => {
         getSubDistrictList(e, editCustomerPayload.district_id)
     }
-    
+
     useEffect(() => {
         if (isModalOpen && detailCustomer) {
             setEditCustomerPayload({
@@ -86,9 +88,10 @@ export const CustomerEditModal = () => {
                 phone: detailCustomer.phone,
                 province_id: detailCustomer.province ? detailCustomer.province.id : null,
                 sub_district_id: detailCustomer.sub_district ? detailCustomer.sub_district.id : null,
+                area: detailCustomer.area
             })
         }
-    },[isModalOpen])
+    }, [isModalOpen])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -128,6 +131,15 @@ export const CustomerEditModal = () => {
             setEditCustomerPayload({
                 ...editCustomerPayload,
                 [name]: value
+            })
+        }
+    }
+
+    const handleSelectChangeForArea = (name: string, e: string | null) => {
+        if (e) {
+            setEditCustomerPayload({
+                ...editCustomerPayload,
+                [name]: e
             })
         }
     }
@@ -184,6 +196,15 @@ export const CustomerEditModal = () => {
                     value={editCustomerPayload.npwp}
                     withAsterisk
                     required
+                />
+                <Select
+                    label="Area"
+                    placeholder="Pick customer area"
+                    data={['utara', 'selatan']}
+                    name="area"
+                    mt={10}
+                    value={editCustomerPayload.area}
+                    onChange={(e) => handleSelectChangeForArea('area', e)}
                 />
                 <Select
                     label="Province"
