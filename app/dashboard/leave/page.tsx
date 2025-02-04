@@ -46,7 +46,8 @@ export default function user() {
         sub_district_id: null,
         name: '',
         npwp: '',
-        phone: ''
+        phone: '',
+        area: ''
     })
     const [showAssignSalesModal, setShowAssignSalesModal] = useState(false);
     const [showDetailCustomerModal, setShowDetailCustomerModal] = useState(false);
