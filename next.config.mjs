@@ -10,7 +10,7 @@ export default withBundleAnalyzer({
     return [
       {
         source: '/backend/:path*',
-        destination: 'http://147.93.28.71:8080/:path*'
+        destination: 'https://api.alprido.co.id/:path*'
       }
     ]
   },
