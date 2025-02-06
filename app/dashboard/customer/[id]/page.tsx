@@ -189,7 +189,7 @@ export default function customerDetail({ params }: { params: Promise<{ id: numbe
     }
 
     const processAssignSales = async (e: React.FormEvent) => {
-        e.preventDefault
+        e.preventDefault()
         try {
             await assignCustomers(assignSalesPayload)
         } catch (error) {
