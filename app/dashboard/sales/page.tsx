@@ -566,45 +566,6 @@ export default function user() {
                 onChange={(e) => handleSelectChange('area', e)}
                 value={salesPayload.area}
               />
-              <Select
-                label="User Type"
-                placeholder="Pick sales user type"
-                data={['Sales', 'Supervisor']}
-                name="user_type"
-                mt={10}
-                onChange={(e) => handleSelectChange('user_type', e)}
-                value={salesPayload.user_type}
-              />
-              {salesPayload.user_type == 'Sales' && (
-                <Select
-                  label="Supervisor"
-                  placeholder="Pick sales supervisor"
-                  mt={10}
-                  data={listForSelesSelect}
-                  name="supervisor_id"
-                  searchable
-                  onSearchChange={(e) => searchSuperVisor(e)}
-                  onChange={(e) => handleSelectChange('supervisor_id', e)}
-                />
-              )}
-              <Select
-                label="Division"
-                placeholder="Pick sales division"
-                data={['Office', 'Laboratium', 'Pengantaran', 'Reguler']}
-                name="division"
-                mt={10}
-                onChange={(e) => handleSelectChange('division', e)}
-                value={salesPayload.division}
-              />
-              <Select
-                label="Area"
-                placeholder="Pick sales area"
-                data={['utara', 'selatan']}
-                name="area"
-                mt={10}
-                onChange={(e) => handleSelectChange('area', e)}
-                value={salesPayload.area}
-              />
               {/* <Select
                                 label="Blood Type"
                                 placeholder="Pick sales blood type"
