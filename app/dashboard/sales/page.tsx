@@ -115,8 +115,8 @@ export default function user() {
         job_level: sales.job_level,
         joining_date: sales.joining_date,
         city_id: sales.city ? sales.city.id : null,
-        area: '',
-        division: '',
+        area: sales.area,
+        division: sales.division,
         supervisor_id: null,
         user_type: '',
       });
@@ -138,6 +138,12 @@ export default function user() {
         setSalesPayload({
           ...salesPayload,
           [name]: value,
+        });
+      } else if (name == 'supervisor_id') {
+        const value = parseInt(e);
+        setSalesPayload({
+          ...salesPayload,
+          [name]: value ? value : null,
         });
       } else {
         setSalesPayload({
@@ -548,6 +554,7 @@ export default function user() {
                   onChange={(e) => handleSelectChange('supervisor_id', e)}
                 />
               )}
+              {salesPayload.division}
               <Select
                 label="Division"
                 placeholder="Pick sales division"
