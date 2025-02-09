@@ -10,6 +10,7 @@ interface attendanceData {
     clock_in_image: string | null;
     clock_out_date: string;
     clock_out_time: string;
+    is_late: boolean;
 }
 
 export default attendanceData
