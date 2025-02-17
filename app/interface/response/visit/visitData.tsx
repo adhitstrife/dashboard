@@ -11,6 +11,7 @@ interface visitData {
     customer: customerData;
     category: string;
     visit_date: string;
+    visit_end: string | null;
     participant: string;
     products: product[];
     notes: string;
