@@ -29,8 +29,12 @@ export const VisitTable = () => {
     const diffInSeconds = Math.floor((endDate - startDate) / 1000); // Convert to seconds
     const hours = Math.floor(diffInSeconds / 3600);
     const minutes = Math.floor((diffInSeconds % 3600) / 60);
+    const seconds = diffInSeconds % 60;
 
-    return `${hours} hours ${minutes} minutes`;
+    if (hours > 0) {
+      return `${hours} hours ${minutes} minutes`;
+    }
+    return `${minutes} minutes ${seconds} seconds`;
   };
   return (
     <Box>
@@ -63,7 +67,11 @@ export const VisitTable = () => {
                     <Table.Td>{visit.sales.name}</Table.Td>
                     <Table.Td>{visit.category}</Table.Td>
                     <Table.Td>{visit.visit_date}</Table.Td>
-                    <Table.Td>{visit.visit_end ? calculateDuration(visit.visit_date, visit.visit_end) : "0 Hour"}</Table.Td>
+                    <Table.Td>
+                      {visit.visit_end
+                        ? calculateDuration(visit.visit_date, visit.visit_end)
+                        : '0 Hour'}
+                    </Table.Td>
                     <Table.Td>
                       <ActionIcon
                         component={Link}
