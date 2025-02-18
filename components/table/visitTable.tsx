@@ -29,12 +29,11 @@ export const VisitTable = () => {
     const diffInSeconds = Math.floor((endDate - startDate) / 1000); // Convert to seconds
     const hours = Math.floor(diffInSeconds / 3600);
     const minutes = Math.floor((diffInSeconds % 3600) / 60);
-    const seconds = diffInSeconds % 60;
 
     if (hours > 0) {
       return `${hours} hours ${minutes} minutes`;
     }
-    return `${minutes} minutes ${seconds} seconds`;
+    return `${minutes} minutes`;
   };
   return (
     <Box>
